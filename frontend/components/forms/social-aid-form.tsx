@@ -19,7 +19,7 @@ const formSchema = z.object({
   children: z.string().min(1, { message: "Veuillez indiquer le nombre d'enfants et leurs âges" }),
   aidType: z.string({ required_error: "Veuillez sélectionner un type d'aide" }),
   situation: z.string().min(10, { message: "Veuillez décrire brièvement votre situation" }),
-  // fileUpload would typically be handled separately with a file upload component
+  // Nous n'utilisons pas de champ de téléchargement de fichier pour l'instant
   rgpdConsent: z.boolean().refine((val) => val === true, {
     message: "Vous devez accepter le traitement de vos données personnelles",
   }),
@@ -44,8 +44,13 @@ export default function SocialAidForm() {
     console.log(values);
     
     try {
+      // Définir une URL sécurisée pour les requêtes API
+      const apiBaseUrl = typeof window !== 'undefined' 
+        ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001')
+        : 'http://localhost:3001'; // Fallback pour SSR
+        
       // Envoyer les données au serveur
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/forms/SOCIAL_AID`, {
+      const response = await fetch(`${apiBaseUrl}/api/forms/SOCIAL_AID`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +68,7 @@ export default function SocialAidForm() {
         });
         
         // Envoyer un email de confirmation
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/send-email`, {
+        await fetch(`${apiBaseUrl}/api/send-email`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -238,14 +243,13 @@ L'équipe Darkei Elyahou
               )}
             />
 
-            {/* File Upload - Would typically use a dedicated file upload component */}
+            {/* Note sur les pièces justificatives */}
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Document justificatif (optionnel)
-              </label>
-              <Input type="file" className="cursor-pointer" />
+              <p className="text-sm font-medium leading-none">
+                Documents justificatifs
+              </p>
               <p className="text-sm text-muted-foreground">
-                Vous pouvez joindre un document justificatif si nécessaire
+                Pour soumettre des documents justificatifs, veuillez les envoyer par email après avoir rempli ce formulaire.
               </p>
             </div>
 

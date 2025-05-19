@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Clock, Target, Package, Users, Search, Banknote, CheckCircle } from "lucide-react";
 import SocialAidForm from "@/components/forms/social-aid-form";
 import { PageHeader } from "@/components/page-header";
-import { React } from "react";
+import React from "react";
 
 export default function AideSociale() {
   return (

@@ -11,7 +11,7 @@ export default function AideSociale() {
   return (
     <div className="pt-24">
       {/* Header Section */}
-      <PageHeader 
+      <PageHeader
         title="Bons d'achat & Soutien Ponctuel"
         subtitle="Mivtzaim de soutien – bons d'achat & aide directe"
       />
@@ -88,8 +88,9 @@ export default function AideSociale() {
                   </CardHeader>
                   <CardContent>
                     <ul className="list-disc pl-5 space-y-2">
-                      <li>Achat de cartables complets, livres, trousses, fournitures de base.</li>
-                      <li>Le tout via des bons d'achat à valeur faciale, avec remise supplémentaire négociée.</li>
+                      <li>Couvre les uniformes, les livres, les fournitures scolaires.</li>
+                      <li>Distribution en août, avant la rentrée, pour anticiper les besoins.</li>
+                      <li>Coordination avec les écoles pour cibler les familles nombreuses.</li>
                     </ul>
                   </CardContent>
                 </Card>
@@ -98,14 +99,14 @@ export default function AideSociale() {
                   <CardHeader>
                     <CardTitle>
                       <span className="text-primary mr-2">🔸</span> 
-                      Aides ponctuelles personnalisées
+                      Aides ponctuelles
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ul className="list-disc pl-5 space-y-2">
-                      <li>Frais de santé ou médicaments non remboursés.</li>
-                      <li>Électricité ou loyer impayé pour éviter une coupure ou une expulsion.</li>
-                      <li>Soutien lors d'un deuil, divorce, accouchement difficile ou situation instable.</li>
+                      <li>En cas d'urgence : factures d'électricité, traitements médicaux non remboursés, loyers impayés…</li>
+                      <li>Analyse rapide du besoin et remise d'aide sous 72h maximum.</li>
+                      <li>Accompagnement vers des solutions durables quand nécessaire.</li>
                     </ul>
                   </CardContent>
                 </Card>
@@ -114,46 +115,36 @@ export default function AideSociale() {
 
             <Separator />
 
-            {/* Target Audience */}
+            {/* Beneficiaries */}
             <section>
               <div className="flex items-center gap-2 mb-4">
                 <Users className="w-5 h-5 text-primary" />
-                <h2 className="text-2xl font-serif">Public concerné</h2>
+                <h2 className="text-2xl font-serif">Bénéficiaires</h2>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg">
-                  <span className="text-primary">•</span>
-                  <p>Familles nombreuses avec revenus modestes</p>
-                </div>
-                <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg">
-                  <span className="text-primary">•</span>
-                  <p>Mères seules</p>
-                </div>
-                <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg">
-                  <span className="text-primary">•</span>
-                  <p>Orphelins ou enfants en foyers familiaux</p>
-                </div>
-                <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg">
-                  <span className="text-primary">•</span>
-                  <p>Ba'alei batim discrets mais en difficulté réelle</p>
-                </div>
-              </div>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>Familles nombreuses avec plusieurs enfants scolarisés.</li>
+                <li>Avrekhim qui étudient la Torah et ont des ressources limitées.</li>
+                <li>Familles monoparentales traversant des périodes difficiles.</li>
+                <li>Personnes en situation de chômage ou de maladie temporaire.</li>
+                <li>Nouveaux arrivants (olim) en phase d'installation.</li>
+              </ul>
             </section>
 
             <Separator />
 
-            {/* Identification Method */}
+            {/* Selection Process */}
             <section>
               <div className="flex items-center gap-2 mb-4">
                 <Search className="w-5 h-5 text-primary" />
-                <h2 className="text-2xl font-serif">Mode d'identification</h2>
+                <h2 className="text-2xl font-serif">Processus de sélection</h2>
               </div>
               
-              <p className="mb-3">Les bénéficiaires sont identifiés via :</p>
+              <p className="mb-3">
+                Les bénéficiaires sont identifiés par :
+              </p>
               
               <ul className="list-disc pl-5 space-y-2">
-                <li>le réseau personnel de Shemouel (synagogues, ganim, voisins),</li>
                 <li>des recommandations par des rabbanim ou enseignants,</li>
                 <li>le Gma"h d'argent (lorsqu'une situation financière fragile est constatée),</li>
                 <li>des demandes directes avec justificatifs (situation familiale, charges, revenus, etc.)</li>

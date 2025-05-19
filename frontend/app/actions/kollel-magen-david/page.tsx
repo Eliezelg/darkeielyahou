@@ -7,14 +7,13 @@ import { PageHeader } from "@/components/page-header";
 
 export default function KollelMagenDavid() {
   return (
-    <div className="container mx-auto px-6 py-16">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <PageHeader 
-          title="Kollel Magen David"
-          subtitle="Kollel du vendredi & Shabbat – sanctifier le temps libre"
-          className="mb-12"
-        />
+    <>
+      <PageHeader 
+        title="Kollel Magen David"
+        subtitle="Kollel du vendredi & Shabbat – sanctifier le temps libre"
+      />
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
 
         {/* Main Content */}
         <div className="grid gap-12">
@@ -228,6 +227,7 @@ export default function KollelMagenDavid() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

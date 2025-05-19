@@ -80,7 +80,6 @@ Détails de votre inscription:
 - Téléphone: ${values.phone}
 - Ville: ${values.city}
 - Nombre de personnes: ${values.attendees}
-${values.dietaryRestrictions ? `- Restrictions alimentaires: ${values.dietaryRestrictions}` : ''}
 ${values.message ? `- Message: ${values.message}` : ''}
 
 Nous vous remercions pour votre confiance et vous contacterons prochainement avec plus de détails concernant l'événement.
@@ -96,7 +95,6 @@ L'équipe Darkei Elyahou
       } else {
         // Afficher un message d'erreur
         toast({
-          variant: "destructive",
           title: "Erreur",
           description: data.error || "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer."
         });
@@ -104,7 +102,6 @@ L'équipe Darkei Elyahou
     } catch (error) {
       console.error("Erreur lors de l'envoi du formulaire:", error);
       toast({
-        variant: "destructive",
         title: "Erreur de connexion",
         description: "Impossible de communiquer avec le serveur. Veuillez vérifier votre connexion et réessayer."
       });
@@ -216,27 +213,7 @@ L'équipe Darkei Elyahou
               )}
             />
 
-            {/* Dietary Restrictions */}
-            <FormField
-              control={form.control}
-              name="dietaryRestrictions"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Allergies ou restrictions alimentaires</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Précisez si nécessaire" 
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Si vous ou vos invités avez des besoins alimentaires spécifiques, veuillez les préciser.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+           
             {/* Optional Message */}
             <FormField
               control={form.control}
@@ -255,31 +232,7 @@ L'équipe Darkei Elyahou
                 </FormItem>
               )}
             />
-
-            {/* Allodons Link */}
-            <FormField
-              control={form.control}
-              name="AllodonsLink"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Je souhaite recevoir le lien de la plateforme Allodons
-                    </FormLabel>
-                    <FormDescription>
-                      Pour effectuer un don en ligne avant ou après le gala.
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-
+           
             <Button type="submit" className="w-full">Envoyer mon inscription</Button>
           </form>
         </Form>

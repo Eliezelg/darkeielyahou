@@ -4,21 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Heart, CreditCard, Calendar, FileText, Mail, PhoneCall, MessageCircle } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 
 export default function Don() {
   return (
-    <div className="container mx-auto px-6 pt-40 pb-16">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-12 text-center">
-          <span className="inline-block bg-primary/10 text-primary font-semibold rounded-full px-4 py-1 mb-4">
-            SOUTENIR L'ASSOCIATION
-          </span>
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Faire Un Don</h1>
-          <div className="text-2xl font-medium text-primary mb-8">
-            Aidez-nous à vous aider
-          </div>
-          <p className="text-lg mb-8">
+    <>
+      <PageHeader
+        title="Faire Un Don"
+        subtitle="Aidez-nous à vous aider"
+        badge="SOUTENIR L'ASSOCIATION"
+      />
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-lg mb-8 text-center">
             Chaque action de Darkei Elyahou est possible <strong>grâce à vous</strong>.<br/> Vos dons financent :
           </p>
 
@@ -49,7 +47,7 @@ export default function Don() {
             </div>
           </div>
           
-          <p className="text-xl font-serif font-medium mt-8">
+          <p className="text-xl font-serif font-medium mt-8 text-center">
             <strong>Ce n'est pas une contribution. C'est un partenariat.</strong>
           </p>
         </div>
@@ -109,18 +107,18 @@ export default function Don() {
             </a>
             
             <a 
-              href="https://wa.me/972XXXXXXXXX" 
+              href="https://wa.me/972547236004" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
               <MessageCircle className="w-5 h-5" />
-              WhatsApp : +972 [XXX XXX XXX]
+              WhatsApp : +972 54 723 6004
             </a>
           </div>
         </section>
       </div>
-    </div>
+    </>
   );
 }
 

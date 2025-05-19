@@ -51,13 +51,13 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a 
-                  href="https://wa.me/972XXXXXXXXX" 
+                  href="https://wa.me/972547236004" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center text-white/80 hover:text-white transition-colors"
                 >
                   <Phone className="w-5 h-5 mr-3 text-white/70" />
-                  +972 [XXX XXX XXX]
+                  +972 54 723 6004
                 </a>
               </li>
               <li>
@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
-                <span>Bayth Vegan, Jerusalem</span>
+                <span>Rechov Zangwill 9/60, Jerusalem</span>
               </li>
             </ul>
           </div>

@@ -4,27 +4,34 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin, Users, Award, Heart, MessageCircle, Mail } from "lucide-react";
 import GalaForm from "@/components/forms/gala-form";
+import { PageHeader } from "@/components/page-header";
+import React from "react";
 
-export default function Galas() {
+const Galas = () => {
   return (
-    <div className="container mx-auto px-6 pt-40 pb-16">
-      <div className="max-w-4xl mx-auto mb-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-serif mb-6">Les Galas de Darkei Elyahou</h1>
-        <h2 className="text-xl md:text-2xl text-muted-foreground mb-8">
-          Une soirée. Une mission. Un avenir.
-        </h2>
-        <p className="text-lg">
-          Depuis 2010, les <strong>galas annuels</strong> de Darkei Elyahou sont bien plus que des événements de collecte. 
-          Ce sont des <strong>rendez-vous d'âme</strong>, où se rencontrent ceux qui donnent, ceux qui reçoivent, 
-          et ceux qui vivent pour transmettre. Chaque gala est <strong>préparé avec amour</strong>, dans un esprit de <strong>kavod, 
-          d'élévation et de vérité</strong>, avec un objectif simple :
-        </p>
-        <p className="text-xl font-bold mt-6 text-primary">
-          Permettre à Darkei Elyahou d&apos;aider toute l&apos;année, sans jamais dire non.
-        </p>
-      </div>
+    <div>
+      {/* Header Section */}
+      <PageHeader
+        title="LES GALAS DE DARKEI ELYAHOU"
+        subtitle="Une soirée. Une mission. Un avenir."
+        className="mb-12"
+        badge="ÉVÉNEMENT"
+      />
 
-      <div className="grid gap-16">
+      <div className="container mx-auto px-6 pb-16">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <p className="text-lg mb-6">
+            Depuis 2010, les <strong>galas annuels</strong> de Darkei Elyahou sont bien plus que des événements de collecte. 
+            Ce sont des <strong>rendez-vous d'âme</strong>, où se rencontrent ceux qui donnent, ceux qui reçoivent, 
+            et ceux qui vivent pour transmettre. Chaque gala est <strong>préparé avec amour</strong>, dans un esprit de <strong>kavod, 
+            d'élévation et de vérité</strong>, avec un objectif simple :
+          </p>
+          <p className="text-xl font-bold text-primary">
+            Permettre à Darkei Elyahou d&apos;aider toute l&apos;année, sans jamais dire non.
+          </p>
+        </div>
+
+        <div className="grid gap-16">
         {/* Timeline des galas */}
         <section className="mb-12">
           <div className="space-y-10">
@@ -137,13 +144,13 @@ export default function Galas() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 text-center">
             <a 
-              href="https://wa.me/972XXXXXXXXX" 
+              href="https://wa.me/972547236004" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
               <MessageCircle className="w-5 h-5" />
-              WhatsApp : +972 [XXX XXX XXX]
+              WhatsApp : +972 54 723 6004
             </a>
             
             <a 
@@ -167,84 +174,95 @@ export default function Galas() {
           <div className="mt-8 max-w-md mx-auto p-6 bg-muted rounded-lg text-center">
             <p className="font-medium mb-4">Pour plus d'informations :</p>
             <div className="space-y-2 text-left">
-              <p>📱 WhatsApp : +972 [XXX XXX XXX]</p>
+              <p>📱 WhatsApp : +972 54 723 6004</p>
               <p>📧 Email : contact@darkei-elyahou.org</p>
             </div>
           </div>
         </section>
       </div>
     </div>
+    </div>
   );
-}
+};
 
-function TimelineItem({ 
-  year, 
-  title, 
-  description, 
-  icon, 
-  isFirst = false 
-}: {
+export default Galas;
+
+interface TimelineItemProps {
   year: string;
   title: string;
   description: string;
   icon: React.ReactNode;
   isFirst?: boolean;
-}) {
-  return (
-    <div className="flex">
-      <div className="flex flex-col items-center mr-6">
-        <div className="rounded-full p-4 bg-primary text-primary-foreground">
-          {icon}
-        </div>
-        {!isFirst && (
-          <div className="h-full w-1 bg-primary/20 -mt-2"></div>
-        )}
-      </div>
-      <div className={`pt-3 ${isFirst ? "" : "-mt-6"}`}>
-        <span className="text-sm font-bold text-primary inline-block px-3 py-1 bg-primary/10 rounded-full mb-2">
-          {year}
-        </span>
-        <h3 className="text-2xl font-serif mb-2">{title}</h3>
-        <p className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: description }} />
-      </div>
-    </div>
-  );
 }
 
-function GalaCard({ city, date, venue }: { city: string; date: string; venue: string }) {
-  return (
-    <Card className="overflow-hidden border-primary/30 hover:border-primary transition-all">
-      <CardHeader className="bg-primary/5 pb-3">
-        <CardTitle className="text-2xl font-serif">{city}</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-4">
-        <div className="space-y-3">
-          <div className="flex items-start gap-2">
-            <Calendar className="w-5 h-5 text-primary mt-0.5" />
-            <div>
-              <p className="font-medium">Date</p>
-              <p className="text-muted-foreground">{date}</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-2">
-            <MapPin className="w-5 h-5 text-primary mt-0.5" />
-            <div>
-              <p className="font-medium">Lieu</p>
-              <p className="text-muted-foreground">{venue}</p>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+const TimelineItem = ({
+  year,
+  title,
+  description,
+  icon,
+  isFirst = false
+}: TimelineItemProps) => (
+  <div className="flex">
+    <div className="flex flex-col items-center mr-6">
+      <div className="rounded-full p-4 bg-primary text-primary-foreground">
+        {icon}
+      </div>
+      {!isFirst && (
+        <div className="h-full w-1 bg-primary/20 -mt-2"></div>
+      )}
+    </div>
+    <div className={`pt-3 ${isFirst ? "" : "-mt-6"}`}>
+      <span className="text-sm font-bold text-primary inline-block px-3 py-1 bg-primary/10 rounded-full mb-2">
+        {year}
+      </span>
+      <h3 className="text-2xl font-serif mb-2">{title}</h3>
+      <p className="text-muted-foreground" dangerouslySetInnerHTML={{ __html: description }} />
+    </div>
+  </div>
+);
+
+interface GalaCardProps {
+  city: string;
+  date: string;
+  venue: string;
 }
 
-function FeatureCard({ title, description, emoji }: { title: string; description: string; emoji: string }) {
-  return (
-    <div className="p-4 bg-background rounded-lg border border-border">
-      <div className="text-3xl mb-3">{emoji}</div>
-      <h3 className="font-medium text-lg mb-1">{title}</h3>
-      <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{ __html: description }} />
-    </div>
-  );
+const GalaCard = ({ city, date, venue }: GalaCardProps) => (
+  <Card className="overflow-hidden border-primary/30 hover:border-primary transition-all">
+    <CardHeader className="bg-primary/5 pb-3">
+      <CardTitle className="text-2xl font-serif">{city}</CardTitle>
+    </CardHeader>
+    <CardContent className="pt-4">
+      <div className="space-y-3">
+        <div className="flex items-start gap-2">
+          <Calendar className="w-5 h-5 text-primary mt-0.5" />
+          <div>
+            <p className="font-medium">Date</p>
+            <p className="text-muted-foreground">{date}</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <MapPin className="w-5 h-5 text-primary mt-0.5" />
+          <div>
+            <p className="font-medium">Lieu</p>
+            <p className="text-muted-foreground">{venue}</p>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+interface FeatureCardProps {
+  title: string;
+  description: string;
+  emoji: string;
 }
+
+const FeatureCard = ({ title, description, emoji }: FeatureCardProps) => (
+  <div className="p-4 bg-background rounded-lg border border-border">
+    <div className="text-3xl mb-3">{emoji}</div>
+    <h3 className="font-medium text-lg mb-1">{title}</h3>
+    <p className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{ __html: description }} />
+  </div>
+);

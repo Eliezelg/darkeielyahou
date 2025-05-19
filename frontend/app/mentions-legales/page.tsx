@@ -18,7 +18,7 @@ export default function MentionsLegales() {
           <p>
             Siège social : Beth Vagan, Jérusalem<br />
             Email : contact@darkei-elyahou.org<br />
-            Téléphone : +972 [XXX XXX XXX]
+            Téléphone : +972 54 723 6004
           </p>
         </section>
         

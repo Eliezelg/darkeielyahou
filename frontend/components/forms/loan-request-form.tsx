@@ -93,7 +93,7 @@ L'équipe Darkei Elyahou
         toast({
           title: "Erreur",
           description: data.error || "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer.",
-          variant: "destructive" as any
+
         });
       }
     } catch (error) {
@@ -101,7 +101,7 @@ L'équipe Darkei Elyahou
       toast({
         title: "Erreur de connexion",
         description: "Impossible de communiquer avec le serveur. Veuillez vérifier votre connexion et réessayer.",
-        variant: "destructive" as any
+
       });
     }
   }

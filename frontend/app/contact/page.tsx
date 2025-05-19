@@ -227,7 +227,7 @@ export default function Contact() {
               <Phone className="w-6 h-6 mr-4 mt-1 text-primary" />
               <div>
                 <h3 className="font-medium mb-1 text-gray-700">WhatsApp</h3>
-                <p className="text-gray-600">+972 [XXX XXX XXX]</p>
+                <p className="text-gray-600">+972 54 723 6004</p>
               </div>
             </div>
             

@@ -17,14 +17,15 @@ export default function Hero() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-fade-in">
-            <a href="/don">
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium">
-                Faire un don
-              </Button>
-            </a>
+
             <a href="/actions">
               <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-medium border-2 border-white">
                 Découvrir nos actions
+              </Button>
+            </a>
+            <a href="/don">
+              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium">
+                Faire un don
               </Button>
             </a>
             <a href="/galas">

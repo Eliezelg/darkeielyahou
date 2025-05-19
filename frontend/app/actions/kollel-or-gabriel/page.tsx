@@ -12,7 +12,7 @@ export default function KollelOrGabriel() {
       {/* Header Section */}
       <PageHeader 
         title="Kollel Or Gabriel"
-        subtitle="Kollel de Hachkama (étude à l'aube, avant la téfila)"
+        subtitle="Kollel Hachkama (étude à l'aube, avant la téfila)"
       />
       
       <div className="container mx-auto px-6 py-16">

@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Statuts des demandes
+enum RequestStatus {
+  PENDING   // En attente
+  IN_REVIEW // En cours d'examen
+  COMPLETED // Traitée
+  REJECTED  // Rejetée
+}
+
+// Types de formulaires
+enum FormType {
+  SOCIAL_AID    // Aide sociale
+  LOAN_REQUEST  // Demande de prêt
+  KOL_JOIN      // Inscription au Kollel
+  GALA          // Inscription au gala
+  DONATION      // Don
+  OTHER         // Autre demande
+}
+
+// Modèle pour les demandes de formulaire
+model FormRequest {
+  id          String       @id @default(cuid())
+  formType    FormType     @default(OTHER)
+  formData    Json         // Données du formulaire au format JSON
+  status      RequestStatus @default(PENDING)
+  notes       String?      // Notes internes
+  metadata    Json?        // Métadonnées supplémentaires
+  
+  // Relations
+  createdBy   String?      // Email de l'utilisateur qui a créé la demande
+  createdByUser AdminUser?  @relation("CreatedByUser", fields: [createdBy], references: [email])
+  
+  assignedTo String?      // Email de l'utilisateur assigné
+  assignedToUser AdminUser? @relation("AssignedToUser", fields: [assignedTo], references: [email])
+  
+  // Timestamps
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  // Index
+  @@index([formType])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Modèle pour les administrateurs
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  password     String    // Mot de passe hashé (bcrypt)
+  fullName     String
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  // Relations (ces champs sont virtuels, utilisés par Prisma pour les requêtes)
+  assignedRequests FormRequest[] @relation("AssignedToUser")
+  createdRequests  FormRequest[] @relation("CreatedByUser")
+}

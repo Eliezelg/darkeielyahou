@@ -1,0 +1,10 @@
+{
+  "name": "font-converter",
+  "version": "1.0.0",
+  "description": "Convert TTF to WOFF2",
+  "main": "convert-font.js",
+  "type": "module",
+  "dependencies": {
+    "ttf2woff2": "^5.0.0"
+  }
+}

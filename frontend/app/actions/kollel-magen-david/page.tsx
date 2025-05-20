@@ -11,6 +11,7 @@ export default function KollelMagenDavid() {
       <PageHeader 
         title="Kollel Magen David"
         subtitle="Kollel du vendredi & Shabbat – sanctifier le temps libre"
+        badge="KOLLELIM"
       />
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">

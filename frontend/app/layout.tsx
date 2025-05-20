@@ -48,7 +48,7 @@ export default function RootLayout({
         >
           {/* Hide header and footer on admin pages */}
           {!isAdminPage && <Header />}
-          <main className={`min-h-screen ${isAdminPage ? 'pt-0' : 'pt-32'}`}>
+          <main className={`min-h-screen ${isAdminPage ? 'pt-0' : 'pt-24'}`}>
             {children}
           </main>
           {!isAdminPage && <Footer />}

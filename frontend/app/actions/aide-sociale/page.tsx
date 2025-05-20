@@ -9,11 +9,12 @@ import React from "react";
 
 export default function AideSociale() {
   return (
-    <div className="pt-24">
+    <div>
       {/* Header Section */}
       <PageHeader
         title="Bons d'achat & Soutien Ponctuel"
         subtitle="Mivtzaim de soutien – bons d'achat & aide directe"
+        badge="SOUTIEN AUX FAMILLES"
       />
       
       <div className="container mx-auto px-6 py-16">

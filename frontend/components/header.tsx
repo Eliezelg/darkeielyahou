@@ -88,26 +88,30 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-lg">
           <div className="container mx-auto py-4 space-y-4">
-            <MobileNavLink href="/">
+            <MobileNavLink href="/" closeMenu={() => setIsMobileMenuOpen(false)}>
               <Home className="w-4 h-4 mr-2" />
               Accueil
             </MobileNavLink>
-            <MobileNavLink href="/notre-histoire">
+            <MobileNavLink href="/notre-histoire" closeMenu={() => setIsMobileMenuOpen(false)}>
               <History className="w-4 h-4 mr-2" />
               Notre Histoire
             </MobileNavLink>
-            <MobileNavLink href="/actions">
+            <MobileNavLink href="/actions" closeMenu={() => setIsMobileMenuOpen(false)}>
               <Heart className="w-4 h-4 mr-2" />
               Nos Actions
             </MobileNavLink>
-            <MobileNavLink href="/galas">
+            <MobileNavLink href="/galas" closeMenu={() => setIsMobileMenuOpen(false)}>
               <CalendarDays className="w-4 h-4 mr-2" />
               Les Galas
             </MobileNavLink>
 
             <div className="pt-2">
               <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium py-2 rounded-full">
-                <Link href="/don" className="flex items-center justify-center w-full">
+                <Link 
+                  href="/don" 
+                  className="flex items-center justify-center w-full"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   <Gift className="w-4 h-4 mr-2" />
                   Faire un don
                 </Link>
@@ -143,15 +147,18 @@ function NavLink({
 
 function MobileNavLink({ 
   href, 
-  children 
+  children,
+  closeMenu
 }: { 
   href: string; 
   children: React.ReactNode;
+  closeMenu: () => void;
 }) {
   return (
     <Link 
       href={href}
       className="flex items-center py-2 text-foreground hover:text-primary"
+      onClick={closeMenu}
     >
       {children}
     </Link>

@@ -11,8 +11,9 @@ export default function KollelNichmatHava() {
    <div>
       {/* Header Section */}
       <PageHeader 
- title="Kollel Nichmat Hava"
-          subtitle="Kollel du soir – étude post-journée"
+        title="Kollel Nichmat Hava"
+        subtitle="Kollel du soir – étude post-journée"
+        badge="KOLLELIM"
       />
       
       <div className="container mx-auto px-6 py-16">

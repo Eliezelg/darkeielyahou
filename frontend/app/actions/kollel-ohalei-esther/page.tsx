@@ -13,6 +13,7 @@ export default function KollelOhaleiEsther() {
       <PageHeader 
         title="Kollel Ohalei Esther"
         subtitle="Kollel du vendredi – réservé aux francophones"
+        badge="KOLLELIM"
       />
       
 <div className="container mx-auto px-6 py-16">

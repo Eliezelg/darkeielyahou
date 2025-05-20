@@ -4,21 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Clock, Target, Package, Users, Shield, Banknote, CheckCircle } from "lucide-react";
 import SocialAidForm from "@/components/forms/social-aid-form";
+import { PageHeader } from "@/components/page-header";
 
 export default function SoutienHayalim() {
   return (
-    <div className="container mx-auto px-6 py-16">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-12 text-center">
-          <span className="inline-block bg-primary/10 text-primary font-semibold rounded-full px-4 py-1 mb-4">
-            SOUTIEN AUX FAMILLES
-          </span>
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Mivtza Chayal</h1>
-          <h2 className="text-xl text-muted-foreground">
-            Soutien moral, logistique et financier aux familles de soldats mobilisés
-          </h2>
-        </div>
+    <div>
+      <PageHeader 
+        title="Mivtza Chayal"
+        subtitle="Soutien moral, logistique et financier aux familles de soldats mobilisés"
+        badge="SOUTIEN AUX FAMILLES"
+      />
+      
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
 
         {/* Main Content */}
         <div className="grid gap-12">
@@ -254,6 +252,7 @@ export default function SoutienHayalim() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -7,17 +7,18 @@ import { PageHeader } from "@/components/page-header";
 
 export default function KollelDafHayomi() {
   return (
-    <div className="container mx-auto px-6 py-16">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <PageHeader 
-          title="Kollel Daf Hayomi"
-          subtitle="Étude quotidienne du Talmud – une page par jour, chaque jour"
-          className="mb-12"
-        />
+    <div>
+      {/* Hero Section */}
+      <PageHeader 
+        title="Kollel Daf Hayomi"
+        subtitle="Étude quotidienne du Talmud – une page par jour, chaque jour"
+        badge="KOLLELIM"
+      />
 
-        {/* Main Content */}
-        <div className="grid gap-12">
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid gap-12">
           {/* Origin & History */}
           <section>
             <div className="flex items-center gap-2 mb-4">
@@ -251,6 +252,7 @@ export default function KollelDafHayomi() {
               </Button>
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </div>

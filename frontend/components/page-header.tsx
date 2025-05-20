@@ -9,7 +9,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, className = '', badge }: PageHeaderProps) {
   return (
-    <section className={`bg-primary/95 text-white py-24 ${className}`}>
+    <section className={`bg-primary/95 text-white py-16 ${className}`}>
       <div className="container mx-auto px-6">
         {badge && (
           <div className="flex justify-center mb-4">

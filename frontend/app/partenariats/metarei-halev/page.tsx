@@ -5,40 +5,38 @@ import {
   Clock, Target, Handshake, Calendar, User, Users, 
   CheckCircle
 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 
 export default function MetareiHalev() {
   return (
-    <div className="container mx-auto px-6 py-16">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-12 text-center">
-          <span className="inline-block bg-primary/10 text-primary font-semibold rounded-full px-4 py-1 mb-4">
-            PARTENARIAT
-          </span>
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Jeunesse Francophone</h1>
-          <h2 className="text-xl text-muted-foreground mb-4">
-            Soutien aux jeunes filles francophones – En partenariat avec l'association Metarei Halev, dirigée par Guila Journo
-          </h2>
-        </div>
+    <div>
+      <PageHeader 
+        title="Jeunesse Francophone"
+        subtitle="Soutien aux jeunes filles francophones – En partenariat avec l'association Metarei Halev, dirigée par Guila Journo"
+        badge="PARTENARIAT"
+      />
+      
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
 
-        {/* Main Content */}
-        <div className="grid gap-12">
-          {/* Origin & History */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-primary" />
-              <h2 className="text-2xl font-serif">Origine & histoire</h2>
-            </div>
-            <p className="mb-4">
-              Shemouel Marciano, attentif aux besoins communautaires dans leur évolution générationnelle, est approché par Guila Journo, éducatrice passionnée et directrice de l'association Metarei Halev.
-            </p>
-            <p className="mb-4">
-              Son projet : Créer un cadre éducatif et protecteur pour les jeunes filles francophones en Israël, souvent en perte de repères, tiraillées entre plusieurs cultures, et souvent livrées à elles-mêmes en dehors de l'école.
-            </p>
-            <p>
-              En tant que père de famille et élu municipal, Shemouel comprend l'urgence de soutenir ce type d'initiative, préventive, éducative et réparatrice.
-            </p>
-          </section>
+          {/* Main Content */}
+          <div className="grid gap-12">
+            {/* Origin & History */}
+            <section>
+              <div className="flex items-center gap-2 mb-4">
+                <Clock className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-serif">Origine & histoire</h2>
+              </div>
+              <p className="mb-4">
+                Shemouel Marciano, attentif aux besoins communautaires dans leur évolution générationnelle, est approché par Guila Journo, éducatrice passionnée et directrice de l'association Metarei Halev.
+              </p>
+              <p className="mb-4">
+                Son projet : Créer un cadre éducatif et protecteur pour les jeunes filles francophones en Israël, souvent en perte de repères, tiraillées entre plusieurs cultures, et souvent livrées à elles-mêmes en dehors de l'école.
+              </p>
+              <p>
+                En tant que père de famille et élu municipal, Shemouel comprend l'urgence de soutenir ce type d'initiative, préventive, éducative et réparatrice.
+              </p>
+            </section>
 
           <Separator />
 
@@ -201,6 +199,7 @@ export default function MetareiHalev() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

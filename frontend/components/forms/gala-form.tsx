@@ -68,6 +68,8 @@ export default function GalaForm() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            to: values.email, // Envoyer au participant
+            from: "contact@darkei-elyahou.org", // L'expéditeur
             subject: `Confirmation d'inscription au gala - ${values.name}`,
             text: `
 Bonjour,
@@ -81,6 +83,7 @@ Détails de votre inscription:
 - Ville: ${values.city}
 - Nombre de personnes: ${values.attendees}
 ${values.message ? `- Message: ${values.message}` : ''}
+${values.dietaryRestrictions ? `- Restrictions alimentaires: ${values.dietaryRestrictions}` : ''}
 
 Nous vous remercions pour votre confiance et vous contacterons prochainement avec plus de détails concernant l'événement.
 

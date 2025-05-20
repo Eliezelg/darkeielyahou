@@ -12,6 +12,7 @@ export default function KollelAvrekhimCheovdim() {
       <PageHeader 
         title="Kollel Avrekhim Cheovdim - en Reconversion"
         subtitle="Kollel du matin – pour ceux qui travaillent"
+        badge="KOLLELIM"
       />
 
       {/* Main Content */}

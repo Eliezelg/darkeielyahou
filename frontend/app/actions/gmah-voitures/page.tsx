@@ -7,11 +7,12 @@ import { PageHeader } from "@/components/page-header";
 
 export default function GmahVoitures() {
   return (
-    <div className="pt-24">
+    <div>
       {/* Header Section */}
       <PageHeader 
         title="GMA'H de Voitures"
         subtitle="Projet communautaire de transport ponctuel"
+        badge="GMAH"
       />
       
       <div className="container mx-auto px-6 py-16">

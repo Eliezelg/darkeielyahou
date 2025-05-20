@@ -5,20 +5,21 @@ import {
   Clock, Target, School, Calendar, BookOpen, Users, 
   Handshake, CheckCircle, AlertTriangle
 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 
 export default function BethSandler() {
   return (
-    <div className="container mx-auto px-6 py-16">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-12 text-center">
-          <span className="inline-block bg-primary/10 text-primary font-semibold rounded-full px-4 py-1 mb-4">
-            PARTENARIAT
-          </span>
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Beth Sandler</h1>
-          <h2 className="text-xl text-muted-foreground mb-4">
-            Kollel intensif pour futurs rabbins – soutenu et co-dirigé par Shemouel Marciano
-          </h2>
+    <div>
+      <PageHeader 
+        title="Beth Sandler"
+        subtitle="Kollel intensif pour futurs rabbins – soutenu et co-dirigé par Shemouel Marciano"
+        badge="PARTENARIAT"
+      />
+      
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Header Section - Avertissement */}
+          <div className="mb-12 text-center">
           <div className="flex justify-center">
             <div className="bg-red-50 text-red-600 p-4 rounded-lg inline-flex items-center gap-2 max-w-xl">
               <AlertTriangle className="h-5 w-5" />
@@ -213,6 +214,7 @@ export default function BethSandler() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -28,7 +28,14 @@ jobs:
           pm2 restart backend
 
           # Va dans le dossier frontend, installe les dépendances, et relance
-          cd ~/app/darkeielyahou/frontend
-          npm install
-          npm run build
-          pm2 restart frontend
+            cd ~/app/darkeielyahou/frontend
+            echo "📦 Frontend - Installation des dépendances"
+            npm install
+            echo "🛠️ Frontend - Build"
+            npm run build
+            echo "🚀 Frontend - Redémarrage"
+            pm2 restart frontend || pm2 start npm --name frontend -- run start
+
+            echo "✅ Déploiement terminé"
+
+            pm2 logs 

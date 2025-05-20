@@ -24,7 +24,6 @@ jobs:
           # Va dans le dossier backend, installe les dépendances, et relance
           cd ~/app/darkeielyahou/backend
           npm install
-          npm run build
           pm2 restart backend
 
           # Va dans le dossier frontend, installe les dépendances, et relance

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Dossiers que les robots ne doivent pas explorer
+Disallow: /api/
+Disallow: /_next/
+
+# Sitemap
+Sitemap: https://darkei-elyahou.org/sitemap.xml

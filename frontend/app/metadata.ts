@@ -1,27 +1,31 @@
 import { Metadata, Viewport } from 'next';
 
 // Titre par défaut de l'application
-const DEFAULT_TITLE = 'Darkei Elyahou | Aidez-nous à vous aider';
+const DEFAULT_TITLE = 'Darkei Elyahou | Actions sociales et Torah pour la communauté francophone en Israël';
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL('https://darkei-elyahou.org'),
   title: DEFAULT_TITLE,
-  description: 'Darkei Elyahou aide la communauté francophone en Israël à travers des actions concrètes de Torah, de \'Hessed et de soutien social. Kollelim, GMA\'H, aide sociale et plus encore.',
+  description: 'Darkei Elyahou soutient la communauté francophone en Israël avec des Kollelim, GMA\'H, aide sociale, projets éducatifs et actions de solidarité. Découvrez nos initiatives et contribuez à notre mission.',
   keywords: [
     'Darkei Elyahou', 
-    'Kollel', 
-    "GMA'H", 
-    'aide sociale', 
-    'Jérusalem', 
-    'Torah', 
-    'communauté francophone', 
-    'actions sociales', 
-    'dons',
-    'Israël',
-    'association caritative',
-    'aides financières',
-    'cours de Torah',
-    'soutien aux familles',
+    'Kollel Jérusalem', 
+    "GMA'H Israël", 
+    'aide sociale francophone', 
+    'Jérusalem francophone', 
+    'Torah étude', 
+    'communauté juive francophone Israël', 
+    'actions sociales Jérusalem', 
+    'dons association juive',
+    'Israël francophone',
+    'association caritative juive',
+    'aide financière Israël',
+    'cours de Torah francophone',
+    'soutien aux familles juives',
+    'solidarité Israel',
+    'Hesed',
+    'actions solidaires',
+    'Tsedaka',
   ],
   authors: [{ name: 'Darkei Elyahou' }],
   creator: 'Darkei Elyahou',
@@ -36,23 +40,24 @@ export const defaultMetadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://darkei-elyahou.org',
     siteName: 'Darkei Elyahou',
-    title: 'Darkei Elyahou | Aidez-nous à vous aider',
-    description: 'Une main tendue. Une Torah vivante. Une réponse à chaque besoin.',
+    title: 'Darkei Elyahou | Actions sociales et Torah pour la communauté francophone en Israël',
+    description: 'Soutenez nos actions de solidarité et d"étude de la Torah pour la communauté francophone en Israël. Kollelim, GMA"H, aide sociale et projets éducatifs.',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Darkei Elyahou - Une main tendue, une Torah vivante',
+        alt: 'Darkei Elyahou - Actions sociales et Torah pour la communauté francophone en Israël',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Darkei Elyahou | Aidez-nous à vous aider',
-    description: 'Une main tendue. Une Torah vivante. Une réponse à chaque besoin.',
+    title: 'Darkei Elyahou | Actions sociales et Torah en Israël',
+    description: 'Soutenez nos actions de solidarité et d"étude de la Torah pour la communauté francophone en Israël. #Kollelim #GMAH #AideSociale',
     images: ['/images/og-image.jpg'],
     creator: '@darkeielyahou',
+    site: '@darkeielyahou',
   },
   robots: {
     index: true,
@@ -70,6 +75,7 @@ export const defaultMetadata: Metadata = {
       { url: '/favicon.ico', sizes: 'any' },
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-192x192.png', sizes: '192x192', type: 'image/png' },
     ],
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180' },
@@ -85,9 +91,15 @@ export const defaultMetadata: Metadata = {
   manifest: '/site.webmanifest',
   verification: {
     google: 'YOUR_GOOGLE_VERIFICATION_CODE',
-    yandex: 'YOUR_YANDEX_VERIFICATION_CODE',
-    yahoo: 'YOUR_YAHOO_VERIFICATION_CODE',
   },
+  alternates: {
+    canonical: 'https://darkei-elyahou.org',
+    languages: {
+      'fr-FR': 'https://darkei-elyahou.org',
+      'he-IL': 'https://darkei-elyahou.org/he',
+    },
+  },
+  category: 'Association caritative',
   other: {
     'msapplication-TileColor': '#1e40af',
     'msapplication-config': '/browserconfig.xml',

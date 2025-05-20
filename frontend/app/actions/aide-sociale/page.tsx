@@ -15,7 +15,7 @@ export default function AideSociale() {
         title="Bons d'achat & Soutien Ponctuel"
         subtitle="Mivtzaim de soutien – bons d'achat & aide directe"
         badge="SOUTIEN AUX FAMILLES"
-      />
+      /> 
       
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-4xl mx-auto">

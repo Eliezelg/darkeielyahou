@@ -1,10 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin, Users, Award, Heart, MessageCircle, Mail } from "lucide-react";
-import GalaForm from "@/components/forms/gala-form";
+import GalaForm from "@/components/forms/gala";
 import { PageHeader } from "@/components/page-header";
+import { GalaGallery } from "@/components/gala/gala-gallery";
 import React from "react";
 
 const Galas = () => {
@@ -32,8 +32,46 @@ const Galas = () => {
         </div>
 
         <div className="grid gap-16">
-        {/* Timeline des galas */}
+        {/* Date des prochains galas avec images d'affiches */}
         <section className="mb-12">
+          <h2 className="text-3xl font-serif text-center mb-8">Les Prochains Galas</h2>
+          
+          <GalaGallery 
+            images={[
+              {
+                src: "/images/gala/strasbourg.png",
+                alt: "Gala de Strasbourg",
+                city: "Strasbourg",
+                date: "23 Juin 2025"
+              },
+              {
+                src: "/images/gala/paris.png",
+                alt: "Gala de Paris",
+                city: "Paris",
+                date: "24 Juin 2025"
+              },
+              {
+                src: "/images/gala/jerusalem.png",
+                alt: "Gala de Jérusalem",
+                city: "Jérusalem",
+                date: "30 Juin 2025"
+              }
+
+            ]}
+          />
+        </section>
+        
+        {/* Formulaire d'inscription */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-serif text-center mb-8">S'inscrire au Prochain Gala</h2>
+          <div className="max-w-3xl mx-auto bg-card rounded-xl shadow-lg p-6 border border-border">
+            <GalaForm />
+          </div>
+        </section>
+        
+        {/* Historique des galas */}
+        <section className="mb-12">  
+          <h2 className="text-3xl font-serif text-center mb-8">Notre Histoire</h2>
           <div className="space-y-10">
             <TimelineItem 
               year="2010" 
@@ -73,28 +111,7 @@ const Galas = () => {
           </div>
         </section>
 
-        {/* Prochains galas */}
-        <section className="mt-12">
-          <h2 className="text-3xl font-serif mb-8 text-center">Prochains Galas</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <GalaCard 
-              city="Strasbourg" 
-              date="23 juin 2025"
-              venue="À confirmer"
-            />
-            <GalaCard 
-              city="Paris" 
-              date="24 juin 2025"
-              venue="À confirmer"
-            />
-            <GalaCard 
-              city="Jérusalem" 
-              date="À confirmer"
-              venue="À confirmer"
-            />
-          </div>
-        </section>
-
+       
         {/* Qu'est-ce qu'un gala Darkei Elyahou */}
         <section className="mt-12 bg-muted p-8 rounded-lg">
           <h2 className="text-3xl font-serif mb-6 text-center">Un gala, c&apos;est...</h2>
@@ -161,26 +178,10 @@ const Galas = () => {
               contact@darkei-elyahou.org
             </a>
           </div>
-          
-          {/* Formulaire d'inscription */}
-          <div className="mt-12">
-            <div className="mb-8 text-center">
-              <h3 className="text-2xl font-serif mb-4">S'inscrire au prochain gala</h3>
-              <p className="text-muted-foreground">Remplissez le formulaire ci-dessous pour vous inscrire à l'un de nos prochains galas</p>
-            </div>
-            <GalaForm />
-          </div>
-          
-          <div className="mt-8 max-w-md mx-auto p-6 bg-muted rounded-lg text-center">
-            <p className="font-medium mb-4">Pour plus d'informations :</p>
-            <div className="space-y-2 text-left">
-              <p>📱 WhatsApp : +972 54 723 6004</p>
-              <p>📧 Email : contact@darkei-elyahou.org</p>
-            </div>
-          </div>
-        </section>
+         </section>
       </div>
     </div>
+      {/* Fin de la page */}
     </div>
   );
 };

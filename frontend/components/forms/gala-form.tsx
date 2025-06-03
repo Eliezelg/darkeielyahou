@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -11,36 +12,53 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { CalendarHeart } from "lucide-react";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
+  firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
+  lastName: z.string().min(2, { message: "Le nom de famille doit contenir au moins 2 caractères" }),
   email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
-  phone: z.string().min(9, { message: "Le numéro de téléphone doit être valide" }),
+  phoneCountryCode: z.string().min(2, { message: "Veuillez sélectionner un indicatif" }),
+  phoneNumber: z.string().min(5, { message: "Le numéro de téléphone doit être valide" }),
   city: z.string({ required_error: "Veuillez sélectionner une ville" }),
-  attendees: z.string().min(1, { message: "Veuillez indiquer le nombre de personnes" }),
-  dietaryRestrictions: z.string().optional(),
-  message: z.string().optional(),
-  AllodonsLink: z.boolean().optional(),
+  maleAttendees: z.string().min(1, { message: "Veuillez indiquer le nombre de participants hommes" }),
+  femaleAttendees: z.string().min(1, { message: "Veuillez indiquer le nombre de participantes femmes" }),
 });
 
 export default function GalaForm() {
   const { toast } = useToast();
 
+  // État local pour l'indicatif pays du téléphone et état de soumission
+  const [countryCode, setCountryCode] = useState("+972");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      phone: "",
-      attendees: "",
-      dietaryRestrictions: "",
-      message: "",
-      AllodonsLink: false,
+      phoneCountryCode: "+972",
+      phoneNumber: "",
+      city: "",
+      maleAttendees: "",
+      femaleAttendees: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    
+    // Indiquer que la soumission est en cours
+    setIsSubmitting(true);
+    
+    // Préparation des données avec les champs mis à jour
+    const formData = {
+      ...values,
+      phone: `${values.phoneCountryCode}${values.phoneNumber}`,
+      totalAttendees: Number(values.maleAttendees) + Number(values.femaleAttendees)
+    };
     
     try {
       // Envoyer les données au serveur
@@ -49,7 +67,7 @@ export default function GalaForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(formData),
       });
       
       const data = await response.json();
@@ -61,27 +79,83 @@ export default function GalaForm() {
           description: data.message || "Votre inscription au gala a été enregistrée avec succès. Nous vous contacterons prochainement avec plus de détails."
         });
         
-        // Envoyer un email de confirmation
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/send-email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: values.email, // Envoyer au participant
-            from: "contact@darkei-elyahou.org", // L'expéditeur
-            subject: `Confirmation d'inscription au gala - ${values.name}`,
-            text: `
-Bonjour,
+        // Marquer le formulaire comme soumis pour afficher le message de confirmation
+        setIsSubmitted(true);
+        
+        // Définir la couleur bleue du site
+        const primaryBlue = "#006989"; // Le bleu principal utilisé sur le site Darkei Elyahou
+        
+        // Créer un email HTML pour le participant avec un joli design et le logo
+        const userHtmlContent = `
+          <!DOCTYPE html>
+          <html lang="fr">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Confirmation d'inscription au gala</title>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+              .header { background-color: ${primaryBlue}; padding: 25px 20px; text-align: center; border-radius: 6px 6px 0 0; }
+              .logo { max-width: 180px; margin: 0 auto 15px; display: block; background-color: white; border-radius: 5px; padding: 10px; }
+              .header h1 { color: white; margin: 0; font-weight: 600; }
+              .content { padding: 25px; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; }
+              .footer { background-color: ${primaryBlue}; color: white; padding: 15px; text-align: center; font-size: 12px; border-radius: 0 0 6px 6px; }
+              .details { background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-left: 4px solid ${primaryBlue}; border-radius: 4px; }
+              h1 { color: white; }
+              h2 { color: ${primaryBlue}; margin-top: 0; }
+              p { margin-bottom: 15px; }
+              .gala-info { background-color: #fafafa; border: 1px solid #eaeaea; padding: 15px; margin-top: 20px; text-align: center; }
+              .gala-info h3 { color: ${primaryBlue}; margin-top: 0; }
+              .button { display: inline-block; background-color: ${primaryBlue}; color: white; text-decoration: none; padding: 10px 20px; border-radius: 4px; margin-top: 10px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <img src="cid:logo" alt="Darkei Elyahou" class="logo">
+              <h1>Confirmation d'inscription au gala</h1>
+            </div>
+            <div class="content">
+              <p>Bonjour ${values.firstName},</p>
+              <p>Nous avons bien reçu votre inscription au <strong>gala de ${values.city}</strong> de Darkei Elyahou. Nous vous remercions pour votre confiance.</p>
+              
+              <div class="details">
+                <h2>Détails de votre inscription</h2>
+                <p><strong>Prénom:</strong> ${values.firstName}</p>
+                <p><strong>Nom:</strong> ${values.lastName}</p>
+                <p><strong>Email:</strong> ${values.email}</p>
+                <p><strong>Téléphone:</strong> ${values.phoneCountryCode}${values.phoneNumber}</p>
+                <p><strong>Ville du gala:</strong> ${values.city}</p>
+                <p><strong>Participants:</strong> ${Number(values.maleAttendees) + Number(values.femaleAttendees)} personnes (${values.maleAttendees} hommes, ${values.femaleAttendees} femmes)</p>
+              </div>
+              
+              <div class="gala-info">
+                <h3>Informations sur le gala de ${values.city}</h3>
+                <p>Vous trouverez en pièce jointe l'affiche officielle de l'événement.</p>
+                <p>Nous vous contacterons prochainement avec plus de détails concernant le déroulement de la soirée.</p>
+              </div>
+              
+              <p>Cordialement,<br>L'équipe Darkei Elyahou</p>
+            </div>
+            <div class="footer">
+              <p>&copy; ${new Date().getFullYear()} Darkei Elyahou. Tous droits réservés.</p>
+            </div>
+          </body>
+          </html>
+        `;
+        
+        // Créer un texte simple pour les clients de messagerie qui ne supportent pas HTML
+        const textContent = `
+Bonjour ${values.firstName},
 
 Nous avons bien reçu votre inscription au gala de Darkei Elyahou.
 
 Détails de votre inscription:
-- Nom: ${values.name}
+- Prénom: ${values.firstName}
+- Nom: ${values.lastName}
 - Email: ${values.email}
-- Téléphone: ${values.phone}
+- Téléphone: ${values.phoneCountryCode}${values.phoneNumber}
 - Ville: ${values.city}
-- Nombre de personnes: ${values.attendees}
+- Participants: ${Number(values.maleAttendees) + Number(values.femaleAttendees)} personnes (${values.maleAttendees} hommes, ${values.femaleAttendees} femmes)
 ${values.message ? `- Message: ${values.message}` : ''}
 ${values.dietaryRestrictions ? `- Restrictions alimentaires: ${values.dietaryRestrictions}` : ''}
 
@@ -89,7 +163,21 @@ Nous vous remercions pour votre confiance et vous contacterons prochainement ave
 
 Cordialement,
 L'équipe Darkei Elyahou
-            `
+`;
+        
+        // Envoyer l'email au participant et une copie à l'administrateur
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/send-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: values.email, // Envoyer au participant
+            subject: `Confirmation d'inscription au gala - ${values.firstName} ${values.lastName}`,
+            text: textContent,
+            html: userHtmlContent,
+            sendCopy: true, // Demande d'envoi d'une copie à l'administrateur
+            formData: formData, // Envoyer toutes les données du formulaire pour l'email administrateur
           }),
         });
         
@@ -103,12 +191,51 @@ L'équipe Darkei Elyahou
         });
       }
     } catch (error) {
-      console.error("Erreur lors de l'envoi du formulaire:", error);
+      console.error('Erreur lors de l\'envoi du formulaire ou de l\'email:', error);
       toast({
-        title: "Erreur de connexion",
-        description: "Impossible de communiquer avec le serveur. Veuillez vérifier votre connexion et réessayer."
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi de votre inscription. Veuillez réessayer plus tard."
       });
+    } finally {
+      // Fin du processus de soumission
+      setIsSubmitting(false);
     }
+  }
+
+  // Si le formulaire a été soumis avec succès, afficher le message de confirmation
+  if (isSubmitted) {
+    return (
+      <div className="max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md border border-muted">
+        <div className="text-center py-8 space-y-6">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight text-green-700">Inscription envoyée avec succès !</h2>
+          <div className="space-y-4 text-center">
+            <p className="text-gray-600">
+              Merci pour votre inscription au gala de Darkei Elyahou. Un email de confirmation a été envoyé à l'adresse que vous avez fournie.
+            </p>
+            <p className="text-gray-600">
+              Nous vous contacterons prochainement avec plus de détails concernant l'événement. L'affiche officielle du gala est jointe à l'email de confirmation.  
+            </p>
+          </div>
+          <div className="pt-4">
+            <Button 
+              onClick={() => setIsSubmitted(false)}
+              variant="outline"
+              className="mr-2"
+            >
+              Faire une nouvelle inscription
+            </Button>
+            <Button asChild>
+              <a href="/galas">Retourner à la page des galas</a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -132,15 +259,30 @@ L'équipe Darkei Elyahou
       <div className="border rounded-xl p-6 md:p-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Name */}
+            {/* Prénom */}
             <FormField
               control={form.control}
-              name="name"
+              name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom et Prénom</FormLabel>
+                  <FormLabel>Prénom*</FormLabel>
                   <FormControl>
-                    <Input placeholder="Votre nom complet" {...field} />
+                    <Input placeholder="Votre prénom" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {/* Nom de famille */}
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nom de famille*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Votre nom de famille" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,20 +304,63 @@ L'équipe Darkei Elyahou
               )}
             />
 
-            {/* Phone */}
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Téléphone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Votre numéro de téléphone" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Phone with country code */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="phoneCountryCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Indicatif pays</FormLabel>
+                    <Select 
+                      value={field.value} 
+                      onValueChange={(value) => {
+                        setCountryCode(value);
+                        field.onChange(value);
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="max-h-[300px]">
+                        <SelectItem value="+972">+972 (Israël 🇮🇱)</SelectItem>
+                        <SelectItem value="+33">+33 (France 🇫🇷)</SelectItem>
+                        <SelectItem value="+1">+1 (États-Unis 🇺🇸)</SelectItem>
+                        <SelectItem value="+32">+32 (Belgique 🇧🇪)</SelectItem>
+                        <SelectItem value="+41">+41 (Suisse 🇨🇭)</SelectItem>
+                        <SelectItem value="+44">+44 (Royaume-Uni 🇬🇧)</SelectItem>
+                        <SelectItem value="+212">+212 (Maroc 🇲🇦)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Numéro de téléphone</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Votre numéro" 
+                        {...field} 
+                        onChange={(e) => {
+                          // Ne garder que les chiffres et quelques caractères spéciaux
+                          const value = e.target.value.replace(/[^\d\s\-\(\)]/g, '');
+                          e.target.value = value;
+                          field.onChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             {/* City */}
             <FormField
@@ -201,42 +386,76 @@ L'équipe Darkei Elyahou
               )}
             />
 
-            {/* Number of Attendees */}
-            <FormField
-              control={form.control}
-              name="attendees"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombre de personnes</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nombre de participants" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Number of Attendees - Split by gender */}
+            <div className="space-y-2">
+              <h3 className="text-base font-medium">Participants</h3>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="maleAttendees"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nombre d'hommes</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Sélectionnez" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {[...Array(10)].map((_, i) => (
+                            <SelectItem key={i} value={String(i + 1)}>{i + 1}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="femaleAttendees"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nombre de femmes</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Sélectionnez" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {[...Array(10)].map((_, i) => (
+                            <SelectItem key={i} value={String(i + 1)}>{i + 1}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-           
-            {/* Optional Message */}
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message (optionnel)</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Si vous avez des demandes particulières..." 
-                      className="resize-none min-h-[80px]"
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                                                                                    
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Envoi en cours...
+                </>
+              ) : (
+                "Envoyer mon inscription"
               )}
-            />
-           
-            <Button type="submit" className="w-full">Envoyer mon inscription</Button>
+            </Button>
           </form>
         </Form>
       </div>

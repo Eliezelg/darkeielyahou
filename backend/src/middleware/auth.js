@@ -1,5 +1,20 @@
 const { APP_CONFIG } = require('../../lib/config');
 const ADMIN_CONFIG = APP_CONFIG.ADMIN;
+const jwt = require('jsonwebtoken');
+
+// Vérifier le token JWT
+const verifyToken = (token) => {
+  try {
+    if (!token) return null;
+    
+    // Si le JWT_SECRET n'est pas défini, utiliser PASSWORD comme fallback
+    const secret = process.env.JWT_SECRET || ADMIN_CONFIG.PASSWORD;
+    return jwt.verify(token, secret);
+  } catch (error) {
+    console.error('Erreur de vérification du token:', error.message);
+    return null;
+  }
+};
 
 // Middleware to require authentication
 const requireAuth = (req, res, next) => {
@@ -18,6 +33,7 @@ const requireAuth = (req, res, next) => {
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
     console.log('Tentative d\'authentification par token dans Authorization header');
+    console.log('Token reçu:', token.slice(0, 10) + '...');
     
     // Vérifier si le token est le mot de passe admin (pour compatibilité)
     if (token === ADMIN_CONFIG.PASSWORD) {
@@ -26,9 +42,31 @@ const requireAuth = (req, res, next) => {
       return next();
     }
     
-    // Vérifier si le token correspond à un token de session stocké
+    // Vérifier si le token est un JWT valide
+    try {
+      console.log('Tentative de vérification JWT avec secret:', process.env.JWT_SECRET ? 'JWT_SECRET présent' : 'JWT_SECRET absent, utilisation de PASSWORD');
+      const secret = process.env.JWT_SECRET || ADMIN_CONFIG.PASSWORD;
+      console.log('Secret utilisé (partiel):', typeof secret === 'string' ? secret.slice(0, 3) + '...' : 'non string');
+      
+      const decodedToken = verifyToken(token);
+      console.log('Résultat décodage JWT:', decodedToken ? 'Token valide' : 'Token invalide');
+      
+      if (decodedToken) {
+        console.log('JWT valide, authentification réussie');
+        req.session.isAuthenticated = true;
+        req.user = decodedToken;
+        return next();
+      }
+    } catch (error) {
+      console.error('Erreur lors de la vérification JWT:', error.message);
+    }
+    
+    // Vérifier si le token correspond à un token de session stocké (rétrocompatibilité)
+    console.log('Vérification token de session:', 
+              'token de session:', req.session?.authToken ? req.session.authToken.slice(0, 10) + '...' : 'absent');
+    
     if (req.session?.authToken === token) {
-      console.log('Token valide, authentification réussie');
+      console.log('Token de session valide, authentification réussie');
       req.session.isAuthenticated = true;
       return next();
     } else {
@@ -62,11 +100,17 @@ const login = (req, res) => {
     // Authentication successful
     req.session.isAuthenticated = true;
     
-    // Générer un token simple pour l'authentification
-    const authToken = require('crypto').randomBytes(32).toString('hex');
+    // Générer un token JWT pour l'authentification
+    const secret = process.env.JWT_SECRET || ADMIN_CONFIG.PASSWORD;
+    const authToken = jwt.sign(
+      { username: 'admin', isAdmin: true },
+      secret,
+      { expiresIn: '24h' }
+    );
     
-    // Sauvegarder le token dans la session
-    req.session.authToken = authToken;
+    // Générer aussi un token simple pour la session (rétrocompatibilité)
+    const sessionToken = require('crypto').randomBytes(32).toString('hex');
+    req.session.authToken = sessionToken;
     
     // Sauvegarder explicitement la session
     req.session.save((err) => {
@@ -82,7 +126,7 @@ const login = (req, res) => {
       return res.status(200).json({
         success: true,
         message: 'Connexion réussie',
-        // Envoyer le token au client pour stockage dans localStorage
+        // Envoyer le token JWT au client pour stockage dans localStorage
         authToken: authToken
       });
     });

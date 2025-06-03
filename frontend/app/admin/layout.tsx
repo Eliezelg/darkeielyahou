@@ -12,6 +12,7 @@ import {
   Settings,
   ChevronRight
 } from 'lucide-react';
+import { FormCategorySidebar } from '@/components/admin/form-category-sidebar';
 
 export default function AdminLayout({
   children,

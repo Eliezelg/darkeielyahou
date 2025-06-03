@@ -24,7 +24,7 @@ enum FormType {
   SOCIAL_AID    // Aide sociale
   LOAN_REQUEST  // Demande de prêt
   KOL_JOIN      // Inscription au Kollel
-  GALA          // Inscription au gala
+  GALA_REGISTRATION  // Inscription au gala
   DONATION      // Don
   OTHER         // Autre demande
 }
@@ -33,7 +33,7 @@ enum FormType {
 model FormRequest {
   id          String       @id @default(cuid())
   formType    FormType     @default(OTHER)
-  formData    Json         // Données du formulaire au format JSON
+  formData    Json         // Données du formulaire au format JSON (pour GALA_REGISTRATION: firstName, lastName, email, phone, etc.)
   status      RequestStatus @default(PENDING)
   notes       String?      // Notes internes
   metadata    Json?        // Métadonnées supplémentaires

@@ -94,7 +94,7 @@ export default function AdminLogin() {
   // Rediriger si déjà connecté
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/admin/dashboard');
+      router.push('/admin/forms/gala');
     }
   }, [isAuthenticated, router]);
 
@@ -144,7 +144,7 @@ export default function AdminLogin() {
         // pour s'assurer que l'état est correctement réinitialisé
         setIsAuthenticated(true);
         setTimeout(() => {
-          window.location.href = '/admin/dashboard';
+          window.location.href = '/admin/forms/gala';
         }, 500); // Court délai pour permettre au toast de s'afficher
       } else {
         throw new Error(data.error || 'Mot de passe incorrect');

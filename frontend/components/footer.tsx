@@ -39,7 +39,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start">
                 <MessageCircle className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
-                <Link href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                <Link href="whatsapp://send?phone=972547236004" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
                   Rejoignez-nous sur WhatsApp
                 </Link>
               </li>

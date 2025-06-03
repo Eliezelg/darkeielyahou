@@ -39,7 +39,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0">
         <ImageCarousel images={carouselImages} interval={6000} />
       </div>
-      <div className="absolute inset-0 z-10 bg-primary/30 mix-blend-overlay" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-primary/40 via-primary/30 to-primary/70" />
       
       <div className="container mx-auto px-6 z-20 py-24 relative">
         <div className="text-center max-w-4xl mx-auto">

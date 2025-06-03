@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const { createClient } = require('redis');
+const connectRedis = require('connect-redis');
+const RedisStore = connectRedis(session);
 const sgMail = require('@sendgrid/mail');
 const { PrismaClient } = require('./generated/prisma');
 const { ADMIN_CONFIG } = require('./lib/config');
@@ -41,8 +44,38 @@ app.use(cors({
 
 app.use(express.json());
 
+// Configuration du client Redis
+const redisClient = createClient({
+  url: process.env.REDIS_URL || 'redis://localhost:6379',
+  password: process.env.REDIS_PASSWORD || '',
+  legacyMode: false
+});
+
+// Connexion au client Redis
+(async () => {
+  try {
+    await redisClient.connect();
+    console.log('Connexion à Redis établie');
+  } catch (err) {
+    console.error('Erreur de connexion à Redis:', err);
+  }
+})();
+
+// Gestion des erreurs Redis
+redisClient.on('error', (err) => {
+  console.error('Erreur Redis:', err);
+});
+
+redisClient.on('connect', () => {
+  console.log('Connexion à Redis établie');
+});
+
+// Création du store Redis
+const redisStore = new RedisStore({ client: redisClient });
+
 // Configuration de la session
 const sessionConfig = {
+  store: redisStore,
   secret: ADMIN_CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
@@ -260,6 +293,14 @@ const shutdown = async () => {
   // Fermer le serveur
   server.close(async () => {
     console.log('Serveur arrêté');
+    
+    // Fermer la connexion Redis
+    try {
+      await redisClient.disconnect();
+      console.log('Connexion Redis fermée');
+    } catch (err) {
+      console.error('Erreur lors de la fermeture de Redis:', err);
+    }
     
     // Fermer la connexion Prisma
     await prisma.$disconnect();

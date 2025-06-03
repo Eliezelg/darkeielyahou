@@ -9,11 +9,21 @@ const nextConfig = {
   images: {
     // Désactive l'optimisation des images pour le développement
     unoptimized: process.env.NODE_ENV !== 'production',
-    // Domaines autorisés pour les images externes
-    domains: [
-      'localhost',
-      'darkei-elyahou.vercel.app',
-      'www.darkei-elyahou.org',
+    // Configuration des modèles d'URL distantes pour les images
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'darkei-elyahou.vercel.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.darkei-elyahou.org',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: process.env.NODE_ENV === 'development' ? '3000' : ''
+      },
     ],
   },
   

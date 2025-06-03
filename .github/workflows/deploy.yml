@@ -3,7 +3,7 @@ name: Déploiement automatique sur VPS
 on:
   push:
     branches:
-      - main  # ou la branche que tu utilises pour déployer
+      - main
 
 jobs:
   deploy:
@@ -21,22 +21,27 @@ jobs:
         key: ${{ secrets.VPS_SSH_KEY }}
         port: 22
         script: |
-          # Va dans le dossier backend, installe les dépendances, et relance
+          set -e
+
+          # Backend
+          echo "🚀 Déploiement backend"
           cd ~/app/darkeielyahou/backend
           git pull origin main
           npm install
-          pm2 restart backend
+          pm2 restart darkeielyahoubackend
 
-          # Va dans le dossier frontend, installe les dépendances, et relance
-            cd ~/app/darkeielyahou/frontend
-            git pull origin main
-            echo "📦 Frontend - Installation des dépendances"
-            npm install
-            echo "🛠️ Frontend - Build"
-            npm run build
-            echo "🚀 Frontend - Redémarrage"
-            pm2 restart frontend || pm2 start npm --name frontend -- run start
+          # Frontend
+          echo "🚀 Déploiement frontend"
+          cd ~/app/darkeielyahou/frontend
+          git pull origin main
+          echo "📦 Installation des dépendances"
+          npm install
+          echo "🛠️ Build"
+          npm run build
+          echo "🚀 Redémarrage"
+          pm2 restart darkeielyahoufrontend || pm2 start npm --name darkeielyahoufrontend -- run start
 
-            echo "✅ Déploiement terminé"
+          # Sauvegarde PM2 (optionnel)
+          pm2 save
 
-            pm2 logs 
+          echo "✅ Déploiement terminé avec succès"

@@ -1,0 +1,44 @@
+# Fichiers de configuration sensibles
+ecosystem.config.js
+
+# Fichiers d'environnement
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Dossiers de dépendances
+node_modules/
+.next/
+
+# Fichiers système
+.DS_Store
+*.pem
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dossiers de build
+/dist
+/build
+
+# Variables d'environnement
+.env*.local
+
+# Base de données locale
+*.sqlite
+*.sqlite3
+
+# IDE
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

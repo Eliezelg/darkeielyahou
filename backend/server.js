@@ -411,13 +411,13 @@ app.post('/api/forms/:type', async (req, res) => {
           // Définir le chemin de l'affiche selon la ville
           switch(cityLowerCase) {
             case 'paris':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.png');
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.webp');
               break;
             case 'jerusalem':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.png');
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp');
               break;
             case 'strasbourg':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.png');
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.webp');
               break;
             default:
               posterPath = null;

@@ -40,6 +40,11 @@ export async function GET() {
         if (!isImage) {
           debug(`Fichier ignoré (pas une image): ${file}`);
         }
+        // Ignorer également les fichiers .md ou autres non-images
+        if (file.endsWith('.md')) {
+          debug(`Fichier markdown ignoré: ${file}`);
+          return false;
+        }
         return isImage;
       })
       .map(file => `/images/carousel/${file}`);
@@ -63,12 +68,14 @@ export async function GET() {
       
       // Vérifier si l'image existe
       const fullPath = path.join(process.cwd(), 'public', imagePath);
+      debug(`Vérification du chemin: ${fullPath}`);
       const exists = fs.existsSync(fullPath);
       if (!exists) {
         debug(`Image introuvable sur le chemin: ${fullPath}`);
         return false;
       }
       
+      debug(`Image validée: ${imagePath}`);
       return true;
     });
     

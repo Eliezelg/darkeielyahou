@@ -22,15 +22,22 @@ export default function ImageCarousel({ images, interval = 6000 }: ImageCarousel
     return () => clearInterval(intervalId);
   }, [images, interval]);
 
+  // Vérifier si le tableau d'images est vide ou non défini
   if (!images || images.length === 0) {
-    return <div className="w-full h-full bg-primary"></div>;
+    console.warn('Aucune image disponible pour le carrousel');
+    return <div className="w-full h-full bg-primary flex items-center justify-center">
+      <div className="text-white text-opacity-50 text-xl">Chargement des images...</div>
+    </div>;
   }
+  
+  // Afficher un log pour aider au débogage
+  console.log(`Affichage du carrousel avec ${images.length} images`, images);
 
   // Précharger toutes les images dans un conteneur caché
   const preloadImages = images.map((image, index) => (
     <img 
       key={`preload-${index}`}
-      src={encodeURI(image)}
+      src={image}
       alt=""
       className="hidden" 
       aria-hidden="true"
@@ -48,7 +55,7 @@ export default function ImageCarousel({ images, interval = 6000 }: ImageCarousel
           }`}
         >
           <img 
-            src={encodeURI(image)}
+            src={image}
             alt={`Slide ${index + 1}`}
             className="w-full h-full object-cover object-center"
             style={{

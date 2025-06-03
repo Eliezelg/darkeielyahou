@@ -9,6 +9,13 @@ export default function Hero() {
   const [carouselImages, setCarouselImages] = useState<string[]>([]);
 
   useEffect(() => {
+    // Images par défaut si aucune image n'est retournée
+    const defaultImages = [
+      '/images/carousel/image (1).jpg',
+      '/images/carousel/image (2).jpg',
+      '/images/carousel/image (3).jpg',
+    ];
+
     // Fonction pour récupérer les images du dossier carousel via l'API
     const fetchCarouselImages = async () => {
       try {
@@ -20,15 +27,18 @@ export default function Hero() {
         const data = await response.json();
         
         if (data.images && data.images.length > 0) {
+          console.log('Images du carrousel chargées avec succès:', data.images);
           setCarouselImages(data.images);
         } else {
-          // Si aucune image n'est retournée, on utilise un tableau vide
-          setCarouselImages([]);
+          // Si aucune image n'est retournée, on utilise les images par défaut
+          console.log('Aucune image retournée par l\'API, utilisation des images par défaut');
+          setCarouselImages(defaultImages);
         }
       } catch (error) {
         console.error('Erreur lors du chargement des images du carrousel:', error);
-        // En cas d'erreur, on utilise un tableau vide
-        setCarouselImages([]);
+        // En cas d'erreur, on utilise les images par défaut
+        console.log('Utilisation des images par défaut suite à une erreur');
+        setCarouselImages(defaultImages);
       }
     };
 

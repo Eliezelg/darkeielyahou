@@ -156,8 +156,6 @@ Détails de votre inscription:
 - Téléphone: ${values.phoneCountryCode}${values.phoneNumber}
 - Ville: ${values.city}
 - Participants: ${Number(values.maleAttendees) + Number(values.femaleAttendees)} personnes (${values.maleAttendees} hommes, ${values.femaleAttendees} femmes)
-${values.message ? `- Message: ${values.message}` : ''}
-${values.dietaryRestrictions ? `- Restrictions alimentaires: ${values.dietaryRestrictions}` : ''}
 
 Nous vous remercions pour votre confiance et vous contacterons prochainement avec plus de détails concernant l'événement.
 

@@ -638,8 +638,11 @@ L'équipe Darkei Elyahou
 });
 
 // Routes d'administration
-const adminRouter = require('./src/routes/admin');
+console.log('Importation du routeur admin depuis ./src/routes/admin/index.js');
+const adminRouter = require('./src/routes/admin/index');
+console.log('Routeur admin importé avec succès');
 app.use('/api/admin', adminRouter);
+console.log('Routeur admin monté sur /api/admin');
 
 // Routes d'exportation de données
 const exportRouter = require('./src/routes/export');

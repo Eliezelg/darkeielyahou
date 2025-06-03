@@ -9,11 +9,20 @@ const { requireAuth } = require('../../middleware/auth');
 const prisma = new PrismaClient();
 
 // Sous-routes
-console.log('Tentative d\'importation du module forms...');
-const formsRouter = require('./forms');
-console.log('Module forms importé avec succès');
-router.use('/forms', formsRouter);
-console.log('Route /forms montée sur le routeur admin');
+console.log('Tentative d\'importation du module forms avec chemin absolu...');
+const path = require('path');
+try {
+  const formsRouter = require(path.join(__dirname, 'forms'));
+  console.log('Module forms importé avec succès');
+  // Debug: afficher ce qui est exporté par forms.js
+  console.log('Contenu exporté par forms.js:', Object.keys(formsRouter));
+  console.log('formsRouter est un routeur Express:', formsRouter && typeof formsRouter.use === 'function');
+  
+  router.use('/forms', formsRouter);
+  console.log('Route /forms montée sur le routeur admin à ' + new Date().toISOString());
+} catch (error) {
+  console.error('ERREUR lors de l\'importation du module forms:', error);
+}
 
 // Route de connexion admin
 router.post('/login', async (req, res) => {

@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('../../../generated/prisma');
+const prisma = new PrismaClient();
 const { requireAuth } = require('../../middleware/auth');
 
-const prisma = new PrismaClient();
+console.log('=== Module forms.js chargé avec succès ===');
+console.log('Router Express créé dans forms.js');
+console.log('Chemin d\'importation pour Prisma:', '../../../generated/prisma');
 
 // Middleware d'authentification pour toutes les routes
 router.use(requireAuth);
@@ -22,12 +25,17 @@ const formTypeMapping = {
 
 // Route pour récupérer les formulaires par type
 router.get('/', async (req, res) => {
+  console.log('==== ROUTE GET /api/admin/forms APPELÉE ====');
+  console.log('Query params reçus:', req.query);
+  console.log('Headers reçus:', req.headers);
+  
   try {
     console.log('Route GET /api/admin/forms exécutée');
     const { type } = req.query;
-    console.log('Requête GET /api/admin/forms avec type =', type);
+    console.log('Route GET /api/admin/forms appelée avec type:', type);
     
     if (!type) {
+      console.log('Erreur: paramètre type manquant');
       return res.status(400).json({
         success: false,
         error: 'Le paramètre "type" est requis',

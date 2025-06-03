@@ -74,7 +74,6 @@ export default function GalaRegistrationsPage() {
       } catch (error) {
         console.error('Erreur:', error);
         toast({
-          variant: "destructive",
           title: "Erreur",
           description: "Impossible de charger les inscriptions au gala."
         });
@@ -94,7 +93,6 @@ export default function GalaRegistrationsPage() {
       
       if (!token) {
         toast({
-          variant: "destructive",
           title: "Erreur d'authentification",
           description: "Vous devez être connecté pour exporter les données."
         });
@@ -148,9 +146,8 @@ export default function GalaRegistrationsPage() {
     } catch (error) {
       console.error('Erreur lors de l\'exportation:', error);
       toast({
-        variant: "destructive",
-        title: "Échec de l'exportation",
-        description: error.message || "Une erreur est survenue lors de l'exportation des inscriptions au gala."
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'exportation des inscriptions au gala."
       });
     } finally {
       setIsExporting(false);

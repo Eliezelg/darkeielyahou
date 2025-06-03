@@ -1,12 +1,47 @@
+"use client";
+
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
+import ImageCarousel from './image-carousel';
+import { useEffect, useState } from 'react';
 
 export default function Hero() {
+  const [carouselImages, setCarouselImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Fonction pour récupérer les images du dossier carousel via l'API
+    const fetchCarouselImages = async () => {
+      try {
+        const response = await fetch('/api/carousel-images');
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des images');
+        }
+        
+        const data = await response.json();
+        
+        if (data.images && data.images.length > 0) {
+          setCarouselImages(data.images);
+        } else {
+          // Si aucune image n'est retournée, on utilise un tableau vide
+          setCarouselImages([]);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des images du carrousel:', error);
+        // En cas d'erreur, on utilise un tableau vide
+        setCarouselImages([]);
+      }
+    };
+
+    fetchCarouselImages();
+  }, []);
   return (
-    <section className="relative min-h-screen bg-cover bg-center flex items-center justify-center text-white overflow-hidden" style={{ backgroundImage: 'url("/images/avrehim.png")' }}>
-      <div className="absolute inset-0 bg-primary/90 mix-blend-multiply" />
+    <section className="relative min-h-screen flex items-center justify-center text-white overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <ImageCarousel images={carouselImages} interval={6000} />
+      </div>
+      <div className="absolute inset-0 z-10 bg-primary/30 mix-blend-overlay" />
       
-      <div className="container mx-auto px-6 z-10 py-24">
+      <div className="container mx-auto px-6 z-20 py-24 relative">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl mb-4 animate-fade-in">
             AIDEZ-NOUS À VOUS AIDER

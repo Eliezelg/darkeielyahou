@@ -16,9 +16,33 @@ export default function MentionsLegales() {
             Responsable de publication : Shemouel Marciano
           </p>
           <p>
-            Siège social : Beth Vagan, Jérusalem<br />
             Email : contact@darkei-elyahou.org<br />
             Téléphone : +972 54 723 6004
+          </p>
+        </section>
+        
+        <Separator className="my-8" />
+        
+        <section className="mb-10">
+          <h2 className="text-2xl font-serif mb-4">Informations sur l'association en France</h2>
+          <p>
+            Nom officiel : DARKEI ELYAHOU<br />
+            Numéro RNA : W941004399 (Répertoire National des Associations)<br />
+            Type d'organisation : Association simplement déclarée<br />
+            Statut : Active<br />
+            Adresse : 56 Avenue Jean Jaurès, 75019 Paris
+          </p>
+        </section>
+        
+        <Separator className="my-8" />
+        
+        <section className="mb-10">
+          <h2 className="text-2xl font-serif mb-4">Informations sur l'association en Israël</h2>
+          <p>
+            Nom officiel : דרכי אליהו - ירושלים (ע"ר) / Darkei Elyahou - Jérusalem<br />
+            Numéro d'organisation : 580498178<br />
+            Type d'organisation : Association enregistrée (עמותה)<br />
+            Adresse : Rue Zangwill (זנגוויל) 9/60, Jérusalem
           </p>
         </section>
         

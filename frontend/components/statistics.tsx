@@ -21,7 +21,7 @@ const statistics = [
   {
     icon: <Book className="w-10 h-10 text-primary" />,
     value: 6,
-    label: "Kollelim ouverts chaque semaine",
+    label: "Kollelim ouverts 7/7",
   },
   {
     icon: <Users className="w-10 h-10 text-primary" />,

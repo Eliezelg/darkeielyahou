@@ -42,7 +42,7 @@ export default function MentionsLegales() {
             Nom officiel : דרכי אליהו - ירושלים (ע"ר) / Darkei Elyahou - Jérusalem<br />
             Numéro d'organisation : 580498178<br />
             Type d'organisation : Association enregistrée (עמותה)<br />
-            Adresse : Rue Zangwill (זנגוויל) 9/60, Jérusalem
+            Adresse : Rue Zanguevill (זנגוויל) 9/60, Jérusalem
           </p>
         </section>
         

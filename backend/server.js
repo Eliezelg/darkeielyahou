@@ -196,7 +196,7 @@ app.post('/api/send-email', async (req, res) => {
             posterPath = path.join(__dirname, '../frontend/public/images/gala/Jerusalem.png');
             break;
           case 'strasbourg':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.png');
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.w');
             break;
           default:
             console.log('Ville non reconnue pour l\'affiche:', formData.city);
@@ -486,8 +486,7 @@ app.post('/api/forms/:type', async (req, res) => {
                 <p><strong>Participants:</strong> ${Number(formData.maleAttendees) + Number(formData.femaleAttendees)} personnes (${formData.maleAttendees} hommes, ${formData.femaleAttendees} femmes)</p>
 
                 <p>Vous trouverez ci-joint l'affiche du gala de ${formData.city}.</p>
-                <p>Nous vous contacterons prochainement avec plus de détails concernant le déroulement de la soirée.</p>
-              </div>
+               </div>
               
               <p>Cordialement,<br>L'équipe Darkei Elyahou</p>
             </div>

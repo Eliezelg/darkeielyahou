@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Phone, Mail, MapPin, Facebook, Instagram, Youtube, Heart, MessageCircle } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
@@ -9,7 +10,7 @@ export default function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <h3 className="text-xl font-serif mb-6">Darkei ELYAHOU</h3>
+            <h3 className="text-xl font-serif mb-6">DARKEI ELYAHOU</h3>
             <p className="mb-6 text-white/80 uppercase font-bold">
               AIDEZ-NOUS À VOUS AIDER
             </p>
@@ -34,9 +35,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li className="flex items-start">
-                <MessageCircle className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
+                <FaWhatsapp className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
                 <Link href="whatsapp://send?phone=972547236004" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
-                  Rejoignez-nous sur WhatsApp
+                  Contactez-nous par WhatsApp
                 </Link>
               </li>
             </ul>
@@ -83,6 +84,8 @@ export default function Footer() {
             <Link href="/contact" className="hover:text-white">Contact</Link>
           </div>
         </div>
+
+
 
         <div className="mt-4 flex items-center justify-center gap-2 text-sm text-white/60">
           <a href="https://webpro650.co.il" target="_blank" rel="noopener noreferrer" className="hover:opacity-80">

@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import {
   Form,
   FormControl,
@@ -224,7 +225,7 @@ export default function Contact() {
             </div>
             
             <div className="flex items-start">
-              <Phone className="w-6 h-6 mr-4 mt-1 text-primary" />
+              <FaWhatsapp className="w-6 h-6 mr-4 mt-1 text-primary" />
               <div>
                 <h3 className="font-medium mb-1 text-gray-700">WhatsApp</h3>
                 <p className="text-gray-600">+972 54 723 6004</p>

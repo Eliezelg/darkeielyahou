@@ -21,8 +21,14 @@ const formSchema = z.object({
   phoneCountryCode: z.string().min(2, { message: "Veuillez sélectionner un indicatif" }),
   phoneNumber: z.string().min(5, { message: "Le numéro de téléphone doit être valide" }),
   city: z.string({ required_error: "Veuillez sélectionner une ville" }),
-  maleAttendees: z.string().min(1, { message: "Veuillez indiquer le nombre de participants hommes" }),
-  femaleAttendees: z.string().min(1, { message: "Veuillez indiquer le nombre de participantes femmes" }),
+  maleAttendees: z.string(),
+  femaleAttendees: z.string(),
+}).refine(data => {
+  // Au moins un des champs doit avoir une valeur autre que "0"
+  return data.maleAttendees !== "0" || data.femaleAttendees !== "0";
+}, {
+  message: "Veuillez indiquer au moins un participant (homme ou femme)",
+  path: ["maleAttendees", "femaleAttendees"]
 });
 
 export default function GalaForm() {
@@ -42,8 +48,8 @@ export default function GalaForm() {
       phoneCountryCode: "+972",
       phoneNumber: "",
       city: "",
-      maleAttendees: "",
-      femaleAttendees: "",
+      maleAttendees: "0",
+      femaleAttendees: "0",
     },
   });
 
@@ -131,7 +137,6 @@ export default function GalaForm() {
               <div class="gala-info">
                 <h3>Informations sur le gala de ${values.city}</h3>
                 <p>Vous trouverez en pièce jointe l'affiche officielle de l'événement.</p>
-                <p>Nous vous contacterons prochainement avec plus de détails concernant le déroulement de la soirée.</p>
               </div>
               
               <p>Cordialement,<br>L'équipe Darkei Elyahou</p>
@@ -215,9 +220,7 @@ L'équipe Darkei Elyahou
             <p className="text-gray-600">
               Merci pour votre inscription au gala de Darkei Elyahou. Un email de confirmation a été envoyé à l'adresse que vous avez fournie.
             </p>
-            <p className="text-gray-600">
-              Nous vous contacterons prochainement avec plus de détails concernant l'événement. L'affiche officielle du gala est jointe à l'email de confirmation.  
-            </p>
+            
           </div>
           <div className="pt-4">
             <Button 

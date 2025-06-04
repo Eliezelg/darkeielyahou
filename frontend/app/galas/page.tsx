@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, MapPin, Users, Award, Heart, MessageCircle, Mail } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import GalaForm from "@/components/forms/gala";
 import { PageHeader } from "@/components/page-header";
 import { GalaGallery } from "@/components/gala/gala-gallery";
@@ -166,7 +167,7 @@ const Galas = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white font-medium py-3 px-6 rounded-lg transition-colors"
             >
-              <MessageCircle className="w-5 h-5" />
+              <FaWhatsapp className="w-5 h-5" />
               WhatsApp : +972 54 723 6004
             </a>
             

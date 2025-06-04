@@ -10,7 +10,7 @@ export default function KollelAvrekhimCheovdim() {
     <>
       {/* Hero Section */}
       <PageHeader 
-        title="Kollel Avrekhim Cheovdim - en Reconversion"
+        title="Kollel Avrekhim Cheovdim"
         subtitle="Kollel du matin – pour ceux qui travaillent"
         badge="KOLLELIM"
       />

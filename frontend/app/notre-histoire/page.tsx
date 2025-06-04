@@ -91,7 +91,7 @@ export default function HistoryPage() {
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
               <li>Des familles viennent rendre ou demander un prêt</li>
               <li>Des gens déposent de l'argent pour faire du 'Hessed</li>
-              <li>D'autres appellent pour une Brit, un Kolel, une voiture, un conseil…</li>
+              <li>D'autres appellent pour une Brit, un Kollel, une voiture, un conseil…</li>
             </ul>
           </div>
         </section>
@@ -139,15 +139,15 @@ export default function HistoryPage() {
 const milestones = [
   {
     icon: "💡",
-    text: "Refusé dans un Kolel ? → Il crée Ohalei Esther, un Kolel pour les francophones, le vendredi matin."
+    text: "Refusé dans un Kollel ? → Il crée Ohalei Esther, un Kollel pour les francophones, le vendredi matin."
   },
   {
     icon: "💬",
-    text: "Une femme dit : \"Mon mari travaille, je ne trouve plus ma place\" → Il crée le Kolel Avrekhim Cheovdim"
+    text: "Une femme dit : \"Mon mari travaille, je ne trouve plus ma place\" → Il crée le Kollel Avrekhim Cheovdim"
   },
   {
     icon: "📖",
-    text: "On veut faire le Daf Hayomi, mais on ne sait pas comment ? → Il fonde un Kolel dédié"
+    text: "On veut faire le Daf Hayomi, mais on ne sait pas comment ? → Il fonde un Kollel dédié"
   },
   {
     icon: "🚗",
@@ -162,7 +162,7 @@ const milestones = [
 const achievements = [
   {
     value: "6",
-    label: "Kollelim actifs chaque semaine"
+    label: "Kollelim actifs 7/7"
   },
   {
     value: "8.000.000₪",

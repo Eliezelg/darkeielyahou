@@ -9,12 +9,9 @@ export default function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <h3 className="text-xl font-serif mb-6">DARKÉI ELYAHOU</h3>
+            <h3 className="text-xl font-serif mb-6">Darkei ELYAHOU</h3>
             <p className="mb-6 text-white/80 uppercase font-bold">
               AIDEZ-NOUS À VOUS AIDER
-            </p>
-            <p className="mb-6 text-white/80">
-              Association Loi 1901 | Siège social : Beth Vagan, Jérusalem
             </p>
           </div>
           
@@ -23,7 +20,6 @@ export default function Footer() {
             <ul className="space-y-3">
               <FooterLink href="/actions/soutien">Soutien aux familles</FooterLink>
               <FooterLink href="/actions/pret">Prêt de véhicules</FooterLink>
-              <FooterLink href="/actions/reconversion">Reconversion professionnelle</FooterLink>
               <FooterLink href="/actions/aide">Aide d'urgence</FooterLink>
             </ul>
           </div>
@@ -71,7 +67,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
-                <span>Rechov Zangwill 9/60, Jerusalem</span>
+                <span>Rehov Zanguevill 9/60, Jerusalem</span>
               </li>
             </ul>
           </div>

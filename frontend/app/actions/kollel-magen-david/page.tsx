@@ -133,7 +133,7 @@ export default function KollelMagenDavid() {
                   <Calendar className="w-4 h-4 text-primary" />
                   <div className="font-medium">Fréquence</div>
                 </div>
-                <p className="pl-6">Chaque semaine, en autonomie guidée</p>
+                <p className="pl-6">7/7, en autonomie guidée</p>
               </div>
               
               <div className="space-y-1">

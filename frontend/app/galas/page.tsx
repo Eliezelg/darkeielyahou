@@ -51,7 +51,7 @@ const Galas = () => {
                 date: "24 Juin 2025"
               },
               {
-                src: "/images/gala/jerusalem.webp",
+                src: "/images/gala/Jerusalem.webp",
                 alt: "Gala de Jérusalem",
                 city: "Jérusalem",
                 date: "30 Juin 2025"
@@ -76,7 +76,7 @@ const Galas = () => {
             <TimelineItem 
               year="2010" 
               title="Une tombola de départ"
-              description={"La première édition a lieu dans une <strong>petite salle à Bayit Vegan</strong>.<br/><br/>Shemouel organise une tombola pour financer les premières bourses du Guemah.<br/><br/><strong>30 personnes.<br/>3 000 shekels</strong>.<br/><br/>Mais déjà une vision : <strong>faire ensemble, grandir ensemble</strong>."}
+              description={"La première édition a lieu dans une <strong>petite salle à Bayit Vegan</strong>.<br/><br/>Shemouel organise une tombola pour financer les premières bourses du Gma''h.<br/><br/><strong>30 personnes.<br/>3 000 shekels</strong>.<br/><br/>Mais déjà une vision : <strong>faire ensemble, grandir ensemble</strong>."}
               icon={<Calendar className="w-10 h-10" />}
               isFirst
             />
@@ -84,28 +84,28 @@ const Galas = () => {
             <TimelineItem 
               year="2010–2022" 
               title="Grandir dans la discrétion"
-              description="Pendant plus de dix ans, les galas sont organisés en Israël, chaque année, dans des formats sobres mais chaleureux.<br/> Les levées de fonds en France se font <strong>en porte-à-porte, en rencontres individuelles, en chizouk personnel</strong>.<br/><br/>Ce qui compte, c'est la cause. Pas les projecteurs."
+              description="Pendant plus de dix ans, les galas sont organisés en Israël, chaque année, dans des formats sobres mais chaleureux.<br/> Les levées de fonds en France se font <strong>en porte-à-porte, en rencontres individuelles</strong>.<br/><br/>Ce qui compte, c'est la cause. Pas les projecteurs."
               icon={<Users className="w-10 h-10" />}
             />
             
             <TimelineItem 
               year="2023" 
               title="Premier gala à Paris"
-              description="Sur les conseils de proches amis (notamment <strong>Yann Esmajah, Steve Sitruck, Jérémy Bouznah</strong>),<br/> Shemouel accepte de créer une vraie <strong>soirée à Paris</strong>, pour <strong>honorer les donateurs français</strong>.<br/><br/>🎥 Film de présentation<br/>🎵 Animation musicale<br/>🍽️ Buffet raffiné<br/>📜 Témoignages bouleversants<br/><br/>Le résultat ? Une salle comble, une ambiance puissante, et une campagne réussie."
+              description="Sur les conseils de proches amis (notamment <strong>Yann Smadja, Steeve Sitruk, Jérémy Bouznah</strong>),<br/> Shemouel accepte de créer une vraie <strong>soirée à Paris</strong>, pour <strong>honorer les donateurs français</strong>.<br/><br/>🎥 Film de présentation<br/>🎵 Animation musicale<br/>🍽️ Buffet raffiné<br/>📜 Témoignages bouleversants<br/><br/>Le résultat ? Une salle comble, une ambiance puissante, et une campagne réussie."
               icon={<MapPin className="w-10 h-10" />}
             />
             
             <TimelineItem 
               year="2024" 
               title="Paris + Jérusalem"
-              description="Face à l'impact du format, Shemouel organise désormais <strong>deux galas</strong> chaque année :<br/><br/> <strong>À Paris</strong>, pour les donateurs européens <br/> <strong>À Jérusalem</strong>, pour les soutiens locaux.<br/><br/> Chacun a son ton, sa couleur, son décor —<br/> Mais tous portent le même cri du coeur :<br/><br/> <strong>'Aidez-nous à vous aider.'</strong>"
+              description="Face à l'impact du format, Shemouel organise désormais <strong>deux galas</strong> chaque année :<br/><br/> <strong>À Paris</strong>, pour les donateurs européens <br/> <strong>À Jérusalem</strong>, pour les soutiens locaux.<br/><br/> Chacun a son ton, sa couleur, son décor <br/> Mais tous portent le même cri du coeur : <strong>'Aidez-nous à vous aider'.</strong>"
               icon={<Award className="w-10 h-10" />}
             />
             
             <TimelineItem 
               year="2025" 
               title="Strasbourg entre dans la danse"
-              description="Cette année, pour la première fois, une <strong>troisième soirée</strong> est ajoutée à l'agenda :<br/><br/>📍 <strong>Strasbourg</strong> – 23 juin 2025<br/>📍 <strong>Paris</strong> – 24 juin 2025<br/>📍 <strong>Jérusalem</strong> – à confirmer<br/><br/>L'objectif annoncé : <strong>420 000 € pour 2025</strong>, pour couvrir l'ensemble des actions listées sur ce site."
+              description="Cette année, pour la première fois, une <strong>troisième soirée</strong> est ajoutée à l'agenda :<br/><br/>📍 <strong>Strasbourg</strong> – Lundi 23 Juin 2025<br/>📍 <strong>Paris</strong> – Mardi 24 Juin 2025<br/>📍 <strong>Jérusalem</strong> – Mardi 1 Juillet 2025<br/><br/>L'objectif annoncé : <strong>420 000 € pour 2025</strong>, pour couvrir l'ensemble des actions listées sur ce site."
               icon={<Heart className="w-10 h-10" />}
             />
           </div>

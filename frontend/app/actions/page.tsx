@@ -138,28 +138,6 @@ export default function Actions() {
         </section>
 
         <Separator className="my-8" />
-
-        {/* Section Partenariat Pédagogique */}
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <School className="h-8 w-8 text-primary" />
-            <h2 className="text-3xl font-serif">Partenariat Pédagogique</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <ActionCard 
-              title="Beth Sandler" 
-              description="Kollel de formation rabbinique (indépendant)" 
-              href="/partenariats/beth-sandler"
-              icon="🏫"
-            />
-            <ActionCard 
-              title="Metarei Halev" 
-              description="Éducation des jeunes filles francophones" 
-              href="/partenariats/metarei-halev"
-              icon="👩‍🎓"
-            />
-          </div>
-        </section>
       </div>
 
       <div className="mt-16 text-center">

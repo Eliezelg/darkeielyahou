@@ -192,8 +192,8 @@ app.post('/api/send-email', async (req, res) => {
           case 'paris':
             posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.png');
             break;
-          case 'jerusalem':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.png');
+          case 'Jerusalem':
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/Jerusalem.png');
             break;
           case 'strasbourg':
             posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.png');
@@ -421,8 +421,8 @@ app.post('/api/forms/:type', async (req, res) => {
             case 'paris':
               posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.webp');
               break;
-            case 'jerusalem':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp');
+            case 'Jerusalem':
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/Jerusalem.webp');
               break;
             case 'strasbourg':
               posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.webp');

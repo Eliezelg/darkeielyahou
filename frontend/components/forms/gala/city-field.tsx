@@ -24,7 +24,7 @@ export function CityField({ control }: CityFieldProps) {
             </FormControl>
             <SelectContent>
               <SelectItem value="paris">Paris</SelectItem>
-              <SelectItem value="jerusalem">Jérusalem</SelectItem>
+              <SelectItem value="Jerusalem">Jérusalem</SelectItem>
               <SelectItem value="strasbourg">Strasbourg</SelectItem>
             </SelectContent>
           </Select>

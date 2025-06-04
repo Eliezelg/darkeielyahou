@@ -33,7 +33,7 @@ export default function Don() {
             
             <div className="flex flex-col items-center bg-primary/5 rounded-lg p-4">
               <span className="text-2xl mb-2">💰</span>
-              <p>les guemah d'argent et de voitures</p>
+              <p>les Gma''h d'argent et de voitures</p>
             </div>
             
             <div className="flex flex-col items-center bg-primary/5 rounded-lg p-4">

@@ -39,7 +39,7 @@ export default function KollelOrGabriel() {
                 Plutôt que de renoncer, Shemouel prend le pari inverse :
               </p>
               <p className="mb-4">
-                Créer un Kolel d'étude AVANT la prière, pour attirer les hommes motivés dès l'aube, et enchaîner avec un minyan.
+                Créer un Kollel d'étude AVANT la prière, pour attirer les hommes motivés dès l'aube, et enchaîner avec un minyan.
               </p>
               <p>
                 Le Kollel Or Gabriel est né — avec la Torah comme point de départ de la journée, même dans un quartier difficile.

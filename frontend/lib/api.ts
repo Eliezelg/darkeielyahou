@@ -129,4 +129,5 @@ export const requestsApi = {
     }),
 };
 
+export { http };
 export default http;

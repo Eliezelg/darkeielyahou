@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { generateUserEmailTemplate, FormData } from "./email-templates";
 import { CalendarHeart, Loader2 } from "lucide-react";
-import api from "@/lib/api";
+import apiClient from "@/lib/api";
 
 // Composants du formulaire
 import { PersonalInfoFields } from "./personal-info-fields";
@@ -75,7 +75,7 @@ export default function GalaForm() {
       console.log("Envoi des données au serveur:", formData);
       
       // Envoyer les données au serveur via l'API centralisée
-      const { data } = await api.post('/api/forms/GALA', formData);
+      const { data } = await apiClient.post('/api/forms/GALA', formData);
       
       // Afficher le message de succès du serveur ou un message par défaut
       toast({

@@ -20,9 +20,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware de sécurité et CORS
-const corsOrigins = process.env.CORS_ORIGINS 
-  ? process.env.CORS_ORIGINS.split(',') 
-  : ['http://localhost:3000'];
+const corsOrigins = process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS
+  ? (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS).split(',').map(origin => origin.trim())
+  : ['http://localhost:3000', 'https://darkei-elyahou.org'];
 
 console.log('CORS Origins autorisées:', corsOrigins);
 
@@ -31,16 +31,24 @@ app.use(cors({
     // Permettre les requêtes sans origine (comme les applications mobiles ou Postman)
     if (!origin) return callback(null, true);
     
-    if (corsOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+    // En développement, permettre tous les localhost
+    if (process.env.NODE_ENV !== 'production' && origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    
+    if (corsOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.log('Origine CORS bloquée:', origin);
-      callback(new Error('Non autorisé par CORS'));
+      console.log('Origines autorisées:', corsOrigins);
+      callback(new Error(`Non autorisé par CORS: ${origin}`));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 app.use(express.json());

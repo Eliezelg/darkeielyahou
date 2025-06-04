@@ -32,36 +32,9 @@ jobs:
           echo "📥 Récupération du code..."
           git pull origin main
           
-          # Arrêter les anciens processus PM2 s'ils existent
-          echo "🛑 Arrêt des anciens processus..."
-          pm2 stop darkeielyahou-frontend darkeielyahou-backend 2>/dev/null || true
-          pm2 delete darkeielyahou-frontend darkeielyahou-backend 2>/dev/null || true
-          
-          # Backend
-          echo "🚀 Installation backend..."
-          cd ~/app/darkeielyahou/backend
-          npm install
-          npx prisma generate
-          
-          # Frontend 
-          echo "🚀 Installation et build frontend..."
-          cd ~/app/darkeielyahou/frontend
-          npm install
-          echo "🛠️ Build du frontend..."
-          npm run build
-          
-          # Retour à la racine pour PM2
-          echo "🚀 Démarrage avec ecosystem.config.js..."
-          cd ~/app/darkeielyahou
-          
-          # Démarrer avec le fichier ecosystem.config.js
-          pm2 start ecosystem.config.js --env production
-          
-          # Sauvegarde de la configuration PM2
-          pm2 save
-          
-          # Afficher le statut
-          echo "📊 Statut des processus:"
-          pm2 list
+          # Rendre le script de déploiement exécutable et l'exécuter
+          echo "🚀 Exécution du script de déploiement..."
+          chmod +x deploy.sh
+          ./deploy.sh
           
           echo "✅ Déploiement terminé avec succès"

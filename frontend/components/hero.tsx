@@ -9,11 +9,11 @@ export default function Hero() {
   const [carouselImages, setCarouselImages] = useState<string[]>([]);
 
   useEffect(() => {
-    // Images par défaut si aucune image n'est retournée
+    // Images par défaut si aucune image n'est retournée (utilisant WebP)
     const defaultImages = [
-      '/images/carousel/image (1).jpg',
-      '/images/carousel/image (2).jpg',
-      '/images/carousel/image (3).jpg',
+      '/images/carousel/image (1)_resultat.webp',
+      '/images/carousel/image (2)_resultat.webp',
+      '/images/carousel/image (3)_resultat.webp',
     ];
 
     // Fonction pour récupérer les images du dossier carousel via l'API

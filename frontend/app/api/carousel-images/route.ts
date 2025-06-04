@@ -31,23 +31,47 @@ export async function GET() {
     const files = fs.readdirSync(carouselDir);
     debug('Fichiers trouvés dans le dossier du carrousel', files);
     
-    // Filtrer pour ne garder que les fichiers image
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-    const images = files
-      .filter(file => {
-        const ext = path.extname(file).toLowerCase();
-        const isImage = imageExtensions.includes(ext);
-        if (!isImage) {
-          debug(`Fichier ignoré (pas une image): ${file}`);
+    // Filtrer pour ne garder que les fichiers image (prioriser WebP)
+    const imageExtensions = ['.webp', '.jpg', '.jpeg', '.png', '.gif'];
+    // Trier les fichiers par nom de base et extension pour privilégier WebP
+    const imageMap = new Map();
+    
+    files.forEach(file => {
+      const ext = path.extname(file).toLowerCase();
+      const baseName = path.basename(file, ext).replace('_resultat', '');
+      const isImage = imageExtensions.includes(ext);
+      
+      if (!isImage) {
+        debug(`Fichier ignoré (pas une image): ${file}`);
+        return;
+      }
+      
+      // Ignorer les fichiers .md ou autres non-images
+      if (file.endsWith('.md')) {
+        debug(`Fichier markdown ignoré: ${file}`);
+        return;
+      }
+      
+      // Si on a déjà une image avec ce nom de base, vérifier si l'extension actuelle est prioritaire
+      if (imageMap.has(baseName)) {
+        const existingFile = imageMap.get(baseName);
+        const existingExt = path.extname(existingFile).toLowerCase();
+        const currentPriority = imageExtensions.indexOf(ext);
+        const existingPriority = imageExtensions.indexOf(existingExt);
+        
+        // Si l'extension actuelle est plus prioritaire (index plus petit dans imageExtensions)
+        if (currentPriority < existingPriority) {
+          debug(`Remplacement de ${existingFile} par ${file} (priorité d'extension plus élevée)`); 
+          imageMap.set(baseName, file);
         }
-        // Ignorer également les fichiers .md ou autres non-images
-        if (file.endsWith('.md')) {
-          debug(`Fichier markdown ignoré: ${file}`);
-          return false;
-        }
-        return isImage;
-      })
-      .map(file => `/images/carousel/${file}`);
+      } else {
+        // Si c'est la première fois qu'on voit ce nom de base
+        imageMap.set(baseName, file);
+      }
+    });
+    
+    // Convertir la map en tableau de chemins d'images
+    const images = Array.from(imageMap.values()).map(file => `/images/carousel/${file}`);
     
     debug('Images filtrées pour le carrousel', images);
     

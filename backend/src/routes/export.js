@@ -1,26 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('../../generated/prisma');
+const { PrismaClient, $Enums } = require('../../generated/prisma');
 const ExcelJS = require('exceljs');
 const path = require('path');
 const fs = require('fs');
+const { requireAuth } = require('../middleware/auth');
 const prisma = new PrismaClient();
 
 // Route pour exporter les inscriptions au gala en Excel
-router.get('/gala-registrations', async (req, res) => {
+router.get('/gala-registrations', requireAuth, async (req, res) => {
   try {
-    // Vérifier que l'utilisateur est authentifié en tant qu'admin
-    if (!req.session || !req.session.user || !req.session.user.isAdmin) {
-      return res.status(401).json({
-        success: false,
-        error: 'Accès non autorisé. Seuls les administrateurs peuvent exporter les données.'
-      });
-    }
+    // L'authentification est déjà vérifiée par le middleware requireAuth
+    // req.user contient les informations de l'utilisateur authentifié
+    console.log('Export demandé par:', req.user);
 
     // Récupérer toutes les inscriptions au gala
     const registrations = await prisma.formRequest.findMany({
       where: {
-        formType: 'GALA_REGISTRATION'
+        formType: $Enums.FormType.GALA_REGISTRATION
       },
       orderBy: {
         createdAt: 'desc'

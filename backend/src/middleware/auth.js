@@ -1,5 +1,4 @@
-const { APP_CONFIG } = require('../../lib/config');
-const ADMIN_CONFIG = APP_CONFIG.ADMIN;
+const { APP_CONFIG, ADMIN_CONFIG } = require('../../lib/config');
 const jwt = require('jsonwebtoken');
 
 // Vérifier le token JWT
@@ -7,8 +6,11 @@ const verifyToken = (token) => {
   try {
     if (!token) return null;
     
-    // Si le JWT_SECRET n'est pas défini, utiliser PASSWORD comme fallback
-    const secret = process.env.JWT_SECRET || ADMIN_CONFIG.PASSWORD;
+    console.log('Vérification du token JWT');
+    // Utiliser SESSION_SECRET comme clé principale, puis JWT_SECRET, puis un fallback
+    const secret = ADMIN_CONFIG.SESSION_SECRET || process.env.JWT_SECRET || 'votre_clé_secrète_jwt';
+    console.log('Secret utilisé (partiel):', secret.substring(0, 3) + '...');
+    
     return jwt.verify(token, secret);
   } catch (error) {
     console.error('Erreur de vérification du token:', error.message);

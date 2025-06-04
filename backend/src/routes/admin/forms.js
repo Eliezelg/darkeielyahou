@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('../../../generated/prisma');
+const { PrismaClient, $Enums } = require('../../../generated/prisma');
 const prisma = new PrismaClient();
 const { requireAuth } = require('../../middleware/auth');
 
@@ -13,14 +13,16 @@ router.use(requireAuth);
 
 console.log('Route admin/forms.js chargée');
 
+console.log('$Enums disponible:', $Enums);
+
 // Mapping des types de formulaires frontend vers les types Prisma
 const formTypeMapping = {
-  'GALA_REGISTRATION': 'GALA_REGISTRATION',
-  'SOCIAL_AID': 'SOCIAL_AID',
-  'LOAN': 'LOAN_REQUEST',
-  'KOLLEL': 'KOL_JOIN',
-  'DONATION': 'DONATION',
-  'OTHER': 'OTHER'
+  'GALA_REGISTRATION': $Enums.FormType.GALA_REGISTRATION,
+  'SOCIAL_AID': $Enums.FormType.SOCIAL_AID,
+  'LOAN': $Enums.FormType.LOAN_REQUEST,
+  'KOLLEL': $Enums.FormType.KOL_JOIN,
+  'DONATION': $Enums.FormType.DONATION,
+  'OTHER': $Enums.FormType.OTHER
 };
 
 // Route pour récupérer les formulaires par type
@@ -57,9 +59,15 @@ router.get('/', async (req, res) => {
     console.log('Type de formulaire Prisma correspondant:', prismaFormType);
     
     // Récupérer les formulaires du type demandé
+    // Pour Prisma, nous devons utiliser directement la chaîne comme valeur d'enum
+    console.log('Tentative de requête Prisma avec type:', prismaFormType);
+    console.log('Tentative directe avec le type brut:', type);
+    
+    // Utiliser directement le type comme valeur d'énumération
+    // Pour Prisma, nous devons utiliser la chaîne exacte du type d'énumération
     const forms = await prisma.formRequest.findMany({
       where: {
-        formType: prismaFormType,
+        formType: prismaFormType, // Utiliser le type Prisma correct
       },
       orderBy: {
         createdAt: 'desc',
@@ -68,16 +76,17 @@ router.get('/', async (req, res) => {
     
     console.log(`Nombre de formulaires ${type} trouvés:`, forms.length);
     
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      forms,
+      forms: forms  // Renommer data en forms pour correspondre aux attentes du frontend
     });
+
   } catch (error) {
     console.error('Erreur lors de la récupération des formulaires:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: 'Une erreur est survenue lors de la récupération des formulaires',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -125,7 +134,7 @@ router.patch('/:id/status', async (req, res) => {
       });
     }
     
-    const validStatuses = ['PENDING', 'IN_REVIEW', 'COMPLETED', 'REJECTED'];
+    const validStatuses = Object.values($Enums.FormStatus);
     
     if (!validStatuses.includes(status)) {
       return res.status(400).json({

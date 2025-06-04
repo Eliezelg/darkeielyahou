@@ -39,19 +39,19 @@ const Galas = () => {
           <GalaGallery 
             images={[
               {
-                src: "/images/gala/strasbourg.png",
+                src: "/images/gala/strasbourg.webp",
                 alt: "Gala de Strasbourg",
                 city: "Strasbourg",
                 date: "23 Juin 2025"
               },
               {
-                src: "/images/gala/paris.png",
+                src: "/images/gala/paris.webp",
                 alt: "Gala de Paris",
                 city: "Paris",
                 date: "24 Juin 2025"
               },
               {
-                src: "/images/gala/jerusalem.png",
+                src: "/images/gala/jerusalem.webp",
                 alt: "Gala de Jérusalem",
                 city: "Jérusalem",
                 date: "30 Juin 2025"

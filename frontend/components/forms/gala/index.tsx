@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { generateUserEmailTemplate, FormData } from "./email-templates";
 import { CalendarHeart, Loader2 } from "lucide-react";
-import apiClient from "@/lib/api";
+import { APP_CONFIG } from "@/lib/config";
 
 // Composants du formulaire
 import { PersonalInfoFields } from "./personal-info-fields";
@@ -74,8 +74,27 @@ export default function GalaForm() {
     try {
       console.log("Envoi des données au serveur:", formData);
       
-      // Envoyer les données au serveur via l'API centralisée
-      const { data } = await apiClient.post('/api/forms/GALA', formData);
+      // Envoyer les données au serveur via fetch directement
+      const response = await fetch(`${APP_CONFIG.API_BASE_URL}/api/forms/GALA`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(formData),
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (error) {
+        const text = await response.text();
+        throw new Error(`Erreur lors de l'analyse de la réponse: ${text}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || `Erreur ${response.status}: ${response.statusText}`);
+      }
       
       // Afficher le message de succès du serveur ou un message par défaut
       toast({

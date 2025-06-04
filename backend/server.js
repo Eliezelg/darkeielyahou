@@ -360,7 +360,7 @@ app.post('/api/forms/:type', async (req, res) => {
       'SOCIAL_AID': 'SOCIAL_AID',
       'LOAN_REQUEST': 'LOAN_REQUEST',
       'KOLLEL_MEMBERSHIP': 'KOL_JOIN',
-      'GALA_REGISTRATION': 'GALA',
+      'GALA_REGISTRATION': 'GALA_REGISTRATION',
       'DONATION': 'DONATION',
       'CONTACT': 'OTHER',
       'OTHER': 'OTHER'

@@ -33,12 +33,14 @@ export default function ImageCarousel({ images, interval = 6000 }: ImageCarousel
   // Afficher un log pour aider au débogage
   console.log(`Affichage du carrousel avec ${images.length} images`, images);
 
-  // Précharger toutes les images dans un conteneur caché
-  const preloadImages = images.map((image, index) => (
-    <img 
-      key={`preload-${index}`}
+  // Précharger les premières images (les autres seront chargées avec priority=false)
+  const preloadImages = images.slice(3).map((image, index) => (
+    <Image 
+      key={`preload-${index + 3}`}
       src={image}
       alt=""
+      width={1}
+      height={1}
       className="hidden" 
       aria-hidden="true"
     />
@@ -54,14 +56,16 @@ export default function ImageCarousel({ images, interval = 6000 }: ImageCarousel
             index === currentImageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          <img 
+          <Image 
             src={image}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover object-center"
+            fill
+            className="object-cover object-center"
             style={{
-              height: '100vh',
               minHeight: '500px',
             }}
+            sizes="100vw"
+            priority={index < 3}
           />
         </div>
       ))}

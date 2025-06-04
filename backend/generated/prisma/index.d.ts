@@ -42,7 +42,7 @@ export const FormType: {
   SOCIAL_AID: 'SOCIAL_AID',
   LOAN_REQUEST: 'LOAN_REQUEST',
   KOL_JOIN: 'KOL_JOIN',
-  GALA_REGISTRATION: 'GALA_REGISTRATION',
+  GALA: 'GALA',
   DONATION: 'DONATION',
   OTHER: 'OTHER'
 };
@@ -1230,8 +1230,8 @@ export namespace Prisma {
     assignedTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
     assignedToUser?: boolean | FormRequest$assignedToUserArgs<ExtArgs>
+    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
   }, ExtArgs["result"]["formRequest"]>
 
   export type FormRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1245,8 +1245,8 @@ export namespace Prisma {
     assignedTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
     assignedToUser?: boolean | FormRequest$assignedToUserArgs<ExtArgs>
+    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
   }, ExtArgs["result"]["formRequest"]>
 
   export type FormRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1260,8 +1260,8 @@ export namespace Prisma {
     assignedTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
     assignedToUser?: boolean | FormRequest$assignedToUserArgs<ExtArgs>
+    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
   }, ExtArgs["result"]["formRequest"]>
 
   export type FormRequestSelectScalar = {
@@ -1279,23 +1279,23 @@ export namespace Prisma {
 
   export type FormRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "formType" | "formData" | "status" | "notes" | "metadata" | "createdBy" | "assignedTo" | "createdAt" | "updatedAt", ExtArgs["result"]["formRequest"]>
   export type FormRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
     assignedToUser?: boolean | FormRequest$assignedToUserArgs<ExtArgs>
+    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
   }
   export type FormRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
     assignedToUser?: boolean | FormRequest$assignedToUserArgs<ExtArgs>
+    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
   }
   export type FormRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
     assignedToUser?: boolean | FormRequest$assignedToUserArgs<ExtArgs>
+    createdByUser?: boolean | FormRequest$createdByUserArgs<ExtArgs>
   }
 
   export type $FormRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FormRequest"
     objects: {
-      createdByUser: Prisma.$AdminUserPayload<ExtArgs> | null
       assignedToUser: Prisma.$AdminUserPayload<ExtArgs> | null
+      createdByUser: Prisma.$AdminUserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1702,8 +1702,8 @@ export namespace Prisma {
    */
   export interface Prisma__FormRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    createdByUser<T extends FormRequest$createdByUserArgs<ExtArgs> = {}>(args?: Subset<T, FormRequest$createdByUserArgs<ExtArgs>>): Prisma__AdminUserClient<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     assignedToUser<T extends FormRequest$assignedToUserArgs<ExtArgs> = {}>(args?: Subset<T, FormRequest$assignedToUserArgs<ExtArgs>>): Prisma__AdminUserClient<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdByUser<T extends FormRequest$createdByUserArgs<ExtArgs> = {}>(args?: Subset<T, FormRequest$createdByUserArgs<ExtArgs>>): Prisma__AdminUserClient<$Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2139,9 +2139,9 @@ export namespace Prisma {
   }
 
   /**
-   * FormRequest.createdByUser
+   * FormRequest.assignedToUser
    */
-  export type FormRequest$createdByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormRequest$assignedToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the AdminUser
      */
@@ -2158,9 +2158,9 @@ export namespace Prisma {
   }
 
   /**
-   * FormRequest.assignedToUser
+   * FormRequest.createdByUser
    */
-  export type FormRequest$assignedToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type FormRequest$createdByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the AdminUser
      */
@@ -3537,8 +3537,8 @@ export namespace Prisma {
     assignedTo?: StringNullableFilter<"FormRequest"> | string | null
     createdAt?: DateTimeFilter<"FormRequest"> | Date | string
     updatedAt?: DateTimeFilter<"FormRequest"> | Date | string
-    createdByUser?: XOR<AdminUserNullableScalarRelationFilter, AdminUserWhereInput> | null
     assignedToUser?: XOR<AdminUserNullableScalarRelationFilter, AdminUserWhereInput> | null
+    createdByUser?: XOR<AdminUserNullableScalarRelationFilter, AdminUserWhereInput> | null
   }
 
   export type FormRequestOrderByWithRelationInput = {
@@ -3552,8 +3552,8 @@ export namespace Prisma {
     assignedTo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    createdByUser?: AdminUserOrderByWithRelationInput
     assignedToUser?: AdminUserOrderByWithRelationInput
+    createdByUser?: AdminUserOrderByWithRelationInput
   }
 
   export type FormRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -3570,8 +3570,8 @@ export namespace Prisma {
     assignedTo?: StringNullableFilter<"FormRequest"> | string | null
     createdAt?: DateTimeFilter<"FormRequest"> | Date | string
     updatedAt?: DateTimeFilter<"FormRequest"> | Date | string
-    createdByUser?: XOR<AdminUserNullableScalarRelationFilter, AdminUserWhereInput> | null
     assignedToUser?: XOR<AdminUserNullableScalarRelationFilter, AdminUserWhereInput> | null
+    createdByUser?: XOR<AdminUserNullableScalarRelationFilter, AdminUserWhereInput> | null
   }, "id">
 
   export type FormRequestOrderByWithAggregationInput = {
@@ -3688,8 +3688,8 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdByUser?: AdminUserCreateNestedOneWithoutCreatedRequestsInput
     assignedToUser?: AdminUserCreateNestedOneWithoutAssignedRequestsInput
+    createdByUser?: AdminUserCreateNestedOneWithoutCreatedRequestsInput
   }
 
   export type FormRequestUncheckedCreateInput = {
@@ -3714,8 +3714,8 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdByUser?: AdminUserUpdateOneWithoutCreatedRequestsNestedInput
     assignedToUser?: AdminUserUpdateOneWithoutAssignedRequestsNestedInput
+    createdByUser?: AdminUserUpdateOneWithoutCreatedRequestsNestedInput
   }
 
   export type FormRequestUncheckedUpdateInput = {
@@ -4202,15 +4202,15 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type AdminUserCreateNestedOneWithoutCreatedRequestsInput = {
-    create?: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
-    connectOrCreate?: AdminUserCreateOrConnectWithoutCreatedRequestsInput
-    connect?: AdminUserWhereUniqueInput
-  }
-
   export type AdminUserCreateNestedOneWithoutAssignedRequestsInput = {
     create?: XOR<AdminUserCreateWithoutAssignedRequestsInput, AdminUserUncheckedCreateWithoutAssignedRequestsInput>
     connectOrCreate?: AdminUserCreateOrConnectWithoutAssignedRequestsInput
+    connect?: AdminUserWhereUniqueInput
+  }
+
+  export type AdminUserCreateNestedOneWithoutCreatedRequestsInput = {
+    create?: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
+    connectOrCreate?: AdminUserCreateOrConnectWithoutCreatedRequestsInput
     connect?: AdminUserWhereUniqueInput
   }
 
@@ -4234,16 +4234,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type AdminUserUpdateOneWithoutCreatedRequestsNestedInput = {
-    create?: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
-    connectOrCreate?: AdminUserCreateOrConnectWithoutCreatedRequestsInput
-    upsert?: AdminUserUpsertWithoutCreatedRequestsInput
-    disconnect?: AdminUserWhereInput | boolean
-    delete?: AdminUserWhereInput | boolean
-    connect?: AdminUserWhereUniqueInput
-    update?: XOR<XOR<AdminUserUpdateToOneWithWhereWithoutCreatedRequestsInput, AdminUserUpdateWithoutCreatedRequestsInput>, AdminUserUncheckedUpdateWithoutCreatedRequestsInput>
-  }
-
   export type AdminUserUpdateOneWithoutAssignedRequestsNestedInput = {
     create?: XOR<AdminUserCreateWithoutAssignedRequestsInput, AdminUserUncheckedCreateWithoutAssignedRequestsInput>
     connectOrCreate?: AdminUserCreateOrConnectWithoutAssignedRequestsInput
@@ -4252,6 +4242,16 @@ export namespace Prisma {
     delete?: AdminUserWhereInput | boolean
     connect?: AdminUserWhereUniqueInput
     update?: XOR<XOR<AdminUserUpdateToOneWithWhereWithoutAssignedRequestsInput, AdminUserUpdateWithoutAssignedRequestsInput>, AdminUserUncheckedUpdateWithoutAssignedRequestsInput>
+  }
+
+  export type AdminUserUpdateOneWithoutCreatedRequestsNestedInput = {
+    create?: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
+    connectOrCreate?: AdminUserCreateOrConnectWithoutCreatedRequestsInput
+    upsert?: AdminUserUpsertWithoutCreatedRequestsInput
+    disconnect?: AdminUserWhereInput | boolean
+    delete?: AdminUserWhereInput | boolean
+    connect?: AdminUserWhereUniqueInput
+    update?: XOR<XOR<AdminUserUpdateToOneWithWhereWithoutCreatedRequestsInput, AdminUserUpdateWithoutCreatedRequestsInput>, AdminUserUncheckedUpdateWithoutCreatedRequestsInput>
   }
 
   export type FormRequestCreateNestedManyWithoutAssignedToUserInput = {
@@ -4573,35 +4573,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type AdminUserCreateWithoutCreatedRequestsInput = {
-    id?: string
-    email: string
-    password: string
-    fullName: string
-    isActive?: boolean
-    lastLoginAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedRequests?: FormRequestCreateNestedManyWithoutAssignedToUserInput
-  }
-
-  export type AdminUserUncheckedCreateWithoutCreatedRequestsInput = {
-    id?: string
-    email: string
-    password: string
-    fullName: string
-    isActive?: boolean
-    lastLoginAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedRequests?: FormRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
-  }
-
-  export type AdminUserCreateOrConnectWithoutCreatedRequestsInput = {
-    where: AdminUserWhereUniqueInput
-    create: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
-  }
-
   export type AdminUserCreateWithoutAssignedRequestsInput = {
     id?: string
     email: string
@@ -4631,39 +4602,33 @@ export namespace Prisma {
     create: XOR<AdminUserCreateWithoutAssignedRequestsInput, AdminUserUncheckedCreateWithoutAssignedRequestsInput>
   }
 
-  export type AdminUserUpsertWithoutCreatedRequestsInput = {
-    update: XOR<AdminUserUpdateWithoutCreatedRequestsInput, AdminUserUncheckedUpdateWithoutCreatedRequestsInput>
+  export type AdminUserCreateWithoutCreatedRequestsInput = {
+    id?: string
+    email: string
+    password: string
+    fullName: string
+    isActive?: boolean
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignedRequests?: FormRequestCreateNestedManyWithoutAssignedToUserInput
+  }
+
+  export type AdminUserUncheckedCreateWithoutCreatedRequestsInput = {
+    id?: string
+    email: string
+    password: string
+    fullName: string
+    isActive?: boolean
+    lastLoginAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignedRequests?: FormRequestUncheckedCreateNestedManyWithoutAssignedToUserInput
+  }
+
+  export type AdminUserCreateOrConnectWithoutCreatedRequestsInput = {
+    where: AdminUserWhereUniqueInput
     create: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
-    where?: AdminUserWhereInput
-  }
-
-  export type AdminUserUpdateToOneWithWhereWithoutCreatedRequestsInput = {
-    where?: AdminUserWhereInput
-    data: XOR<AdminUserUpdateWithoutCreatedRequestsInput, AdminUserUncheckedUpdateWithoutCreatedRequestsInput>
-  }
-
-  export type AdminUserUpdateWithoutCreatedRequestsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedRequests?: FormRequestUpdateManyWithoutAssignedToUserNestedInput
-  }
-
-  export type AdminUserUncheckedUpdateWithoutCreatedRequestsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedRequests?: FormRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
   }
 
   export type AdminUserUpsertWithoutAssignedRequestsInput = {
@@ -4699,6 +4664,41 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdRequests?: FormRequestUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  }
+
+  export type AdminUserUpsertWithoutCreatedRequestsInput = {
+    update: XOR<AdminUserUpdateWithoutCreatedRequestsInput, AdminUserUncheckedUpdateWithoutCreatedRequestsInput>
+    create: XOR<AdminUserCreateWithoutCreatedRequestsInput, AdminUserUncheckedCreateWithoutCreatedRequestsInput>
+    where?: AdminUserWhereInput
+  }
+
+  export type AdminUserUpdateToOneWithWhereWithoutCreatedRequestsInput = {
+    where?: AdminUserWhereInput
+    data: XOR<AdminUserUpdateWithoutCreatedRequestsInput, AdminUserUncheckedUpdateWithoutCreatedRequestsInput>
+  }
+
+  export type AdminUserUpdateWithoutCreatedRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedRequests?: FormRequestUpdateManyWithoutAssignedToUserNestedInput
+  }
+
+  export type AdminUserUncheckedUpdateWithoutCreatedRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLoginAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedRequests?: FormRequestUncheckedUpdateManyWithoutAssignedToUserNestedInput
   }
 
   export type FormRequestCreateWithoutAssignedToUserInput = {

@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { generateUserEmailTemplate, FormData } from "./email-templates";
 import { CalendarHeart, Loader2 } from "lucide-react";
+import api from "@/lib/api";
 
 // Composants du formulaire
 import { PersonalInfoFields } from "./personal-info-fields";
@@ -73,35 +74,17 @@ export default function GalaForm() {
     try {
       console.log("Envoi des données au serveur:", formData);
       
-      // Envoyer les données au serveur
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/forms/GALA_REGISTRATION`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      // Envoyer les données au serveur via l'API centralisée
+      const { data } = await api.post('/api/forms/GALA', formData);
+      
+      // Afficher le message de succès du serveur ou un message par défaut
+      toast({
+        title: "Inscription envoyée",
+        description: data.message || "Votre inscription au gala a été enregistrée avec succès. Nous vous contacterons prochainement avec plus de détails."
       });
       
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Afficher le message de succès du serveur ou un message par défaut
-        toast({
-          title: "Inscription envoyée",
-          description: data.message || "Votre inscription au gala a été enregistrée avec succès. Nous vous contacterons prochainement avec plus de détails."
-        });
-        
-        // Marquer le formulaire comme soumis pour afficher le message de confirmation
-        setIsSubmitted(true);
-        
-        // Définir la couleur bleue du site
-        const primaryBlue = "#006989"; // Le bleu principal utilisé sur le site Darkei Elyahou
-        
-        // Le message a déjà été envoyé donc pas besoin de le renvoyer
-        
-      } else {
-        throw new Error(data.message || "Une erreur est survenue lors de l'envoi du formulaire.");
-      }
+      // Marquer le formulaire comme soumis pour afficher le message de confirmation
+      setIsSubmitted(true);
     } catch (error: any) {
       console.error("Erreur lors de l'envoi:", error);
       toast({

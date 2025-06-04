@@ -106,10 +106,38 @@ The project uses GitHub Actions for automatic deployment to a VPS. The deploymen
 1. Pulls the latest code from the main branch
 2. Installs dependencies for both frontend and backend
 3. Runs Prisma generate for the backend
-4. Builds the frontend
+4. Builds the frontend with proper environment variables
 5. Uses PM2 to manage the Node.js processes
 
 Configuration is managed through an `ecosystem.config.js` file (based on the template in the repo).
+
+### Important Notes for Deployment
+
+**Frontend Environment Variables**: 
+- The frontend has a `.env.production` file with `NEXT_PUBLIC_API_URL=/api`
+- This ensures that API calls go through nginx proxy instead of direct localhost:3001
+- The `ecosystem.config.js` includes both `env` and `env_production` sections for robustness
+
+**Build Process**:
+```bash
+# Clear Next.js cache and rebuild with correct env vars
+rm -rf frontend/.next
+cd frontend && NEXT_PUBLIC_API_URL="/api" npm run build
+```
+
+**PM2 Restart**:
+```bash
+pm2 delete all || true
+pm2 start ecosystem.config.js --env production
+pm2 save
+```
+
+**GitHub Actions Integration**:
+Your workflow should include the `deploy.sh` script which handles:
+- Clearing Next.js cache
+- Building with explicit environment variables  
+- Restarting PM2 with proper configuration
+- Ensuring nginx proxy works correctly
 
 ## Environment Variables
 

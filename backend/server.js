@@ -5,16 +5,16 @@ const session = require('express-session');
 const { createClient } = require('redis');
 const connectRedis = require('connect-redis');
 const RedisStore = connectRedis(session);
-const sgMail = require('@sendgrid/mail');
-const { PrismaClient } = require('./generated/prisma');
+const { Resend } = require('resend');
+const { PrismaClient, $Enums } = require('./generated/prisma');
 const { ADMIN_CONFIG } = require('./lib/config');
 const path = require('path'); // Ajout de l'import du module path
 
 // Initialisation de Prisma
 const prisma = new PrismaClient();
 
-// Configuration de SendGrid
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Configuration de Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -190,13 +190,13 @@ app.post('/api/send-email', async (req, res) => {
         // Définir le chemin de l'affiche selon la ville
         switch(cityLowerCase) {
           case 'paris':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.png');
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.webp');
             break;
-          case 'Jerusalem':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/Jerusalem.png');
+          case 'jerusalem':
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp'); // Conserve le nom de fichier avec majuscule
             break;
           case 'strasbourg':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.w');
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.webp'); // Corrigé l'extension en .png
             break;
           default:
             console.log('Ville non reconnue pour l\'affiche:', formData.city);
@@ -227,9 +227,25 @@ app.post('/api/send-email', async (req, res) => {
       // On continue l'envoi de l'email même sans les pièces jointes
     }
     
-    // Envoi de l'email à l'utilisateur
-    await sgMail.send(userMsg);
-    console.log('Email envoyé avec succès à l\'utilisateur:', to);
+    // Envoi de l'email à l'utilisateur via Resend
+    const { data: userData, error: userError } = await resend.emails.send({
+      from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+      to: to,
+      subject: subject,
+      text: text,
+      html: html || text,
+      attachments: userMsg.attachments ? userMsg.attachments.map(attachment => ({
+        filename: attachment.filename,
+        content: attachment.content,
+        path: attachment.path
+      })) : []
+    });
+    
+    if (userError) {
+      throw new Error(`Erreur lors de l'envoi de l'email à l'utilisateur: ${userError.message}`);
+    }
+    
+    console.log('Email envoyé avec succès à l\'utilisateur:', to, 'ID:', userData?.id);
     
     // Si demandé, envoi d'une copie à l'administrateur avec toutes les données du formulaire
     if (sendCopy && formData) {
@@ -309,8 +325,19 @@ app.post('/api/send-email', async (req, res) => {
         text: `Nouvelle inscription au gala de ${formData.city} reçue de ${formData.firstName} ${formData.lastName}. Email: ${formData.email}, Téléphone: ${formData.phone}. Nombre de participants: ${formData.totalAttendees} (${formData.maleAttendees} hommes, ${formData.femaleAttendees} femmes).`
       };
       
-      await sgMail.send(adminMsg);
-      console.log('Copie de l\'email envoyée à l\'administrateur:', process.env.DEFAULT_FROM_EMAIL);
+      const { data: adminData, error: adminError } = await resend.emails.send({
+        from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+        to: adminMsg.to,
+        subject: adminMsg.subject,
+        text: adminMsg.text,
+        html: adminMsg.html
+      });
+      
+      if (adminError) {
+        console.error(`Erreur lors de l'envoi de la copie à l'administrateur: ${adminError.message}`);
+      } else {
+        console.log('Copie de l\'email envoyée à l\'administrateur:', adminMsg.to, 'ID:', adminData?.id);
+      }
     }
     
     res.status(200).json({
@@ -320,9 +347,9 @@ app.post('/api/send-email', async (req, res) => {
   } catch (error) {
     console.error('Erreur lors de l\'envoi de l\'email:', error);
     
-    // Gestion des erreurs spécifiques à SendGrid
-    if (error.response) {
-      console.error('Détails de l\'erreur SendGrid:', error.response.body);
+    // Gestion des erreurs Resend
+    if (error.name === 'ResendError') {
+      console.error('Détails de l\'erreur Resend:', error);
     }
     
     res.status(500).json({
@@ -355,15 +382,15 @@ app.post('/api/forms/:type', async (req, res) => {
       'OTHER'
     ];
     
-    // Mapper les types de formulaires frontend vers les types Prisma
+    // Mapper les types de formulaires frontend vers les enums Prisma FormType
     const formTypeMapping = {
-      'SOCIAL_AID': 'SOCIAL_AID',
-      'LOAN_REQUEST': 'LOAN_REQUEST',
-      'KOLLEL_MEMBERSHIP': 'KOL_JOIN',
-      'GALA_REGISTRATION': 'GALA_REGISTRATION',
-      'DONATION': 'DONATION',
-      'CONTACT': 'OTHER',
-      'OTHER': 'OTHER'
+      'SOCIAL_AID': $Enums.FormType.SOCIAL_AID,
+      'LOAN_REQUEST': $Enums.FormType.LOAN_REQUEST,
+      'KOLLEL_MEMBERSHIP': $Enums.FormType.KOL_JOIN,
+      'GALA_REGISTRATION': $Enums.FormType.GALA, // Utiliser GALA au lieu de GALA_REGISTRATION
+      'DONATION': $Enums.FormType.DONATION,
+      'CONTACT': $Enums.FormType.OTHER,
+      'OTHER': $Enums.FormType.OTHER
     };
     
     // Validation du type de formulaire
@@ -421,8 +448,8 @@ app.post('/api/forms/:type', async (req, res) => {
             case 'paris':
               posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.webp');
               break;
-            case 'Jerusalem':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/Jerusalem.webp');
+            case 'jerusalem':
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp');
               break;
             case 'strasbourg':
               posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.webp');
@@ -446,8 +473,8 @@ app.post('/api/forms/:type', async (req, res) => {
           }
         }
 
-        // Générer un template HTML pour l'email utilisateur
-        const primaryBlue = '#006989'; // Couleur principale du site
+        // Générer un template HTML pour l'email utilisateur avec le même style que le site
+        const primaryBlue = 'hsl(240, 85%, 25%)'; // Couleur primaire du site (même que page-header.tsx)
         const userHtmlContent = `
           <!DOCTYPE html>
           <html lang="fr">
@@ -455,43 +482,122 @@ app.post('/api/forms/:type', async (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { text-align: center; padding: 20px 0; }
-              .header img { max-width: 200px; height: auto; }
-              .content { padding: 20px; background-color: #f9f9f9; border-radius: 5px; }
-              h1, h2 { color: ${primaryBlue}; }
-              .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #666; }
-              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-              th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-              .btn { display: inline-block; padding: 10px 20px; background-color: ${primaryBlue}; color: white; text-decoration: none; border-radius: 5px; }
+              body { 
+                font-family: Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333; 
+                margin: 0; 
+                padding: 0;
+                background-color: #f5f5f5;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background-color: white;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              }
+              .header-banner { 
+                background-color: ${primaryBlue};
+                background: linear-gradient(135deg, ${primaryBlue} 0%, hsl(240, 85%, 30%) 100%);
+                padding: 30px 20px;
+                text-align: center;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+              }
+              .header-banner img { 
+                max-width: 180px; 
+                height: auto;
+                filter: brightness(1.1);
+              }
+              .content { 
+                padding: 30px 25px; 
+                background-color: white;
+              }
+              h1 { 
+                color: ${primaryBlue}; 
+                font-size: 24px;
+                margin-bottom: 20px;
+                border-bottom: 2px solid ${primaryBlue};
+                padding-bottom: 10px;
+              }
+              h2 { 
+                color: ${primaryBlue}; 
+                font-size: 18px;
+                margin-top: 25px;
+                margin-bottom: 15px;
+              }
+              .details-table {
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 20px;
+                margin: 20px 0;
+              }
+              .details-table p {
+                margin: 8px 0;
+                line-height: 1.5;
+              }
+              .footer { 
+                background-color: ${primaryBlue};
+                color: white;
+                text-align: center; 
+                padding: 20px;
+                font-size: 12px;
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
+              }
+              .signature {
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid #e0e0e0;
+                font-style: italic;
+              }
+              .highlight {
+                background-color: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 4px;
+              }
             </style>
           </head>
           <body>
-            <div class="container">
-              <div class="header">
+            <div class="email-container">
+              <div class="header-banner">
                 <img src="cid:logo" alt="Logo Darkei Elyahou" />
               </div>
+              
               <div class="content">
                 <h1>Confirmation d'inscription</h1>
-                <p>Bonjour ${formData.firstName},</p>
-                <p>Nous avons bien reçu votre inscription pour le gala de <strong>${formData.city}</strong>.</p>
+                
+                <p>Bonjour <strong>${formData.firstName}</strong>,</p>
+                
+                <div class="highlight">
+                  <p>« Nous avons bien reçu votre inscription pour le gala de <strong>${formData.city}</strong>. »</p>
+                </div>
                 
                 <h2>Détails de votre inscription</h2>
-                <p><strong>Prénom:</strong> ${formData.firstName}</p>
-                <p><strong>Nom:</strong> ${formData.lastName}</p>
-                <p><strong>Email:</strong> ${formData.email}</p>
-                <p><strong>Téléphone:</strong> ${formData.phoneCountryCode}${formData.phoneNumber}</p>
-                <p><strong>Ville du gala:</strong> ${formData.city}</p>
-                <p><strong>Participants:</strong> ${Number(formData.maleAttendees) + Number(formData.femaleAttendees)} personnes (${formData.maleAttendees} hommes, ${formData.femaleAttendees} femmes)</p>
+                <div class="details-table">
+                  <p><strong>Prénom :</strong> ${formData.firstName}</p>
+                  <p><strong>Nom :</strong> ${formData.lastName}</p>
+                  <p><strong>Email :</strong> ${formData.email}</p>
+                  <p><strong>Téléphone :</strong> ${formData.phoneCountryCode}${formData.phoneNumber}</p>
+                  <p><strong>Ville du gala :</strong> ${formData.city}</p>
+                  <p><strong>Nombre de participants :</strong> ${Number(formData.maleAttendees) + Number(formData.femaleAttendees)} personnes (${formData.maleAttendees} hommes, ${formData.femaleAttendees} femmes)</p>
+                </div>
 
-                <p>Vous trouverez ci-joint l'affiche du gala de ${formData.city}.</p>
-               </div>
+                <p>Vous trouverez ci-joint l'affiche du gala de <strong>${formData.city}</strong> avec tous les détails de l'événement.</p>
+                
+                <p>Nous vous contacterons prochainement avec plus d'informations concernant le déroulement de la soirée.</p>
+                
+                <div class="signature">
+                  <p>Cordialement,<br><strong>L'équipe Darkei Elyahou</strong></p>
+                </div>
+              </div>
               
-              <p>Cordialement,<br>L'équipe Darkei Elyahou</p>
-            </div>
-            <div class="footer">
-              <p>&copy; ${new Date().getFullYear()} Darkei Elyahou. Tous droits réservés.</p>
+              <div class="footer">
+                <p>&copy; ${new Date().getFullYear()} Darkei Elyahou • Tous droits réservés</p>
+                <p>Association à but non lucratif • Soutien à la communauté</p>
+              </div>
             </div>
           </body>
           </html>
@@ -527,9 +633,26 @@ L'équipe Darkei Elyahou
           attachments: attachments
         };
 
-        // Envoi de l'email à l'utilisateur
-        await sgMail.send(userMsg);
-        console.log('Email envoyé avec succès à:', formData.email);
+        // Envoi de l'email à l'utilisateur via Resend
+        const { data: userData, error: userError } = await resend.emails.send({
+          from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+          to: userMsg.to,
+          subject: userMsg.subject,
+          text: userMsg.text,
+          html: userMsg.html,
+          attachments: userMsg.attachments ? userMsg.attachments.map(attachment => ({
+            filename: attachment.filename,
+            content: attachment.content,
+            disposition: attachment.disposition, // Conserver la disposition (inline ou attachment)
+            content_id: attachment.content_id    // Conserver l'ID de contenu pour les références CID
+          })) : []
+        });
+        
+        if (userError) {
+          throw new Error(`Erreur lors de l'envoi de l'email à l'utilisateur: ${userError.message}`);
+        }
+        
+        console.log('Email envoyé avec succès à:', formData.email, 'ID:', userData?.id);
 
         // Envoi d'une copie à l'administrateur
         const adminHtmlContent = `
@@ -599,9 +722,23 @@ L'équipe Darkei Elyahou
           attachments: attachments
         };
 
-        // Envoi de l'email à l'administrateur
-        await sgMail.send(adminMsg);
-        console.log('Email envoyé avec succès à l\'administrateur');
+        // Envoi de l'email à l'administrateur via Resend
+        const { data: adminData, error: adminError } = await resend.emails.send({
+          from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+          to: adminMsg.to,
+          subject: adminMsg.subject,
+          html: adminMsg.html,
+          attachments: adminMsg.attachments ? adminMsg.attachments.map(attachment => ({
+            filename: attachment.filename,
+            content: attachment.content
+          })) : []
+        });
+        
+        if (adminError) {
+          console.error(`Erreur lors de l'envoi de l'email à l'administrateur: ${adminError.message}`);
+        } else {
+          console.log('Email envoyé avec succès à l\'administrateur. ID:', adminData?.id);
+        }
       } catch (emailError) {
         console.error("Erreur lors de l'envoi des emails:", emailError);
         // On continue l'exécution même en cas d'erreur d'envoi d'email

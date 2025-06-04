@@ -21,14 +21,16 @@ const formSchema = z.object({
   phoneCountryCode: z.string().min(2, { message: "Veuillez sélectionner un indicatif" }),
   phoneNumber: z.string().min(5, { message: "Le numéro de téléphone doit être valide" }),
   city: z.string({ required_error: "Veuillez sélectionner une ville" }),
-  maleAttendees: z.string(),
-  femaleAttendees: z.string(),
+  maleAttendees: z.string().optional(),
+  femaleAttendees: z.string().optional(),
 }).refine(data => {
-  // Au moins un des champs doit avoir une valeur autre que "0"
-  return data.maleAttendees !== "0" || data.femaleAttendees !== "0";
+  // Au moins un des champs doit avoir une valeur autre que "0" ou undefined
+  const maleCount = parseInt(data.maleAttendees || "0");
+  const femaleCount = parseInt(data.femaleAttendees || "0");
+  return maleCount > 0 || femaleCount > 0;
 }, {
   message: "Veuillez indiquer au moins un participant (homme ou femme)",
-  path: ["maleAttendees", "femaleAttendees"]
+  path: ["maleAttendees"]
 });
 
 export default function GalaForm() {
@@ -168,20 +170,25 @@ Cordialement,
 L'équipe Darkei Elyahou
 `;
         
-        // Envoyer l'email au participant et une copie à l'administrateur
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/send-email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: values.email, // Envoyer au participant
-            subject: `Confirmation d'inscription au gala - ${values.firstName} ${values.lastName}`,
-            text: textContent,
-            html: userHtmlContent,
-            sendCopy: true, // Demande d'envoi d'une copie à l'administrateur
-            formData: formData, // Envoyer toutes les données du formulaire pour l'email administrateur
-          }),
+        // Importer le service d'email
+        const { sendEmail } = await import('@/lib/email-service');
+        
+        // Envoyer l'email au participant
+        await sendEmail({
+          to: values.email,
+          from: 'contact@darkei-elyahou.org',
+          subject: `Confirmation d'inscription au gala - ${values.firstName} ${values.lastName}`,
+          text: textContent,
+          html: userHtmlContent,
+        });
+        
+        // Envoyer une copie à l'administrateur
+        await sendEmail({
+          to: 'contact@darkei-elyahou.org',
+          from: 'contact@darkei-elyahou.org', 
+          subject: `[ADMIN] Nouvelle inscription au gala - ${values.firstName} ${values.lastName}`,
+          text: `Nouvelle inscription au gala reçue:\n\n${JSON.stringify(formData, null, 2)}`,
+          html: `<h1>Nouvelle inscription au gala</h1><pre>${JSON.stringify(formData, null, 2)}</pre>`,
         });
         
         // Reset form
@@ -296,7 +303,7 @@ L'équipe Darkei Elyahou
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email*</FormLabel>
                   <FormControl>
                     <Input placeholder="votre@email.com" {...field} />
                   </FormControl>
@@ -312,7 +319,7 @@ L'équipe Darkei Elyahou
                 name="phoneCountryCode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Indicatif pays</FormLabel>
+                    <FormLabel>Indicatif pays*</FormLabel>
                     <Select 
                       value={field.value} 
                       onValueChange={(value) => {
@@ -344,7 +351,7 @@ L'équipe Darkei Elyahou
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Numéro de téléphone</FormLabel>
+                    <FormLabel>Numéro de téléphone*</FormLabel>
                     <FormControl>
                       <Input 
                         placeholder="Votre numéro" 
@@ -369,7 +376,7 @@ L'équipe Darkei Elyahou
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ville du gala</FormLabel>
+                  <FormLabel>Ville du gala*</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -378,7 +385,7 @@ L'équipe Darkei Elyahou
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="paris">Paris</SelectItem>
-                      <SelectItem value="Jerusalem">Jérusalem</SelectItem>
+                      <SelectItem value="jerusalem">Jérusalem</SelectItem>
                       <SelectItem value="strasbourg">Strasbourg</SelectItem>
                     </SelectContent>
                   </Select>

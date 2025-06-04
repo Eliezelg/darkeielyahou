@@ -19,9 +19,9 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-serif mb-6">Nos Actions</h3>
             <ul className="space-y-3">
-              <FooterLink href="/actions/soutien">Soutien aux familles</FooterLink>
-              <FooterLink href="/actions/pret">Prêt de véhicules</FooterLink>
-              <FooterLink href="/actions/aide">Aide d'urgence</FooterLink>
+              <FooterLink href="/actions/soutien-hayalim">Soutien aux Soldats</FooterLink>
+              <FooterLink href="/actions/gmah-voitures">Prêt de véhicules</FooterLink>
+              <FooterLink href="/actions/aide-social">Aide sociale</FooterLink>
             </ul>
           </div>
           

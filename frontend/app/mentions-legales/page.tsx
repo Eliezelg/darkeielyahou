@@ -51,8 +51,8 @@ export default function MentionsLegales() {
         <section className="mb-10">
           <h2 className="text-2xl font-serif mb-4">Hébergeur du site</h2>
           <p>
-            [Nom de l'hébergeur choisi – à compléter]<br />
-            Adresse de l'hébergeur : [Adresse à compléter]
+            Hostinger<br />
+            Adresse de l'hébergeur : 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA
           </p>
         </section>
         

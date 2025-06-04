@@ -7,7 +7,7 @@ import {
   Users, 
   Car, 
   Globe, 
-  GraduationCap 
+  Banknote 
 } from 'lucide-react';
 
 type StatisticProps = {
@@ -21,18 +21,18 @@ const statistics = [
   {
     icon: <Book className="w-10 h-10 text-primary" />,
     value: 6,
-    label: "Kollelim ouverts 7/7",
+    label: "Kollelim ouverts 7 jours sur 7",
   },
   {
     icon: <Users className="w-10 h-10 text-primary" />,
-    value: 1000,
+    value: 500,
     label: "Familles accompagnées chaque année",
     suffix: "+"
   },
   {
     icon: <Car className="w-10 h-10 text-primary" />,
     value: 15,
-    label: "Voitures en prêt gratuit pour les moments-clés",
+    label: "Voitures à prix minime pour les moments-clés",
   },
   {
     icon: <Globe className="w-10 h-10 text-primary" />,
@@ -40,10 +40,9 @@ const statistics = [
     label: "Galas annuels : Paris – Jérusalem – Strasbourg",
   },
   {
-    icon: <GraduationCap className="w-10 h-10 text-primary" />,
-    value: 20,
-    label: "Avrekhim en reconversion soutenus chaque jour",
-    suffix: "+"
+    icon: <Banknote className="w-10 h-10 text-primary" />,
+    value: 500,
+    label: "Demande de prêt à taux 0% chaque année" 
   }
 ];
 

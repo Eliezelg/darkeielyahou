@@ -20,11 +20,14 @@ export function GalaSuccessMessage() {
         tous les détails relatifs à l'événement.
       </p>
       
-      <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
-        <Button onClick={() => router.refresh()} variant="outline">
-          Nouvelle inscription
-        </Button>
-        <Button onClick={() => router.push('/galas')}>
+      <div className="flex justify-center">
+        <Button 
+          onClick={() => {
+            // Forcer le rechargement complet de la page pour s'assurer que tout est réinitialisé
+            window.location.href = '/galas';
+          }} 
+          className="px-6"
+        >
           Retour aux galas
         </Button>
       </div>

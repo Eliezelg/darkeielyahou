@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import Flag from "react-world-flags";
 import {
   Form,
   FormControl,
@@ -18,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { formatFormDataForEmail, sendEmail } from "@/lib/sendgrid-service";
+import { formatFormDataForEmail, sendEmail } from "@/lib/email-service";
 
 const formSchema = z.object({
   lastName: z.string().min(2, {
@@ -212,31 +213,53 @@ export default function Contact() {
         <div>
           <h2 className="text-2xl font-serif mb-6">Nous contacter</h2>
           <p className="mb-8">
-            Vous pouvez également nous joindre par les moyens suivants :
+            Vous pouvez nous joindre par les moyens suivants :
           </p>
           
-          <div className="space-y-6">
-            <div className="flex items-start">
-              <Mail className="w-6 h-6 mr-4 mt-1 text-primary" />
-              <div>
-                <h3 className="font-medium mb-1 text-gray-700">Email</h3>
-                <p className="text-gray-600">contact@darkei-elyahou.org</p>
+          <div className="space-y-8">
+            <div>
+              <div className="flex items-center mb-4">
+                <Flag code="il" className="mr-2 rounded-sm" style={{ width: 24, height: 'auto' }} />
+                <h3 className="font-medium text-gray-800 text-lg">דרכי אליהו - ירושלים (ע"ר) / Darkei Elyahou - Jérusalem</h3>
+              </div>
+              <div className="ml-8 space-y-2 text-gray-600">
+                <p>Numéro de Amouta : 580498178</p>
+                <div className="flex items-start">
+                  <MapPin className="w-5 h-5 mr-2 mt-1 text-primary shrink-0" />
+                  <p>Adresse : Rue Zanguevill (זנגוויל) 9/60, Jérusalem</p>
+                </div>
+                <div className="flex items-center">
+                  <FaWhatsapp className="w-5 h-5 mr-2 text-primary shrink-0" />
+                  <p>+972 54 723 6004</p>
+                </div>
               </div>
             </div>
             
-            <div className="flex items-start">
-              <FaWhatsapp className="w-6 h-6 mr-4 mt-1 text-primary" />
-              <div>
-                <h3 className="font-medium mb-1 text-gray-700">WhatsApp</h3>
-                <p className="text-gray-600">+972 54 723 6004</p>
+            <div>
+              <div className="flex items-center mb-4">
+                <Flag code="fr" className="mr-2 rounded-sm" style={{ width: 24, height: 'auto' }} />
+                <h3 className="font-medium text-gray-800 text-lg">DARKEI ELYAHOU - Paris</h3>
+              </div>
+              <div className="ml-8 space-y-2 text-gray-600">
+                <p>Numéro RNA : W941004399</p>
+                <div className="flex items-start">
+                  <MapPin className="w-5 h-5 mr-2 mt-1 text-primary shrink-0" />
+                  <p>Adresse : 56 Avenue Jean Jaurès, 75019 Paris</p>
+                </div>
+                <div className="flex items-center">
+                  <FaWhatsapp className="w-5 h-5 mr-2 text-primary shrink-0" />
+                  <p>+33 6 64 98 73 71</p>
+                </div>
               </div>
             </div>
-            
-            <div className="flex items-start">
-              <MapPin className="w-6 h-6 mr-4 mt-1 text-primary" />
-              <div>
-                <h3 className="font-medium mb-1">Adresse postale</h3>
-                <p>Beth Vagan, Jérusalem</p>
+
+            <div className="pt-4">
+              <div className="flex items-start">
+                <Mail className="w-6 h-6 mr-4 mt-1 text-primary" />
+                <div>
+                  <h3 className="font-medium mb-1 text-gray-700">Email</h3>
+                  <p className="text-gray-600">contact@darkei-elyahou.org</p>
+                </div>
               </div>
             </div>
           </div>

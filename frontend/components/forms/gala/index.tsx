@@ -24,8 +24,15 @@ const formSchema = z.object({
   phoneCountryCode: z.string().min(2, { message: "Veuillez sélectionner un indicatif" }),
   phoneNumber: z.string().min(5, { message: "Le numéro de téléphone doit être valide" }),
   city: z.string({ required_error: "Veuillez sélectionner une ville" }),
-  maleAttendees: z.string().min(1, { message: "Veuillez indiquer le nombre de participants hommes" }),
-  femaleAttendees: z.string().min(1, { message: "Veuillez indiquer le nombre de participantes femmes" }),
+  maleAttendees: z.string(),
+  femaleAttendees: z.string(),
+}).refine((data) => {
+  const maleCount = Number(data.maleAttendees || "0");
+  const femaleCount = Number(data.femaleAttendees || "0");
+  return maleCount > 0 || femaleCount > 0;
+}, {
+  message: "Veuillez indiquer au moins un participant (homme ou femme)",
+  path: ["maleAttendees", "femaleAttendees"] // Les deux champs seront marqués comme invalides
 });
 
 export default function GalaForm() {
@@ -45,8 +52,8 @@ export default function GalaForm() {
       phoneCountryCode: "+972",
       phoneNumber: "",
       city: "",
-      maleAttendees: "",
-      femaleAttendees: "",
+      maleAttendees: "0",
+      femaleAttendees: "0",
     },
   });
 
@@ -60,7 +67,7 @@ export default function GalaForm() {
     const formData = {
       ...values,
       phone: `${values.phoneCountryCode}${values.phoneNumber}`,
-      totalAttendees: Number(values.maleAttendees) + Number(values.femaleAttendees)
+      totalAttendees: Number(values.maleAttendees || "0") + Number(values.femaleAttendees || "0")
     };
     
     try {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
+import { Resend } from 'resend';
 
 // Indique que cette route est dynamique (ne pas mettre en cache)
 export const dynamic = 'force-dynamic';
@@ -7,12 +7,12 @@ export const dynamic = 'force-dynamic';
 // Désactive le rendu statique pour cette route
 export const revalidate = 0;
 
-// Vérifier que la clé API SendGrid est configurée
-const apiKey = process.env.SENDGRID_API_KEY;
-if (!apiKey) {
-  console.error('Erreur: SENDGRID_API_KEY non configurée');
-} else {
-  sgMail.setApiKey(apiKey);
+// Initialiser Resend avec la clé API
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
+
+if (!resendApiKey) {
+  console.error('Erreur: RESEND_API_KEY non configurée');
 }
 
 export async function POST(request: Request) {
@@ -28,23 +28,28 @@ export async function POST(request: Request) {
       );
     }
 
-    // Envoyer l'email via SendGrid
-    if (apiKey) {
-      await sgMail.send({
+    // Envoyer l'email via Resend
+    if (resend) {
+      const { data, error } = await resend.emails.send({
+        from: `Darkei Elyahou <${from}>`,
         to,
-        from: {
-          email: from,
-          name: 'Darkei Elyahou',
-        },
         subject,
         text,
         html: html || text,
       });
 
-      console.log('Email envoyé avec succès à:', to);
-      return NextResponse.json({ success: true });
+      if (error) {
+        console.error('Erreur lors de l\'envoi de l\'email:', error);
+        return NextResponse.json(
+          { error: 'Échec lors de l\'envoi de l\'email' },
+          { status: 500 }
+        );
+      }
+
+      console.log('Email envoyé avec succès à:', to, 'ID:', data?.id);
+      return NextResponse.json({ success: true, id: data?.id });
     } else {
-      console.error('Erreur: SENDGRID_API_KEY non configurée');
+      console.error('Erreur: RESEND_API_KEY non configurée');
       return NextResponse.json(
         { error: 'Erreur de configuration du serveur' },
         { status: 500 }

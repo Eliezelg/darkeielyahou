@@ -8,8 +8,8 @@ interface EmailData {
   html?: string;
 }
 
-// URL de l'API frontend (à adapter selon l'environnement)
-const API_BASE_URL = process.env.NEXT_PUBLIC_URL || '';
+// URL de l'API backend (à adapter selon l'environnement)
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Email par défaut - doit être un domaine vérifié dans Resend
 const DEFAULT_EMAIL = process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL || 'contact@darkei-elyahou.org';
@@ -59,7 +59,7 @@ export function formatFormDataForEmail(formData: Record<string, any>, formName: 
   
   return {
     to: DEFAULT_EMAIL,
-    from: DEFAULT_EMAIL, // L'email d'envoi doit être vérifié dans SendGrid
+    from: DEFAULT_EMAIL, 
     subject: `Nouveau message - Formulaire ${formName}`,
     text: `Nouveau message reçu depuis le formulaire ${formName}:\n\n${textContent}`,
     html: `

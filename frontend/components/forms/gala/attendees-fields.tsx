@@ -12,6 +12,7 @@ export function AttendeesFields({ control }: AttendeesFieldsProps) {
   return (
     <div className="space-y-2">
       <h3 className="text-base font-medium">Participants</h3>
+      <p className="text-sm text-gray-600 mb-3">Au moins un des deux champs est requis</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <FormField
           control={control}
@@ -19,15 +20,15 @@ export function AttendeesFields({ control }: AttendeesFieldsProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre d'hommes</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value || "0"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {[...Array(10)].map((_, i) => (
-                    <SelectItem key={i} value={String(i + 1)}>{i + 1}</SelectItem>
+                  {[...Array(11)].map((_, i) => (
+                    <SelectItem key={i} value={String(i)}>{i}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -42,15 +43,15 @@ export function AttendeesFields({ control }: AttendeesFieldsProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre de femmes</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value || "0"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {[...Array(10)].map((_, i) => (
-                    <SelectItem key={i} value={String(i + 1)}>{i + 1}</SelectItem>
+                  {[...Array(11)].map((_, i) => (
+                    <SelectItem key={i} value={String(i)}>{i}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

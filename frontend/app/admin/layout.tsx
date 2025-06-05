@@ -35,7 +35,7 @@ export default function AdminLayout({
         localStorage.removeItem('darkei_admin_auth_token');
         
         // Appel au backend pour détruire la session
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
         await fetch(`${API_URL}/api/admin/logout`, {
           method: 'POST',
           credentials: 'include',

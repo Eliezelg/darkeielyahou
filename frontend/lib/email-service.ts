@@ -9,7 +9,7 @@ interface EmailData {
 }
 
 // URL de l'API backend (à adapter selon l'environnement)
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Email par défaut - doit être un domaine vérifié dans Resend
 const DEFAULT_EMAIL = process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL || 'contact@darkei-elyahou.org';

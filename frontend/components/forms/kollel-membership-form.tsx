@@ -44,7 +44,7 @@ export default function KollelMembershipForm() {
     
     try {
       // Envoyer les données au serveur
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/forms/KOLLEL_MEMBERSHIP`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forms/KOLLEL_MEMBERSHIP`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default function KollelMembershipForm() {
         });
         
         // Envoyer un email de confirmation
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/send-email`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-email`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -70,7 +70,7 @@ export default function GalaForm() {
     
     try {
       // Envoyer les données au serveur
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/forms/GALA_REGISTRATION`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forms/GALA_REGISTRATION`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

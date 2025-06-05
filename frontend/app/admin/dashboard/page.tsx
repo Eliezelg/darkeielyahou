@@ -71,7 +71,7 @@ export default function AdminDashboard() {
 
   // Fonction utilitaire pour les appels API au backend avec authentification
   const callBackendApi = async (endpoint: string, options: RequestInit = {}) => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     
     // Récupérer le token d'authentification du localStorage s'il existe
     const authToken = typeof window !== 'undefined' ? localStorage.getItem('darkei_admin_auth_token') : null;

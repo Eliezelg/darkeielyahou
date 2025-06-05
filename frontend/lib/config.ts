@@ -1,7 +1,7 @@
 // Configuration de l'application
 export const APP_CONFIG = {
   // URL de l'API (utilisée pour les appels API côté client)
-  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL,
   
   // Configuration de l'administration
   ADMIN: {
@@ -41,6 +41,6 @@ export const DEFAULT_METADATA = {
   description: 'Association Darkei Elyahou - Soutien aux familles et aux érudits de la Torah',
   keywords: ['Darkei Elyahou', 'Association', 'Torah', 'Kollel', 'Aide sociale'],
   author: 'Darkei Elyahou',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  url: process.env.NEXT_PUBLIC_SITE_URL,
   image: '/images/logo.png',
 } as const;

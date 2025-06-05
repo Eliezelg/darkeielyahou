@@ -45,9 +45,7 @@ export default function SocialAidForm() {
     
     try {
       // Définir une URL sécurisée pour les requêtes API
-      const apiBaseUrl = typeof window !== 'undefined' 
-        ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001')
-        : 'http://localhost:3001'; // Fallback pour SSR
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
         
       // Envoyer les données au serveur
       const response = await fetch(`${apiBaseUrl}/api/forms/SOCIAL_AID`, {

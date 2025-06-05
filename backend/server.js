@@ -55,7 +55,7 @@ app.use(express.json());
 
 // Configuration du client Redis
 const redisClient = createClient({
-  url: process.env.REDIS_URL || 'redis://localhost:6379',
+  url: process.env.REDIS_URL,
   password: process.env.REDIS_PASSWORD || '',
   legacyMode: true // Changer à true pour compatibilité
 });
@@ -477,7 +477,7 @@ app.post('/api/forms/:type', async (req, res) => {
         const primaryBlue = 'hsl(240, 85%, 25%)'; // Couleur primaire du site (même que page-header.tsx)
         const userHtmlContent = `
           <!DOCTYPE html>
-          <html lang="fr">
+          <html lang="fr"> 
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">

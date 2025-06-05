@@ -41,7 +41,7 @@ export default function LoanRequestForm() {
     
     try {
       // Envoyer les données au serveur
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/forms/LOAN_REQUEST`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forms/LOAN_REQUEST`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export default function LoanRequestForm() {
         });
         
         // Envoyer un email de confirmation
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/send-email`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-email`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

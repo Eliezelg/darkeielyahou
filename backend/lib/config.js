@@ -1,7 +1,7 @@
 // Configuration globale de l'application
 const APP_CONFIG = {
   // URL du frontend
-  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
+  FRONTEND_URL: process.env.FRONTEND_URL,
   
   // Configuration de l'administration
   ADMIN: {

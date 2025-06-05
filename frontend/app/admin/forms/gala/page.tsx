@@ -50,7 +50,7 @@ export default function GalaRegistrationsPage() {
         }
 
         // Appeler l'API pour récupérer les inscriptions au gala
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
         const response = await fetch(`${API_URL}/api/admin/forms?type=GALA_REGISTRATION`, {
           method: 'GET',
           headers: {
@@ -100,7 +100,7 @@ export default function GalaRegistrationsPage() {
       }
       
       // Faire une requête au serveur pour télécharger l'Excel
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const response = await fetch(`${API_URL}/api/export/gala-registrations`, {
         method: 'GET',
         headers: {

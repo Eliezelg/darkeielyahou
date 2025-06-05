@@ -214,7 +214,7 @@ export default function GalaRegistrationsPage() {
       }
 
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${API_URL}/api/admin/forms/${registrationToEdit.id}`, {
+      const response = await fetch(`${API_URL}/admin/forms/${registrationToEdit.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -288,7 +288,7 @@ export default function GalaRegistrationsPage() {
       
       // Appeler l'API pour supprimer l'inscription
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${API_URL}/api/admin/forms/${id}`, {
+      const response = await fetch(`${API_URL}/admin/forms/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

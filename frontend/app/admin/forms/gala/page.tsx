@@ -6,8 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
-import { FileSpreadsheet, Loader2, Search } from 'lucide-react';
+import { FileSpreadsheet, Loader2, Search, X, Save } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type GalaRegistration = {
   id: string;
@@ -35,6 +38,11 @@ export default function GalaRegistrationsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [registrationToEdit, setRegistrationToEdit] = useState<GalaRegistration | null>(null);
+  const [editFormData, setEditFormData] = useState<any>(null);
   const { toast } = useToast();
 
   // Vérifier l'authentification et charger les données
@@ -170,14 +178,145 @@ export default function GalaRegistrationsPage() {
     );
   });
 
+  // Formater la date pour l'affichage
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('fr-FR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit',
-    });
+      minute: '2-digit'
+    }).format(date);
+  };
+
+  // Modifier une inscription
+  const handleEdit = (registration: GalaRegistration) => {
+    setRegistrationToEdit(registration);
+    setEditFormData({ ...registration.formData });
+    setIsEditDialogOpen(true);
+  };
+
+  // Sauvegarder les modifications
+  const handleSaveEdit = async () => {
+    if (!registrationToEdit || !editFormData) return;
+
+    try {
+      setIsEditing(true);
+      const token = localStorage.getItem('darkei_admin_auth_token');
+      
+      if (!token) {
+        toast({
+          title: "Erreur d'authentification",
+          description: "Vous devez être connecté pour modifier une inscription."
+        });
+        return;
+      }
+
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${API_URL}/api/admin/forms/${registrationToEdit.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          formData: editFormData,
+          status: registrationToEdit.status
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour de l'inscription");
+      }
+
+      // Mettre à jour la liste des inscriptions
+      setRegistrations(prev => 
+        prev.map(reg => 
+          reg.id === registrationToEdit.id 
+            ? { ...reg, formData: editFormData } 
+            : reg
+        )
+      );
+
+      toast({
+        title: "Succès",
+        description: "L'inscription a été mise à jour avec succès."
+      });
+      
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la mise à jour de l'inscription."
+      });
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
+  // Gérer le changement des champs du formulaire
+  const handleInputChange = (field: string, value: string) => {
+    setEditFormData((prev: any) => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Supprimer une inscription
+  const handleDelete = async (id: string) => {
+    try {
+      setIsDeleting(true);
+      
+      // Récupérer le token JWT du localStorage
+      const token = localStorage.getItem('darkei_admin_auth_token');
+      
+      if (!token) {
+        toast({
+          title: "Erreur d'authentification",
+          description: "Vous devez être connecté pour supprimer une inscription."
+        });
+        return;
+      }
+      
+      // Confirmation de suppression
+      if (!confirm("Êtes-vous sûr de vouloir supprimer cette inscription ? Cette action est irréversible.")) {
+        setIsDeleting(false);
+        return;
+      }
+      
+      // Appeler l'API pour supprimer l'inscription
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${API_URL}/api/admin/forms/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error("Erreur lors de la suppression de l'inscription");
+      }
+      
+      // Mettre à jour la liste des inscriptions
+      setRegistrations(prev => prev.filter(reg => reg.id !== id));
+      
+      toast({
+        title: "Suppression réussie",
+        description: "L'inscription au gala a été supprimée avec succès."
+      });
+      
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer l'inscription au gala."
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -256,6 +395,7 @@ export default function GalaRegistrationsPage() {
                     <TableHead className="text-center">Total</TableHead>
                     <TableHead>Statut</TableHead>
                     <TableHead className="w-[150px]">Date</TableHead>
+                    <TableHead className="w-[130px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -280,6 +420,37 @@ export default function GalaRegistrationsPage() {
                         <TableCell className="text-center font-medium">{totalAttendees}</TableCell>
                         <TableCell>{getStatusBadge(registration.status)}</TableCell>
                         <TableCell>{formatDate(registration.createdAt)}</TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => handleEdit(registration)}
+                              title="Modifier"
+                              className="h-8 w-8 p-0"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                                <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                <path d="m15 5 4 4"/>
+                              </svg>
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => handleDelete(registration.id)}
+                              title="Supprimer"
+                              className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                                <path d="M3 6h18"/>
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                <line x1="10" x2="10" y1="11" y2="17"/>
+                                <line x1="14" x2="14" y1="11" y2="17"/>
+                              </svg>
+                            </Button>
+                          </div>
+                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -289,6 +460,164 @@ export default function GalaRegistrationsPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Boîte de dialogue d'édition */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Modifier l'inscription</DialogTitle>
+          </DialogHeader>
+          
+          {editFormData && registrationToEdit && (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">Prénom</Label>
+                  <Input
+                    id="firstName"
+                    value={editFormData.firstName || ''}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Nom</Label>
+                  <Input
+                    id="lastName"
+                    value={editFormData.lastName || ''}
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={editFormData.email || ''}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="city">Ville</Label>
+                  <Input
+                    id="city"
+                    value={editFormData.city || ''}
+                    onChange={(e) => handleInputChange('city', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Code pays téléphone</Label>
+                  <Input
+                    value={editFormData.phoneCountryCode || ''}
+                    onChange={(e) => handleInputChange('phoneCountryCode', e.target.value)}
+                    placeholder="+33"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Téléphone</Label>
+                  <Input
+                    value={editFormData.phoneNumber || ''}
+                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Nombre d'hommes</Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={editFormData.maleAttendees || '0'}
+                    onChange={(e) => handleInputChange('maleAttendees', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Nombre de femmes</Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={editFormData.femaleAttendees || '0'}
+                    onChange={(e) => handleInputChange('femaleAttendees', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Régime alimentaire</Label>
+                <Input
+                  value={editFormData.dietaryRestrictions || ''}
+                  onChange={(e) => handleInputChange('dietaryRestrictions', e.target.value)}
+                  placeholder="Allergies ou restrictions alimentaires"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Message</Label>
+                <Input
+                  value={editFormData.message || ''}
+                  onChange={(e) => handleInputChange('message', e.target.value)}
+                  placeholder="Message supplémentaire"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Statut</Label>
+                <Select
+                  value={registrationToEdit.status}
+                  onValueChange={(value) => 
+                    setRegistrationToEdit({
+                      ...registrationToEdit,
+                      status: value as 'PENDING' | 'IN_REVIEW' | 'COMPLETED' | 'REJECTED'
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner un statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="PENDING">En attente</SelectItem>
+                    <SelectItem value="IN_REVIEW">En cours</SelectItem>
+                    <SelectItem value="COMPLETED">Terminé</SelectItem>
+                    <SelectItem value="REJECTED">Rejeté</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsEditDialogOpen(false)}
+              disabled={isEditing}
+            >
+              <X className="mr-2 h-4 w-4" /> Annuler
+            </Button>
+            <Button 
+              onClick={handleSaveEdit}
+              disabled={isEditing}
+            >
+              {isEditing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Enregistrement...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Enregistrer
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

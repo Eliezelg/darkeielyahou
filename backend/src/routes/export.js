@@ -37,7 +37,6 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
 
     // Définir les en-têtes
     worksheet.columns = [
-      { header: 'ID', key: 'id', width: 30 },
       { header: 'Prénom', key: 'firstName', width: 20 },
       { header: 'Nom', key: 'lastName', width: 20 },
       { header: 'Email', key: 'email', width: 30 },
@@ -46,8 +45,6 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
       { header: 'Participants Hommes', key: 'maleAttendees', width: 15 },
       { header: 'Participants Femmes', key: 'femaleAttendees', width: 15 },
       { header: 'Total Participants', key: 'totalAttendees', width: 15 },
-      { header: 'Restrictions Alimentaires', key: 'dietaryRestrictions', width: 25 },
-      { header: 'Message', key: 'message', width: 40 },
       { header: 'Date d\'inscription', key: 'createdAt', width: 25 },
       { header: 'Statut', key: 'status', width: 15 }
     ];
@@ -62,7 +59,6 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
       const data = registration.formData;
       
       worksheet.addRow({
-        id: registration.id,
         firstName: data.firstName || '',
         lastName: data.lastName || '',
         email: data.email || '',
@@ -73,8 +69,6 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
         totalAttendees: data.attendees?.total || 
           (Number(data.maleAttendees || data.attendees?.male || 0) + 
            Number(data.femaleAttendees || data.attendees?.female || 0)).toString(),
-        dietaryRestrictions: data.dietaryRestrictions || '',
-        message: data.message || '',
         createdAt: registration.createdAt.toLocaleString('fr-FR'),
         status: registration.status
       });

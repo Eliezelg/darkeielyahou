@@ -52,6 +52,10 @@ declare module '*.webp' {
 // Déclarations pour les modules personnalisés
 declare module '@/lib/api' {
   export * from '@/lib/api';
+
+  export function post(arg0: string, formData: { phone: string; totalAttendees: number; email: string; firstName: string; lastName: string; phoneCountryCode: string; phoneNumber: string; city: string; maleAttendees: string; femaleAttendees: string; }): { data: any; } | PromiseLike<{ data: any; }> {
+    throw new Error("Function not implemented.");
+  }
 }
 
 declare module '@/config' {

@@ -162,4 +162,89 @@ router.patch('/:id/status', async (req, res) => {
   }
 });
 
+// Supprimer un formulaire
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Vérifier si le formulaire existe
+    const existingForm = await prisma.formRequest.findUnique({
+      where: { id },
+    });
+    
+    if (!existingForm) {
+      return res.status(404).json({
+        success: false,
+        error: 'Formulaire non trouvé',
+      });
+    }
+    
+    // Supprimer le formulaire
+    await prisma.formRequest.delete({
+      where: { id },
+    });
+    
+    res.status(200).json({
+      success: true,
+      message: 'Formulaire supprimé avec succès',
+    });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du formulaire:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Une erreur est survenue lors de la suppression du formulaire',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+});
+
+// Mettre à jour les données d'un formulaire
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { formData } = req.body;
+    
+    if (!formData) {
+      return res.status(400).json({
+        success: false,
+        error: 'Les données du formulaire sont requises',
+      });
+    }
+    
+    // Vérifier si le formulaire existe
+    const existingForm = await prisma.formRequest.findUnique({
+      where: { id },
+    });
+    
+    if (!existingForm) {
+      return res.status(404).json({
+        success: false,
+        error: 'Formulaire non trouvé',
+      });
+    }
+    
+    // Mettre à jour le formulaire
+    const updatedForm = await prisma.formRequest.update({
+      where: { id },
+      data: { 
+        formData: formData,
+        updatedAt: new Date()
+      },
+    });
+    
+    res.status(200).json({
+      success: true,
+      form: updatedForm,
+      message: 'Formulaire mis à jour avec succès',
+    });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du formulaire:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Une erreur est survenue lors de la mise à jour du formulaire',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+});
+
 module.exports = router;

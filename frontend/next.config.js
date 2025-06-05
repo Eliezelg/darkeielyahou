@@ -70,8 +70,8 @@ const nextConfig = {
   // Configuration pour la compilation
   reactStrictMode: true,
   
-  // Configuration pour les pages statiques
-  // output: 'standalone',
+  // Configuration pour les pages statiques - activée pour la production
+  output: 'standalone',
   
   // Configuration pour la compression
   compress: true,

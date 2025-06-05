@@ -5,11 +5,11 @@ const APP_CONFIG = {
   
   // Configuration de l'administration
   ADMIN: {
-    // Mot de passe admin (à changer en production)
-    PASSWORD: process.env.ADMIN_PASSWORD || 'admin123',
+    // Mot de passe admin
+    PASSWORD: process.env.ADMIN_PASSWORD,
     
     // Clé de session
-    SESSION_SECRET: process.env.SESSION_SECRET || 'votre_clé_secrète_très_longue_et_sécurisée',
+    SESSION_SECRET: process.env.SESSION_SECRET,
     
     // Durée de validité de la session (en millisecondes)
     SESSION_MAX_AGE: 24 * 60 * 60 * 1000, // 24 heures

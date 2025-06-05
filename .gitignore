@@ -1,12 +1,20 @@
 # Fichiers de configuration sensibles
-ecosystem.config.js
+# Ne pas ignorer ecosystem.config.js car il est nécessaire pour le déploiement
+# ecosystem.config.js
 
-# Fichiers d'environnement
+# Fichiers d'environnement (ne pas commiter les fichiers avec des secrets)
 .env
 .env.local
+.env.*.local
 .env.development
 .env.production
 .env.test
+
+# Fichiers avec mot de passe ou clés
+*.key
+*.pem
+*.crt
+credentials.json
 
 # Dossiers de dépendances
 node_modules/

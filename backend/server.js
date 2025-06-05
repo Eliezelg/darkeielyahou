@@ -20,9 +20,16 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware de sécurité et CORS
-const corsOrigins = process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS
-  ? (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS).split(',').map(origin => origin.trim())
-  : ['http://localhost:3000', 'https://darkei-elyahou.org'];
+// Configuration CORS améliorée pour la production
+let corsOrigins;
+if (process.env.NODE_ENV === 'production') {
+  // En production, utiliser uniquement les origines spécifiées dans les variables d'environnement
+  corsOrigins = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGINS || 'https://darkei-elyahou.org')
+    .split(',').map(origin => origin.trim());
+} else {
+  // En développement, permettre localhost avec différents ports
+  corsOrigins = ['http://localhost:3000'];
+}
 
 console.log('CORS Origins autorisées:', corsOrigins);
 

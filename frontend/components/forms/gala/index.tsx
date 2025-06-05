@@ -75,7 +75,7 @@ export default function GalaForm() {
       console.log("Envoi des données au serveur:", formData);
       
       // Envoyer les données au serveur via fetch directement
-      const response = await fetch(`${APP_CONFIG.API_BASE_URL}/api/forms/GALA`, {
+      const response = await fetch(`${APP_CONFIG.API_BASE_URL}/api/forms/GALA_REGISTRATION`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

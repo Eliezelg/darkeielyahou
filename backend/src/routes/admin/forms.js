@@ -9,6 +9,10 @@ console.log('Router Express créé dans forms.js');
 console.log('Chemin d\'importation pour Prisma:', '../../../generated/prisma');
 
 // Middleware d'authentification pour toutes les routes
+router.use((req, res, next) => {
+  console.log(`=== FORMS ROUTER === ${req.method} ${req.originalUrl} - Base URL: ${req.baseUrl} - Params:`, req.params);
+  next();
+});
 router.use(requireAuth);
 
 console.log('Route admin/forms.js chargée');
@@ -17,7 +21,7 @@ console.log('$Enums disponible:', $Enums);
 
 // Mapping des types de formulaires frontend vers les types Prisma
 const formTypeMapping = {
-  'GALA_REGISTRATION': $Enums.FormType.GALA_REGISTRATION,
+  'GALA_REGISTRATION': $Enums.FormType.GALA,
   'SOCIAL_AID': $Enums.FormType.SOCIAL_AID,
   'LOAN': $Enums.FormType.LOAN_REQUEST,
   'KOLLEL': $Enums.FormType.KOL_JOIN,
@@ -163,7 +167,9 @@ router.patch('/:id/status', async (req, res) => {
 });
 
 // Supprimer un formulaire
+console.log('Définition de la route DELETE /:id dans forms.js');
 router.delete('/:id', async (req, res) => {
+  console.log(`Route DELETE forms/:id appelée avec ID: ${req.params.id}`);
   try {
     const { id } = req.params;
     
@@ -199,7 +205,9 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Mettre à jour les données d'un formulaire
+console.log('Définition de la route PUT /:id dans forms.js');
 router.put('/:id', async (req, res) => {
+  console.log(`Route PUT forms/:id appelée avec ID: ${req.params.id}`);
   try {
     const { id } = req.params;
     const { formData } = req.body;

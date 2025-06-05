@@ -46,9 +46,7 @@ const requireAuth = (req, res, next) => {
     
     // Vérifier si le token est un JWT valide
     try {
-      console.log('Tentative de vérification JWT avec secret:', process.env.JWT_SECRET ? 'JWT_SECRET présent' : 'JWT_SECRET absent, utilisation de PASSWORD');
-      const secret = process.env.JWT_SECRET || ADMIN_CONFIG.PASSWORD;
-      console.log('Secret utilisé (partiel):', typeof secret === 'string' ? secret.slice(0, 3) + '...' : 'non string');
+      console.log('Tentative de vérification JWT avec secret:', ADMIN_CONFIG.SESSION_SECRET ? 'SESSION_SECRET présent' : 'SESSION_SECRET absent');
       
       const decodedToken = verifyToken(token);
       console.log('Résultat décodage JWT:', decodedToken ? 'Token valide' : 'Token invalide');
@@ -103,7 +101,7 @@ const login = (req, res) => {
     req.session.isAuthenticated = true;
     
     // Générer un token JWT pour l'authentification
-    const secret = process.env.JWT_SECRET || ADMIN_CONFIG.PASSWORD;
+    const secret = ADMIN_CONFIG.SESSION_SECRET || process.env.JWT_SECRET || 'votre_clé_secrète_jwt';
     const authToken = jwt.sign(
       { username: 'admin', isAdmin: true },
       secret,

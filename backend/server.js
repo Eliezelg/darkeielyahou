@@ -62,9 +62,9 @@ app.use(express.json());
 
 // Configuration du client Redis
 const redisClient = createClient({
-  url: process.env.REDIS_URL,
-  password: process.env.REDIS_PASSWORD || '',
-  legacyMode: true // Changer à true pour compatibilité
+  url: process.env.REDIS_URL || 'redis://localhost:6379',
+  // Pas de password car Redis local n'en a pas
+  legacyMode: true
 });
 
 // Connexion au client Redis
@@ -83,13 +83,13 @@ redisClient.on('error', (err) => {
 });
 
 redisClient.on('connect', () => {
-  console.log('Connexion à Redis établie');
+  console.log('Client Redis connecté');
 });
 
-// Création du store Redis - s'assurer que le client est correctement passé
+// Création du store Redis
 const redisStore = new RedisStore({ 
   client: redisClient,
-  prefix: 'darkei:sess:' // Ajout d'un préfixe pour éviter les collisions
+  prefix: 'darkei:sess:' 
 });
 
 // Configuration de la session
@@ -833,10 +833,10 @@ const shutdown = async () => {
     
     // Fermer la connexion Redis
     try {
-      await redisClient.disconnect();
+      await redisClient.quit();
       console.log('Connexion Redis fermée');
-    } catch (err) {
-      console.error('Erreur lors de la fermeture de Redis:', err);
+    } catch (error) {
+      console.log('Redis déjà fermé ou erreur:', error.message);
     }
     
     // Fermer la connexion Prisma

@@ -37,7 +37,7 @@ export function generateUserEmailTemplate(values: FormData, primaryBlue: string 
     </head>
     <body>
       <div class="header">
-        <img src="cid:logo" alt="Darkei Elyahou" class="logo">
+        <img src="https://darkei-elyahou.org/logo/logo.png" alt="Darkei Elyahou" class="logo">
         <h1>Confirmation d'inscription au gala</h1>
       </div>
       <div class="content">

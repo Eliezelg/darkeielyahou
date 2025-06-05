@@ -131,7 +131,8 @@ router.get('/profile', requireAuth, (req, res) => {
   });
 });
 
-// Récupérer toutes les demandes
+// Récupérer toutes les demandes - DÉSACTIVÉ pour éviter conflits avec /forms
+/*
 router.get('/requests', requireAuth, async (req, res) => {
   try {
     const { status } = req.query;
@@ -162,8 +163,10 @@ router.get('/requests', requireAuth, async (req, res) => {
     });
   }
 });
+*/
 
-// Récupérer une demande par son ID
+// Récupérer une demande par son ID - DÉSACTIVÉ pour éviter conflits avec /forms
+/*
 router.get('/requests/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
@@ -192,8 +195,10 @@ router.get('/requests/:id', requireAuth, async (req, res) => {
     });
   }
 });
+*/
 
-// Mettre à jour le statut d'une demande
+// Mettre à jour le statut d'une demande - DÉSACTIVÉ pour éviter conflits avec /forms
+/*
 router.put('/requests/:id/status', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
@@ -234,5 +239,44 @@ router.put('/requests/:id/status', requireAuth, async (req, res) => {
     });
   }
 });
+*/
+
+// Supprimer une demande - DÉSACTIVÉ pour éviter conflits avec /forms
+/*
+router.delete('/requests/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Vérifier si la demande existe
+    const existingRequest = await prisma.formRequest.findUnique({
+      where: { id },
+    });
+    
+    if (!existingRequest) {
+      return res.status(404).json({
+        success: false,
+        error: 'Demande non trouvée',
+      });
+    }
+    
+    // Supprimer la demande
+    await prisma.formRequest.delete({
+      where: { id },
+    });
+    
+    res.status(200).json({
+      success: true,
+      message: 'Demande supprimée avec succès',
+    });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la demande:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Une erreur est survenue lors de la suppression de la demande',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+});
+*/
 
 module.exports = router;

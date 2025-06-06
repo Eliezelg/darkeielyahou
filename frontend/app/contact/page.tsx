@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import Flag from "react-world-flags";
 import {
@@ -230,6 +230,7 @@ export default function Contact() {
                 </div>
                 <div className="flex items-center">
                   <FaWhatsapp className="w-5 h-5 mr-2 text-primary shrink-0" />
+                  <Phone className="w-5 h-5 mr-2 text-primary shrink-0" />
                   <p>+972 54 723 6004</p>
                 </div>
               </div>
@@ -247,7 +248,7 @@ export default function Contact() {
                   <p>Adresse : 56 Avenue Jean Jaurès, 75019 Paris</p>
                 </div>
                 <div className="flex items-center">
-                  <FaWhatsapp className="w-5 h-5 mr-2 text-primary shrink-0" />
+                  <Phone className="w-5 h-5 mr-2 text-primary shrink-0" />
                   <p>+33 6 64 98 73 71</p>
                 </div>
               </div>

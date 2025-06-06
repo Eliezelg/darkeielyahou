@@ -47,6 +47,15 @@ export default function Footer() {
             <h3 className="text-xl font-serif mb-6">Contact</h3>
             <ul className="space-y-4">
               <li>
+                <a
+                  href="tel:+33664987371"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-white/80 hover:text-white transition-colors"
+                >
+                  <Phone className="w-5 h-5 mr-3 text-white/70" />
+                  +33 6 64 98 73 71
+                </a>
                 <a 
                   href="https://wa.me/972547236004" 
                   target="_blank" 
@@ -65,10 +74,6 @@ export default function Footer() {
                   <Mail className="w-5 h-5 mr-3 text-white/70" />
                   contact@darkei-elyahou.org
                 </a>
-              </li>
-              <li className="flex items-start">
-                <MapPin className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
-                <span>Rehov Zanguevill 9/60, Jerusalem</span>
               </li>
             </ul>
           </div>

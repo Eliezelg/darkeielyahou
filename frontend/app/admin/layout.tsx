@@ -6,8 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { 
-  LayoutDashboard, 
-  FileText, 
+  Users, 
   LogOut,
   Settings,
   ChevronRight
@@ -75,7 +74,7 @@ export default function AdminLayout({
       {/* Admin Header */}
       <header className="bg-gray-900 text-white py-4 px-6 flex justify-between items-center shadow-md sticky top-0 z-50">
         <div className="flex items-center space-x-2">
-          <Link href="/admin/dashboard" className="flex items-center">
+          <Link href="/admin/forms/gala" className="flex items-center">
             <div className="relative h-10 w-40 mr-2">
               <Image 
                 src="/logo/logo.png" 
@@ -104,28 +103,15 @@ export default function AdminLayout({
             <ul className="space-y-2">
               <li>
                 <Link 
-                  href="/admin/dashboard" 
+                  href="/admin/forms/gala" 
                   className={`flex items-center p-3 rounded-lg transition-colors ${
-                    pathname === '/admin/dashboard' 
+                    pathname.startsWith('/admin/forms') 
                       ? 'bg-primary text-white' 
                       : 'hover:bg-gray-700'
                   }`}
                 >
-                  <LayoutDashboard className="w-5 h-5 mr-3" />
-                  <span>Tableau de bord</span>
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/admin/requests" 
-                  className={`flex items-center p-3 rounded-lg transition-colors ${
-                    pathname.startsWith('/admin/requests') 
-                      ? 'bg-primary text-white' 
-                      : 'hover:bg-gray-700'
-                  }`}
-                >
-                  <FileText className="w-5 h-5 mr-3" />
-                  <span>Demandes</span>
+                  <Users className="w-5 h-5 mr-3" />
+                  <span>Inscriptions Gala</span>
                 </Link>
               </li>
               <li>
@@ -147,19 +133,12 @@ export default function AdminLayout({
 
         {/* Main Content */}
         <main className="flex-1 p-6 bg-gray-50">
-          {pathname !== '/admin/dashboard' && (
-            <div className="flex items-center text-sm text-gray-500 mb-4">
-              <Link href="/admin/dashboard" className="hover:text-primary">
-                Administration
-              </Link>
-              <ChevronRight className="w-4 h-4 mx-2" />
-              <span className="font-medium text-gray-700">
-                {pathname.includes('/requests/') ? 'Détails demande' : 
-                 pathname.includes('/requests') ? 'Demandes' : 
-                 pathname.includes('/settings') ? 'Paramètres' : 'Page'}
-              </span>
-            </div>
-          )}
+          <div className="flex items-center text-sm text-gray-500 mb-4">
+            <span className="font-medium text-gray-700">
+              {pathname.includes('/forms/gala') ? 'Inscriptions Gala' : 
+               pathname.includes('/settings') ? 'Paramètres' : 'Administration'}
+            </span>
+          </div>
           {children}
         </main>
       </div>

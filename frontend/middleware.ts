@@ -38,7 +38,7 @@ export function middleware(request: NextRequest) {
   
   // Ne pas rediriger vers le dashboard si l'utilisateur vient de se déconnecter
   if (isLoginPath && isAuthenticated && !isLogout) {
-    const url = new URL('/admin/dashboard', request.url);
+    const url = new URL('/admin/forms/gala', request.url);
     return NextResponse.redirect(url);
   }
 
@@ -48,7 +48,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/admin',
-    '/admin/dashboard',
-    '/admin/requests/:path*',
+    '/admin/forms/:path*',
   ],
 };

@@ -58,7 +58,7 @@ export function FormCategorySidebar() {
               'w-full justify-start',
               activeCategory === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
             )}
-            onClick={() => router.push('/admin/dashboard')}
+            onClick={() => router.push('/admin/forms/gala')}
           >
             Tableau de bord
           </Button>

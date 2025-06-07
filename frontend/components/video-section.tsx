@@ -128,13 +128,13 @@ export default function VideoSection() {
           <video 
             ref={videoRef}
             className="w-full aspect-video object-contain bg-black"
-            poster="/darka-poster.jpg"
+            poster="/darkei-poster.png"
             onEnded={() => setIsPlaying(false)}
             onClick={togglePlay}
             playsInline
             preload="metadata"
           >
-            <source src="/darka.mp4" type="video/mp4" />
+            <source src="/darkei.mp4" type="video/mp4" />
             Votre navigateur ne prend pas en charge la lecture de vidéos.
           </video>
           

@@ -93,6 +93,12 @@ export default function Actions() {
               icon="🛒"
             />
             <ActionCard 
+              title="Opération Cartable" 
+              description="Rentrée scolaire pour tous" 
+              href="/actions/operation-cartable"
+              icon="🎒"
+            />
+            <ActionCard 
               title="Soutien aux familles de 'Hayalim" 
               description="Guerre 2023–2024" 
               href="/actions/soutien-hayalim"

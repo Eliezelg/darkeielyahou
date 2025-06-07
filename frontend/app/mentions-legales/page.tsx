@@ -17,7 +17,7 @@ export default function MentionsLegales() {
           </p>
           <p>
             Email : contact@darkei-elyahou.org<br />
-            Téléphone : +972 54 723 6004
+            Téléphone : +33 6 64 98 73 71
           </p>
         </section>
         
@@ -30,7 +30,8 @@ export default function MentionsLegales() {
             Numéro RNA : W941004399 (Répertoire National des Associations)<br />
             Type d'organisation : Association simplement déclarée<br />
             Statut : Active<br />
-            Adresse : 56 Avenue Jean Jaurès, 75019 Paris
+            Adresse : 56 Avenue Jean Jaurès, 75019 Paris<br />
+            Téléphone : +33 6 64 98 73 71
           </p>
         </section>
         
@@ -42,7 +43,8 @@ export default function MentionsLegales() {
             Nom officiel : דרכי אליהו - ירושלים (ע"ר) / Darkei Elyahou - Jérusalem<br />
             Numéro d'organisation : 580498178<br />
             Type d'organisation : Association enregistrée (עמותה)<br />
-            Adresse : Rue Zanguevill (זנגוויל) 9/60, Jérusalem
+            Adresse : Rue Zanguevill (זנגוויל) 9/60, Jérusalem<br />
+            Téléphone : +972 54 723 6004
           </p>
         </section>
         

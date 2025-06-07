@@ -43,6 +43,10 @@ export default function GalaRegistrationsPage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [registrationToEdit, setRegistrationToEdit] = useState<GalaRegistration | null>(null);
   const [editFormData, setEditFormData] = useState<any>(null);
+  
+  // État pour le tri du tableau
+  const [sortColumn, setSortColumn] = useState<string>('createdAt'); // Colonne par défaut pour le tri (date d'inscription)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc'); // Direction du tri (décroissant par défaut)
   const { toast } = useToast();
 
   // Vérifier l'authentification et charger les données
@@ -162,21 +166,76 @@ export default function GalaRegistrationsPage() {
     }
   };
 
+  // Fonction de tri des inscriptions
+  const sortRegistrations = (a: GalaRegistration, b: GalaRegistration) => {
+    let comparison = 0;
+    
+    switch (sortColumn) {
+      case 'name':
+        // Tri par nom complet (nom et prénom)
+        const nameA = `${a.formData.lastName} ${a.formData.firstName}`.toLowerCase();
+        const nameB = `${b.formData.lastName} ${b.formData.firstName}`.toLowerCase();
+        comparison = nameA.localeCompare(nameB);
+        break;
+      case 'city':
+        // Tri par ville
+        const cityA = a.formData.city?.toLowerCase() || '';
+        const cityB = b.formData.city?.toLowerCase() || '';
+        comparison = cityA.localeCompare(cityB);
+        break;
+      case 'createdAt':
+      default:
+        // Tri par date d'inscription (par défaut)
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        comparison = dateA - dateB;
+        break;
+    }
+    
+    // Inverser le résultat si le tri est descendant
+    return sortDirection === 'asc' ? comparison : -comparison;
+  };
+  
+  // Gérer le changement de colonne de tri
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      // Si on clique sur la même colonne, on inverse la direction du tri
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Si on clique sur une nouvelle colonne, on définit cette colonne comme colonne de tri
+      // et on réinitialise la direction (descendant par défaut)
+      setSortColumn(column);
+      setSortDirection('desc');
+    }
+  };
+
+  // Obtenir une flèche pour indiquer la direction du tri
+  const getSortIndicator = (column: string) => {
+    if (sortColumn !== column) {
+      return null;
+    }
+    
+    return sortDirection === 'asc' 
+      ? <span className="ml-1">↑</span> 
+      : <span className="ml-1">↓</span>;
+  };
+
   // Filtrer les inscriptions selon le terme de recherche
-  const filteredRegistrations = registrations.filter(registration => {
-    if (!searchTerm.trim()) return true;
-    
-    const searchLower = searchTerm.toLowerCase();
-    const { formData } = registration;
-    
-    return (
-      (formData.firstName && formData.firstName.toLowerCase().includes(searchLower)) ||
-      (formData.lastName && formData.lastName.toLowerCase().includes(searchLower)) ||
-      (formData.email && formData.email.toLowerCase().includes(searchLower)) ||
-      (formData.city && formData.city.toLowerCase().includes(searchLower)) ||
-      (registration.id.toLowerCase().includes(searchLower))
-    );
-  });
+  const filteredRegistrations = registrations
+    .filter((registration) => {
+      const { formData } = registration;
+      const searchTermLower = searchTerm.toLowerCase();
+      
+      return (
+        formData.firstName?.toLowerCase().includes(searchTermLower) ||
+        formData.lastName?.toLowerCase().includes(searchTermLower) ||
+        formData.email?.toLowerCase().includes(searchTermLower) ||
+        formData.city?.toLowerCase().includes(searchTermLower) ||
+        formData.phoneNumber?.toLowerCase().includes(searchTermLower)
+      );
+    })
+    // Appliquer le tri
+    .sort(sortRegistrations);
 
   // Formater la date pour l'affichage
   const formatDate = (dateString: string) => {
@@ -386,15 +445,30 @@ export default function GalaRegistrationsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[180px]">Nom complet</TableHead>
+                    <TableHead 
+                      className="w-[180px] cursor-pointer hover:bg-gray-50" 
+                      onClick={() => handleSort('name')}
+                    >
+                      Nom complet {getSortIndicator('name')}
+                    </TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Téléphone</TableHead>
-                    <TableHead>Ville</TableHead>
+                    <TableHead 
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleSort('city')}
+                    >
+                      Ville {getSortIndicator('city')}
+                    </TableHead>
                     <TableHead className="text-center">Hommes</TableHead>
                     <TableHead className="text-center">Femmes</TableHead>
                     <TableHead className="text-center">Total</TableHead>
                     <TableHead>Statut</TableHead>
-                    <TableHead className="w-[150px]">Date</TableHead>
+                    <TableHead 
+                      className="w-[150px] cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleSort('createdAt')}
+                    >
+                      Date {getSortIndicator('createdAt')}
+                    </TableHead>
                     <TableHead className="w-[130px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>

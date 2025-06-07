@@ -19,9 +19,12 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-serif mb-6">Nos Actions</h3>
             <ul className="space-y-3">
-              <FooterLink href="/actions/soutien-hayalim">Soutien aux Soldats</FooterLink>
+              <FooterLink href="/actions/soutien-hayalim">Soutien aux familles des soldats</FooterLink>
               <FooterLink href="/actions/gmah-voitures">Prêt de véhicules</FooterLink>
               <FooterLink href="/actions/aide-social">Aide sociale</FooterLink>
+              <FooterLink href="/actions/gmah-hasdei-esther">Prêt d'argent à taux 0%</FooterLink>
+              <FooterLink href="/actions/operation-cartable">Opération cartable</FooterLink>
+              <FooterLink href="/actions/habiller-dignite">Vente de H'essed</FooterLink>
             </ul>
           </div>
           
@@ -47,8 +50,8 @@ export default function Footer() {
             <h3 className="text-xl font-serif mb-6">Contact</h3>
             <ul className="space-y-4">
               <li>
-                <a
-                  href="tel:+33664987371"
+                <a 
+                  href="tel:+33664987371" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center text-white/80 hover:text-white transition-colors"
@@ -60,10 +63,13 @@ export default function Footer() {
                   href="https://wa.me/972547236004" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center text-white/80 hover:text-white transition-colors"
+                  className="flex items-center text-white/80 hover:text-white transition-colors group"
                 >
-                  <Phone className="w-5 h-5 mr-3 text-white/70" />
-                  +972 54 723 6004
+                  <span className="flex items-center">
+                    <Phone className="w-5 h-5 mr-2 text-white/70 group-hover:text-white" />
+                    <span className="mr-2">+972 54 723 6004</span>
+                    <FaWhatsapp className="w-4 h-4 text-green-400" />
+                  </span>
                 </a>
               </li>
               <li>

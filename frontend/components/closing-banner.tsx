@@ -24,7 +24,11 @@ export default function ClosingBanner() {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
-            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium shadow-lg">
+            <Button 
+              size="lg" 
+              className="bg-accent text-accent-foreground hover:bg-accent/90 font-medium shadow-lg"
+              onClick={() => window.open("https://allodons.fr/darkei-elyahou25", "_blank")}
+            >
               Faire un don – via Allodons
             </Button>
             <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-medium border-2 border-white">

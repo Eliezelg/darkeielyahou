@@ -33,7 +33,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <Heart className="w-5 h-5 mr-3 mt-0.5 text-white/70" />
-                <Link href="https://Allodons.com" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+                <Link href="https://allodons.fr/darkei-elyahou25" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
                   Faire un don via Allodons
                 </Link>
               </li>

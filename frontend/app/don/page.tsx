@@ -85,7 +85,7 @@ export default function Don() {
           </div>
           
           <div className="text-center mt-10">
-            <a href="https://Allodons.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://allodons.fr/darkei-elyahou25" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8">
                 JE FAIS UN DON – VIA Allodons
               </Button>

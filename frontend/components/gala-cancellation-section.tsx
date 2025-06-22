@@ -20,6 +20,7 @@ interface VideoItem {
   title: string;
   description: string;
   url: string;
+  videoId: string;
   thumbnail: string;
   icon: React.ReactNode;
 }

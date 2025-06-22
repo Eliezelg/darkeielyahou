@@ -132,17 +132,15 @@ export default function GalaCancellationSection() {
              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
              Aidez-nous à continuer. Aidez-nous à vous aider.
           </h2>
-          <p className="text-lg text-gray-700 mb-6">
-            📲 Dès maintenant, faites un don sur :{' '}
-            <a 
-                    href="https://allodons.fr/darkei-elyahou25" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-blue-600 hover:text-blue-800 underline transition-colors"
-                  >
-                    AlloDons
-                  </a>
-          </p>
+      
+            <Button
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-8"
+              onClick={() => window.open('https://allodons.fr/darkei-elyahou25', '_blank')}
+            >
+              <HeartHandshake className="w-5 h-5 mr-2" />
+              Dès maintenant, faites un don sur AlloDons
+            </Button>
           </div>
         </div>
 

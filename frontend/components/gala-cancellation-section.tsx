@@ -117,30 +117,35 @@ export default function GalaCancellationSection() {
           
           <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
             <h2 className="text-3xl md:text-4xl font-semibold text-red-600 mb-6">
-             <strong>Annulation des galas</strong>
+             <strong>⚠️ INFO IMPORTANTE – CAMPAGNE EXCEPTIONNELLE ⚠️</strong>
             </h2>
             <h3 className="text-xl md:text-2xl font-semibold text-red-600 mb-6">
-              Mais pas de notre mission - Une campagne plus essentielle que jamais
+            🗓️ 23 • 24 • 25 juin 2025
             </h3>
             <p className="text-lg text-gray-700 mb-6">
-              En raison du conflit avec l'Iran, les galas prévus à Strasbourg, Paris et Jérusalem ne pourront pas avoir lieu.
-            </p>
+            💥 Les galas à Paris, Strasbourg et Jérusalem <strong>ont été annulés</strong> en raison du contexte sécuritaire.
+           <br/> Mais notre mission, elle, ne s’annule pas.            </p>
               <p className="text-lg text-gray-700 mb-6">
-                Mais les besoins, eux, sont toujours là. Plus que jamais, notre campagne{' '}
-                <a 
-                  href="https://allodons.fr/darkei-elyahou25" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-bold text-blue-600 hover:text-blue-800 underline transition-colors"
-                >
-                  AlloDons
-                </a> est vitale.
+              🎯 Darkei Elyahou lance sa grande campagne annuelle.
+              <br/> 3 jours pour agir. 380 000 € à réunir. Des centaines de vies à soutenir.
               </p>
              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Aidez-nous à continuer. Aidez-nous à vous aider.
+             Aidez-nous à continuer. Aidez-nous à vous aider.
           </h2>
+          <p className="text-lg text-gray-700 mb-6">
+            📲 Dès maintenant, faites un don sur :{' '}
+            <a 
+                    href="https://allodons.fr/darkei-elyahou25" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-blue-600 hover:text-blue-800 underline transition-colors"
+                  >
+                    AlloDons
+                  </a>
+          </p>
           </div>
         </div>
+
 
           {/* Affiches des galas annulés */}
           <div className="grid md:grid-cols-2 gap-8 mb-12">

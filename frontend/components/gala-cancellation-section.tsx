@@ -75,7 +75,7 @@ export default function GalaCancellationSection() {
       description: 'Découvrez le teaser de notre événement',
       url: 'https://www.youtube.com/embed/1A8h98fCKaI?rel=0&modestbranding=1&autoplay=1&showinfo=0&controls=1',
       videoId: '1A8h98fCKaI',
-      thumbnail: 'https://img.youtube.com/vi/1A8h98fCKaI/maxresdefault.jpg',
+      thumbnail: '/images/thumbnails/teaser.jpg',
       icon: <Play className="w-6 h-6 text-white" />
     },
     {
@@ -84,7 +84,7 @@ export default function GalaCancellationSection() {
       description: 'Découvrez l\'ambiance de nos précédents galas',
       url: 'https://www.youtube.com/embed/fD9do9RTz0E?rel=0&modestbranding=1&autoplay=1&showinfo=0&controls=1',
       videoId: 'fD9do9RTz0E',
-      thumbnail: 'https://img.youtube.com/vi/fD9do9RTz0E/maxresdefault.jpg',
+      thumbnail: '/images/thumbnails/gala.jpg',
       icon: <Play className="w-6 h-6 text-white" />
     },
     {
@@ -93,7 +93,7 @@ export default function GalaCancellationSection() {
       description: 'Interview avec le Président Rav Shemouel Marciano',
       url: 'https://www.youtube.com/embed/lsK5SSQlWDM?rel=0&modestbranding=1&autoplay=1&showinfo=0&controls=1',
       videoId: 'lsK5SSQlWDM',
-      thumbnail: 'https://img.youtube.com/vi/lsK5SSQlWDM/maxresdefault.jpg',
+      thumbnail: '/images/thumbnails/interview.jpg',
       icon: <Users className="w-6 h-6 text-white" />
     }
   ];
@@ -127,32 +127,34 @@ export default function GalaCancellationSection() {
         {/* Section principale */}
         <div className="max-w-4xl mx-auto text-center mb-12">
           
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-3xl md:text-4xl font-semibold text-red-600 mb-6">
+          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 text-center">
+            <h2 className="text-2xl md:text-4xl font-semibold text-red-600 mb-4 md:mb-6">
              <strong>⚠️ INFO IMPORTANTE – CAMPAGNE EXCEPTIONNELLE ⚠️</strong>
             </h2>
-            <h3 className="text-xl md:text-2xl font-semibold text-red-600 mb-6">
+            <h3 className="text-xl md:text-2xl font-semibold text-red-600 mb-4 md:mb-6">
             🗓️ 23 • 24 • 25 juin 2025
             </h3>
-            <p className="text-lg text-gray-700 mb-6">
+            <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6">
             💥 Les galas à Paris, Strasbourg et Jérusalem <strong>ont été annulés</strong> en raison du contexte sécuritaire.
-           <br/> Mais notre mission, elle, ne s’annule pas.            </p>
-              <p className="text-lg text-gray-700 mb-6">
+           <br/> Mais notre mission, elle, ne s'annule pas.            </p>
+            <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6">
               🎯 Darkei Elyahou lance sa grande campagne annuelle.
               <br/> 3 jours pour agir. 380 000 € à réunir. Des centaines de vies à soutenir.
-              </p>
-             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-             Aidez-nous à continuer. Aidez-nous à vous aider.
-          </h2>
-      
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-8"
-              onClick={() => window.open('https://allodons.fr/darkei-elyahou25', '_blank')}
-            >
-              <HeartHandshake className="w-5 h-5 mr-2" />
-              Dès maintenant, faites un don sur AlloDons
-            </Button>
+            </p>
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
+              Aidez-nous à continuer. Aidez-nous à vous aider.
+            </h2>
+            
+            <div className="flex justify-center">
+              <Button
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-6 md:px-8 mx-auto"
+                onClick={() => window.open('https://allodons.fr/darkei-elyahou25', '_blank')}
+              >
+                <HeartHandshake className="w-5 h-5 mr-2" />
+                Dès maintenant, faites un don sur AlloDons
+              </Button>
+            </div>
           </div>
         </div>
 

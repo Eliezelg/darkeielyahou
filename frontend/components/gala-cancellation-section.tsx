@@ -33,16 +33,28 @@ export default function GalaCancellationSection() {
 
   const galleryImages: GalleryImage[] = [
     {
+      src: "/images/gala/strasbourg.webp",
+      alt: "Gala de Strasbourg - Reporté",
+      title: "Gala de Strasbourg",
+      description: "Événement reporté en raison du conflit"
+    },
+    {
       src: "/images/gala/paris.webp",
       alt: "Gala de Paris - Reporté",
       title: "Gala de Paris",
       description: "Événement reporté en raison du conflit"
     },
     {
-      src: "/images/gala/strasbourg.webp",
-      alt: "Gala de Strasbourg - Reporté",
-      title: "Gala de Strasbourg",
+      src: "/images/gala/jerusalem.webp",
+      alt: "Gala de Jérusalem - Reporté",
+      title: "Gala de Jérusalem",
       description: "Événement reporté en raison du conflit"
+    },
+    {
+      src: "/images/gala/tombola.webp",
+      alt: "Tombola du gala",
+      title: "Grande Tombola",
+      description: "Le tirage au sort aura lieu le mardi 1er juillet 2025"
     }
   ];
 
@@ -145,8 +157,8 @@ export default function GalaCancellationSection() {
         </div>
 
 
-          {/* Affiches des galas annulés */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          {/* Affiches des galas annulés et tombola */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {galleryImages.map((image, index) => (
               <Card 
                 key={index}
@@ -155,13 +167,14 @@ export default function GalaCancellationSection() {
               >
                 <CardContent className="p-0">
                   <div className="relative group">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={600}
-                      height={400}
-                      className="w-full h-64 object-cover group-hover:opacity-90 transition-opacity"
-                    />
+                    <div className="relative w-full h-64">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="object-cover group-hover:opacity-90 transition-opacity"
+                      />
+                    </div>
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition-all duration-300">
                       <div className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                         <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

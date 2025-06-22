@@ -8,18 +8,18 @@ const LoadingFallback = () => (
 );
 
 // Import dynamique des composants avec chargement différé
+const GalaCancellationSection = dynamic(() => import('@/components/gala-cancellation-section'), { ssr: true, loading: LoadingFallback });
 const Hero = dynamic(() => import('@/components/hero'), { ssr: true, loading: LoadingFallback });
 const Statistics = dynamic(() => import('@/components/statistics'), { ssr: true, loading: LoadingFallback });
-const VideoSection = dynamic(() => import('@/components/video-section'), { ssr: true, loading: () => <div className="h-[600px]" /> });
 const ActionLinks = dynamic(() => import('@/components/action-links'), { ssr: true, loading: LoadingFallback });
 const ClosingBanner = dynamic(() => import('@/components/closing-banner'), { ssr: true, loading: () => null });
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
+      <GalaCancellationSection />
       <Hero />
       <Statistics />
-      <VideoSection />
       <ActionLinks />
       <ClosingBanner />
     </div>

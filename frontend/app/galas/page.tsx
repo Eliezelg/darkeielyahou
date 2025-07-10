@@ -40,24 +40,17 @@ const Galas = () => {
           <GalaGallery 
             images={[
               {
-                src: "/images/gala/strasbourg.webp",
+                src: "/images/gala/strasbourg.jpg",
                 alt: "Gala de Strasbourg",
                 city: "Strasbourg",
-                date: "Lundi 23 Juin 2025"
+                date: "Mercredi 10 Septembre 2025"
               },
               {
-                src: "/images/gala/paris.webp",
+                src: "/images/gala/paris.jpg",
                 alt: "Gala de Paris",
                 city: "Paris",
-                date: "Mardi 24 Juin 2025"
-              },
-              {
-                src: "/images/gala/jerusalem.webp",
-                alt: "Gala de Jérusalem",
-                city: "Jérusalem",
-                date: "Mardi 1 Juillet 2025"
+                date: "Mardi 09 Septembre 2025"
               }
-
             ]}
           />
         </section>
@@ -106,7 +99,7 @@ const Galas = () => {
             <TimelineItem 
               year="2025" 
               title="Strasbourg entre dans la danse"
-              description="Cette année, pour la première fois, une <strong>troisième soirée</strong> est ajoutée à l'agenda :<br/><br/>📍 <strong>Strasbourg</strong> – Lundi 23 Juin 2025<br/>📍 <strong>Paris</strong> – Mardi 24 Juin 2025<br/>📍 <strong>Jérusalem</strong> – Mardi 1 Juillet 2025<br/><br/>L'objectif annoncé : <strong>450 000 € pour 2025</strong>, pour couvrir l'ensemble des actions listées sur ce site."
+              description="Cette année, pour la première fois, une <strong>troisième soirée</strong> est ajoutée à l'agenda :<br/><br/>📍 <strong>Strasbourg</strong> – Mercredi 10 Septembre 2025<br/>📍 <strong>Paris</strong> – Mardi 24 Juin 2025<br/>📍 <strong>Jérusalem</strong> – Mardi 1 Juillet 2025<br/><br/>L'objectif annoncé : <strong>450 000 € pour 2025</strong>, pour couvrir l'ensemble des actions listées sur ce site."
               icon={<Heart className="w-10 h-10" />}
             />
           </div>

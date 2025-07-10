@@ -197,13 +197,13 @@ app.post('/api/send-email', async (req, res) => {
         // Définir le chemin de l'affiche selon la ville
         switch(cityLowerCase) {
           case 'paris':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.webp');
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.jpg');
             break;
           case 'jerusalem':
             posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp'); // Conserve le nom de fichier avec majuscule
             break;
           case 'strasbourg':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.webp'); // Corrigé l'extension en .png
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.jpg'); // Corrigé l'extension en .png
             break;
           default:
             console.log('Ville non reconnue pour l\'affiche:', formData.city);
@@ -453,13 +453,13 @@ app.post('/api/forms/:type', async (req, res) => {
           // Définir le chemin de l'affiche selon la ville
           switch(cityLowerCase) {
             case 'paris':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.webp');
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.jpg');
               break;
             case 'jerusalem':
               posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp');
               break;
             case 'strasbourg':
-              posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.webp');
+              posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.jpg');
               break;
             default:
               posterPath = null;

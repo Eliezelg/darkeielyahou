@@ -33,13 +33,13 @@ export default function GalaCancellationSection() {
 
   const galleryImages: GalleryImage[] = [
     {
-      src: "/images/gala/strasbourg.webp",
+      src: "/images/gala/strasbourg.jpg",
       alt: "Gala de Strasbourg - Reporté",
       title: "Gala de Strasbourg",
       description: "Événement reporté en raison du conflit"
     },
     {
-      src: "/images/gala/paris.webp",
+      src: "/images/gala/paris.jpg",
       alt: "Gala de Paris - Reporté",
       title: "Gala de Paris",
       description: "Événement reporté en raison du conflit"

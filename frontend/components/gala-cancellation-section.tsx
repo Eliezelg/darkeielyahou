@@ -48,13 +48,13 @@ export default function GalaCancellationSection() {
       src: "/images/gala/jerusalem.webp",
       alt: "Gala de Jérusalem - Reporté",
       title: "Gala de Jérusalem",
-      description: "Événement reporté en raison du conflit"
+      description: "Événement annulé en raison du conflit"
     },
     {
       src: "/images/gala/tombola.webp",
       alt: "Tombola du gala",
       title: "Grande Tombola",
-      description: "Le tirage au sort aura lieu le mardi 1er juillet 2025"
+      description: "Le tirage au sort aura lieu le Lundi 15 Septembre 2025"
     }
   ];
 
@@ -124,39 +124,7 @@ export default function GalaCancellationSection() {
   return (
     <section className="relative py-16 bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="container mx-auto px-4">
-        {/* Section principale */}
-        <div className="max-w-4xl mx-auto text-center mb-12">
-          
-          <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 text-center">
-            <h2 className="text-2xl md:text-4xl font-semibold text-red-600 mb-4 md:mb-6">
-             <strong>⚠️ INFO IMPORTANTE – CAMPAGNE EXCEPTIONNELLE ⚠️</strong>
-            </h2>
-            <h3 className="text-xl md:text-2xl font-semibold text-red-600 mb-4 md:mb-6">
-            🗓️ 23 • 24 • 25 juin 2025
-            </h3>
-            <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6">
-            💥 Les galas à Paris, Strasbourg et Jérusalem <strong>ont été annulés</strong> en raison du contexte sécuritaire.
-           <br/> Mais notre mission, elle, ne s'annule pas.            </p>
-            <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6">
-              🎯 Darkei Elyahou lance sa grande campagne annuelle.
-              <br/> 3 jours pour agir. 380 000 € à réunir. Des centaines de vies à soutenir.
-            </p>
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6">
-              Aidez-nous à continuer. Aidez-nous à vous aider.
-            </h2>
-            
-            <div className="flex justify-center">
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-6 md:px-8 mx-auto"
-                onClick={() => window.open('https://allodons.fr/darkei-elyahou25', '_blank')}
-              >
-                <HeartHandshake className="w-5 h-5 mr-2" />
-                Dès maintenant, faites un don sur AlloDons
-              </Button>
-            </div>
-          </div>
-        </div>
+ 
 
 
           {/* Affiches des galas annulés et tombola */}

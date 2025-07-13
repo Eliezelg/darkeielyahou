@@ -177,7 +177,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/root/app/darkeielyahou/backend/generated/prisma",
+      "value": "/home/eli/Documents/darkeielyahou/backend/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -191,12 +191,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/root/app/darkeielyahou/backend/prisma/schema.prisma",
+    "sourceFilePath": "/home/eli/Documents/darkeielyahou/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.8.2",
@@ -205,7 +204,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Clock, Target, Book, Users, Calendar, Star, CheckCircle } from "lucide-react";
-import KollelMembershipForm from "@/components/forms/kollel-membership-form";
 import { PageHeader } from "@/components/page-header";
 
 export default function KollelOhaleiEsther() {
@@ -210,17 +209,15 @@ export default function KollelOhaleiEsther() {
 
         {/* Adhésion au Kollel */}
         <section className="mt-16">
-          <h2 className="text-2xl font-serif mb-8 text-center">Demande d'adhésion au Kollel</h2>
-          <div className="bg-muted p-6 rounded-lg mb-8">
-            <p className="mb-2 font-medium">Avant de soumettre votre demande :</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Veuillez préciser dans le formulaire que vous êtes intéressé par le Kollel Ohalei Esther</li>
-              <li>Indiquez vos disponibilités pour le vendredi matin</li>
-              <li>Mentionnez votre niveau d'étude et votre parcours</li>
-            </ul>
+          <h2 className="text-2xl font-serif mb-8 text-center">Rejoindre ce Kollel</h2>
+          <div className="bg-muted p-6 rounded-lg text-center">
+            <p className="mb-4">Pour rejoindre le Kollel Ohalei Esther, veuillez nous contacter directement.</p>
+            <Link href="/contact">
+              <Button size="lg" variant="outline">
+                Nous contacter
+              </Button>
+            </Link>
           </div>
-          
-          <KollelMembershipForm />
         </section>
 
         {/* Call to Action */}

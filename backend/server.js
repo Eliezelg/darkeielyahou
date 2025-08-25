@@ -60,41 +60,70 @@ app.use(cors({
 
 app.use(express.json());
 
-// Configuration du client Redis
-const redisClient = createClient({
-  url: process.env.REDIS_URL || 'redis://localhost:6379',
-  // Pas de password car Redis local n'en a pas
-  legacyMode: true
-});
+// Configuration du client Redis (optionnel)
+let sessionStore;
+let redisAvailable = false;
 
-// Connexion au client Redis
-(async () => {
-  try {
-    await redisClient.connect();
-    console.log('Connexion à Redis établie');
-  } catch (err) {
-    console.error('Erreur de connexion à Redis:', err);
+try {
+  const redisClient = createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379',
+    legacyMode: true,
+    socket: {
+      connectTimeout: 5000,
+      reconnectStrategy: (retries) => {
+        if (retries > 3) {
+          console.log('Redis indisponible après 3 tentatives, utilisation de la session en mémoire');
+          return false;
+        }
+        return 1000;
+      }
+    }
+  });
+
+  // Tentative de connexion à Redis
+  redisClient.connect()
+    .then(() => {
+      console.log('✅ Connexion à Redis établie');
+      redisAvailable = true;
+    })
+    .catch((err) => {
+      console.warn('⚠️ Redis non disponible, utilisation de la session en mémoire');
+      console.warn('Pour activer Redis: sudo apt install redis-server && sudo systemctl start redis');
+    });
+
+  // Gestion des erreurs Redis sans arrêter l'application
+  redisClient.on('error', (err) => {
+    if (err.code === 'ECONNREFUSED') {
+      if (redisAvailable) {
+        console.warn('⚠️ Connexion Redis perdue');
+        redisAvailable = false;
+      }
+    } else {
+      console.error('Erreur Redis:', err.message);
+    }
+  });
+
+  redisClient.on('connect', () => {
+    console.log('Redis reconnecté');
+    redisAvailable = true;
+  });
+
+  // Utiliser Redis store si disponible
+  if (redisClient) {
+    sessionStore = new RedisStore({ 
+      client: redisClient,
+      prefix: 'darkei:sess:',
+      ttl: 86400 // 24 heures
+    });
   }
-})();
-
-// Gestion des erreurs Redis
-redisClient.on('error', (err) => {
-  console.error('Erreur Redis:', err);
-});
-
-redisClient.on('connect', () => {
-  console.log('Client Redis connecté');
-});
-
-// Création du store Redis
-const redisStore = new RedisStore({ 
-  client: redisClient,
-  prefix: 'darkei:sess:' 
-});
+} catch (err) {
+  console.warn('⚠️ Impossible de configurer Redis:', err.message);
+  console.warn('Utilisation de la session en mémoire (non persistante)');
+}
 
 // Configuration de la session
 const sessionConfig = {
-  store: redisStore,
+  store: sessionStore || undefined, // undefined = utilise MemoryStore par défaut
   secret: ADMIN_CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
@@ -382,7 +411,6 @@ app.post('/api/forms/:type', async (req, res) => {
     const validTypes = [
       'SOCIAL_AID',
       'LOAN_REQUEST',
-      'KOLLEL_MEMBERSHIP',
       'GALA_REGISTRATION',
       'DONATION',
       'CONTACT',
@@ -393,7 +421,6 @@ app.post('/api/forms/:type', async (req, res) => {
     const formTypeMapping = {
       'SOCIAL_AID': $Enums.FormType.SOCIAL_AID,
       'LOAN_REQUEST': $Enums.FormType.LOAN_REQUEST,
-      'KOLLEL_MEMBERSHIP': $Enums.FormType.KOL_JOIN,
       'GALA_REGISTRATION': $Enums.FormType.GALA, // Utiliser GALA au lieu de GALA_REGISTRATION
       'DONATION': $Enums.FormType.DONATION,
       'CONTACT': $Enums.FormType.OTHER,

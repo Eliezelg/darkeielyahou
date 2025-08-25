@@ -97,48 +97,47 @@ export default function AdminLayout({
       </header>
 
       <div className="flex flex-1">
-        {/* Sidebar */}
-        <aside className="bg-gray-800 text-white w-64 flex-shrink-0 hidden md:block">
-          <nav className="p-4">
-            <ul className="space-y-2">
-              <li>
-                <Link 
-                  href="/admin/forms/gala" 
-                  className={`flex items-center p-3 rounded-lg transition-colors ${
-                    pathname.startsWith('/admin/forms') 
-                      ? 'bg-primary text-white' 
-                      : 'hover:bg-gray-700'
-                  }`}
-                >
-                  <Users className="w-5 h-5 mr-3" />
-                  <span>Inscriptions Gala</span>
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/admin/settings" 
-                  className={`flex items-center p-3 rounded-lg transition-colors ${
-                    pathname === '/admin/settings' 
-                      ? 'bg-primary text-white' 
-                      : 'hover:bg-gray-700'
-                  }`}
-                >
-                  <Settings className="w-5 h-5 mr-3" />
-                  <span>Paramètres</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        {/* Sidebar avec toutes les catégories de formulaires */}
+        {pathname.includes('/admin/forms') ? (
+          <FormCategorySidebar />
+        ) : (
+          <aside className="bg-gray-800 text-white w-64 flex-shrink-0 hidden md:block">
+            <nav className="p-4">
+              <ul className="space-y-2">
+                <li>
+                  <Link 
+                    href="/admin/forms/gala" 
+                    className={`flex items-center p-3 rounded-lg transition-colors ${
+                      pathname.startsWith('/admin/forms') 
+                        ? 'bg-primary text-white' 
+                        : 'hover:bg-gray-700'
+                    }`}
+                  >
+                    <Users className="w-5 h-5 mr-3" />
+                    <span>Gestion des formulaires</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/admin/settings" 
+                    className={`flex items-center p-3 rounded-lg transition-colors ${
+                      pathname === '/admin/settings' 
+                        ? 'bg-primary text-white' 
+                        : 'hover:bg-gray-700'
+                    }`}
+                  >
+                    <Settings className="w-5 h-5 mr-3" />
+                    <span>Paramètres</span>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </aside>
+        )}
 
         {/* Main Content */}
         <main className="flex-1 p-6 bg-gray-50">
-          <div className="flex items-center text-sm text-gray-500 mb-4">
-            <span className="font-medium text-gray-700">
-              {pathname.includes('/forms/gala') ? 'Inscriptions Gala' : 
-               pathname.includes('/settings') ? 'Paramètres' : 'Administration'}
-            </span>
-          </div>
+          {/* Breadcrumb optionnel - supprimé pour simplifier */}
           {children}
         </main>
       </div>

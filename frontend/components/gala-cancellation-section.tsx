@@ -144,6 +144,14 @@ export default function GalaCancellationSection() {
                         fill
                         className="object-cover group-hover:opacity-90 transition-opacity"
                       />
+                      {/* Cachet ANNULÉ pour Jérusalem */}
+                      {image.src.includes('jerusalem') && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="bg-red-600 text-white font-bold text-3xl px-6 py-3 rounded-lg border-4 border-red-700 transform rotate-12 shadow-2xl opacity-90">
+                            ANNULÉ
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center transition-all duration-300">
                       <div className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
@@ -298,14 +306,7 @@ export default function GalaCancellationSection() {
               <HeartHandshake className="w-5 h-5 mr-2" />
               Faire un don maintenant
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600 font-bold px-8"
-              onClick={() => window.open('/actions', '_blank')}
-            >
-              Découvrir nos actions
-            </Button>
+
           </div>
         </div>
       </div>

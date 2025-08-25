@@ -15,7 +15,6 @@ export const formCategories: FormCategory[] = [
   { id: 'gala', name: 'Inscriptions Gala', prismaType: 'GALA_REGISTRATION' },
   { id: 'contact', name: 'Formulaires Contact', prismaType: 'OTHER' },
   { id: 'social-aid', name: 'Aide Sociale', prismaType: 'SOCIAL_AID' },
-  { id: 'kollel', name: 'Kollel', prismaType: 'KOLLEL' },
   { id: 'loan', name: 'Demandes de Prêt', prismaType: 'LOAN' },
   { id: 'donation', name: 'Dons', prismaType: 'DONATION' },
   { id: 'autres', name: 'Autres Demandes', prismaType: 'OTHER' },

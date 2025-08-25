@@ -15,6 +15,14 @@ if (!resendApiKey) {
   console.error('Erreur: RESEND_API_KEY non configurée');
 }
 
+// Gérer les requêtes GET pour éviter l'erreur 405
+export async function GET() {
+  return NextResponse.json(
+    { error: 'Cette route accepte uniquement les requêtes POST' },
+    { status: 405 }
+  );
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();

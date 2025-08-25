@@ -24,7 +24,6 @@ const formTypeMapping = {
   'GALA_REGISTRATION': $Enums.FormType.GALA,
   'SOCIAL_AID': $Enums.FormType.SOCIAL_AID,
   'LOAN': $Enums.FormType.LOAN_REQUEST,
-  'KOLLEL': $Enums.FormType.KOL_JOIN,
   'DONATION': $Enums.FormType.DONATION,
   'OTHER': $Enums.FormType.OTHER
 };

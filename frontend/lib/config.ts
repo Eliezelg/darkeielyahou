@@ -19,7 +19,6 @@ export const APP_CONFIG = {
       'SOCIAL_AID',
       'GALA_REGISTRATION',
       'LOAN_REQUEST',
-      'KOLLEL_MEMBERSHIP',
     ] as const,
     // Statuts possibles des demandes
     STATUS: {

@@ -9,6 +9,7 @@ interface GalaImageProps {
   alt: string;
   city: string;
   date: string;
+  isCancelled?: boolean;
 }
 
 interface GalaGalleryProps {
@@ -43,6 +44,14 @@ export function GalaGallery({ images }: GalaGalleryProps) {
                 alt={image.alt}
                 className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
+              {/* Cachet ANNULÉ pour les galas annulés */}
+              {image.isCancelled && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-red-600 text-white font-bold text-3xl px-6 py-3 rounded-lg border-4 border-red-700 transform rotate-12 shadow-2xl opacity-90">
+                    ANNULÉ
+                  </div>
+                </div>
+              )}
               <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white p-4">
                 <h3 className="text-xl font-semibold mb-1">{image.city}</h3>
                 <p>{image.date}</p>

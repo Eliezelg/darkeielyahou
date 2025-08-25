@@ -1,5 +1,8 @@
 const { APP_CONFIG, ADMIN_CONFIG } = require('../../lib/config');
 const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('../../generated/prisma');
+
+const prisma = new PrismaClient();
 
 // Vérifier le token JWT
 const verifyToken = (token) => {
@@ -19,66 +22,69 @@ const verifyToken = (token) => {
 };
 
 // Middleware to require authentication
-const requireAuth = (req, res, next) => {
-  console.log('Auth check - Session ID:', req.sessionID);
-  console.log('Auth check - Session contenu:', req.session);
+const requireAuth = async (req, res, next) => {
   console.log('Auth check - Headers:', req.headers);
   
-  // 1. Check if the user is authenticated via session
-  if (req.session?.isAuthenticated) {
-    console.log('Authentification réussie via session');
-    return next();
-  }
-
-  // 2. Vérifier le token dans le header Authorization
+  // Vérifier le token dans le header Authorization
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
-    console.log('Tentative d\'authentification par token dans Authorization header');
-    console.log('Token reçu:', token.slice(0, 10) + '...');
+    console.log('Tentative d\'authentification par token JWT');
     
-    // Vérifier si le token est le mot de passe admin (pour compatibilité)
-    if (token === ADMIN_CONFIG.PASSWORD) {
-      console.log('Mot de passe administrateur utilisé comme token, authentification réussie');
-      req.session.isAuthenticated = true;
-      return next();
-    }
-    
-    // Vérifier si le token est un JWT valide
     try {
-      console.log('Tentative de vérification JWT avec secret:', ADMIN_CONFIG.SESSION_SECRET ? 'SESSION_SECRET présent' : 'SESSION_SECRET absent');
-      
       const decodedToken = verifyToken(token);
-      console.log('Résultat décodage JWT:', decodedToken ? 'Token valide' : 'Token invalide');
       
       if (decodedToken) {
-        console.log('JWT valide, authentification réussie');
-        req.session.isAuthenticated = true;
-        req.user = decodedToken;
+        // Vérifier que l'utilisateur existe toujours et est actif
+        if (decodedToken.userId) {
+          const admin = await prisma.adminUser.findUnique({
+            where: { id: decodedToken.userId }
+          });
+          
+          if (!admin || !admin.isActive) {
+            return res.status(401).json({
+              success: false,
+              error: 'Compte administrateur inactif ou supprimé'
+            });
+          }
+          
+          req.user = {
+            userId: admin.id,
+            email: admin.email,
+            fullName: admin.fullName,
+            isAdmin: true
+          };
+        } else {
+          // Support ancien format de token
+          req.user = decodedToken;
+        }
+        
         return next();
       }
     } catch (error) {
       console.error('Erreur lors de la vérification JWT:', error.message);
     }
-    
-    // Vérifier si le token correspond à un token de session stocké (rétrocompatibilité)
-    console.log('Vérification token de session:', 
-              'token de session:', req.session?.authToken ? req.session.authToken.slice(0, 10) + '...' : 'absent');
-    
-    if (req.session?.authToken === token) {
-      console.log('Token de session valide, authentification réussie');
-      req.session.isAuthenticated = true;
-      return next();
-    } else {
-      console.log('Token invalide ou non présent dans la session');
-    }
   }
   
-  // 3. Vérifier le token dans un paramètre d'URL (pour les cas spéciaux comme les téléchargements)
-  const urlToken = req.query.token;
-  if (urlToken && req.session?.authToken === urlToken) {
-    console.log('Token URL valide, authentification réussie');
-    req.session.isAuthenticated = true;
+  // Vérifier la session (fallback)
+  if (req.session?.user) {
+    console.log('Authentification via session');
+    
+    if (req.session.user.userId) {
+      const admin = await prisma.adminUser.findUnique({
+        where: { id: req.session.user.userId }
+      });
+      
+      if (!admin || !admin.isActive) {
+        req.session.destroy();
+        return res.status(401).json({
+          success: false,
+          error: 'Compte administrateur inactif ou supprimé'
+        });
+      }
+    }
+    
+    req.user = req.session.user;
     return next();
   }
 
@@ -86,7 +92,7 @@ const requireAuth = (req, res, next) => {
   console.log('Authentification échouée');
   res.status(401).json({
     success: false,
-    error: 'Non autorisé',
+    error: 'Authentification requise',
   });
 };
 

@@ -21,7 +21,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <FooterLink href="/actions/soutien-hayalim">Soutien aux familles des soldats</FooterLink>
               <FooterLink href="/actions/gmah-voitures">Prêt de véhicules</FooterLink>
-              <FooterLink href="/actions/aide-social">Aide sociale</FooterLink>
+              <FooterLink href="/actions/aide-sociale">Aide sociale</FooterLink>
               <FooterLink href="/actions/gmah-hasdei-esther">Prêt d'argent à taux 0%</FooterLink>
               <FooterLink href="/actions/operation-cartable">Opération cartable</FooterLink>
               <FooterLink href="/actions/habiller-dignite">Vente de H'essed</FooterLink>
@@ -99,7 +99,7 @@ export default function Footer() {
 
 
         <div className="mt-4 flex items-center justify-center gap-2 text-sm text-white/60">
-          <a href="https://webpro650.co.il" target="_blank" rel="noopener noreferrer" className="hover:opacity-80">
+          <a href="https://webpro200.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80">
             <img src="/logo/webpro-logo.png" alt="WebPro Logo" className="h-6" />
           </a>
           <span dir="rtl">האתר נבנה ועוצב ע"י</span>

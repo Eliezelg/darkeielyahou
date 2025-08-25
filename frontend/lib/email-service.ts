@@ -9,7 +9,7 @@ interface EmailData {
 }
 
 // URL de l'API backend (à adapter selon l'environnement)
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Email par défaut - doit être un domaine vérifié dans Resend
 const DEFAULT_EMAIL = process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL || 'contact@darkei-elyahou.org';
@@ -19,7 +19,10 @@ const DEFAULT_EMAIL = process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL || 'contact@dark
  */
 export async function sendEmail(data: EmailData): Promise<boolean> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/send-email`, {
+    // Utiliser l'API route Next.js directement si pas d'API backend configurée
+    const url = API_BASE_URL ? `${API_BASE_URL}/api/send-email` : '/api/send-email';
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,8 +35,15 @@ export async function sendEmail(data: EmailData): Promise<boolean> {
     });
     
     if (!response.ok) {
-      const error = await response.json();
-      console.error('Erreur lors de l\'envoi de l\'email:', error);
+      let errorMessage = 'Erreur lors de l\'envoi de l\'email';
+      try {
+        const error = await response.json();
+        errorMessage = error.error || errorMessage;
+      } catch (e) {
+        // Si la réponse n'est pas du JSON valide
+        errorMessage = `${response.status} ${response.statusText}`;
+      }
+      console.error('Erreur lors de l\'envoi de l\'email:', errorMessage);
       return false;
     }
     

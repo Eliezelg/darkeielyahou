@@ -15,7 +15,7 @@ const actions = [
     icon: <BookMarked className="h-8 w-8 text-primary" />,
     title: "Envie d'étudier ou de parrainer un Avrekh ?",
     description: "Nos Kollelim sont ouverts à tous ceux qui souhaitent étudier ou soutenir l'étude de la Torah.",
-    link: "/kollelim",
+    link: "/actions",
     linkText: "Je visite nos Kollelim"
   },
   {

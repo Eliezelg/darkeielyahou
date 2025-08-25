@@ -50,7 +50,6 @@ enum RequestStatus {
 enum FormType {
   SOCIAL_AID
   LOAN_REQUEST
-  KOL_JOIN
   GALA
   DONATION
   OTHER

@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.8.2
- * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+ * Prisma Client JS version: 6.14.0
+ * Query Engine version: 717184b7b35ea05dfa71a3236b7af656013e1e49
  */
 Prisma.prismaVersion = {
-  client: "6.8.2",
-  engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
+  client: "6.14.0",
+  engine: "717184b7b35ea05dfa71a3236b7af656013e1e49"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -176,7 +176,6 @@ exports.Prisma.NullsOrder = {
 exports.FormType = exports.$Enums.FormType = {
   SOCIAL_AID: 'SOCIAL_AID',
   LOAN_REQUEST: 'LOAN_REQUEST',
-  KOL_JOIN: 'KOL_JOIN',
   GALA: 'GALA',
   DONATION: 'DONATION',
   OTHER: 'OTHER'

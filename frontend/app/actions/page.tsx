@@ -5,6 +5,18 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Heart, Briefcase, School } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Nos Actions | Darkei Elyahou',
+  description: 'Découvrez toutes les actions de Darkei Elyahou : 6 Kollelim pour l\'étude de la Torah, aide sociale, prêts sans intérêt, soutien éducatif et projets de solidarité pour la communauté francophone en Israël.',
+  keywords: 'actions Darkei Elyahou, kollel Jérusalem, aide sociale Israël, gmah prêts, soutien éducatif juif, solidarité francophone Israël',
+  openGraph: {
+    title: 'Toutes nos actions - Darkei Elyahou',
+    description: 'Kollelim, aide sociale, GMA\'H, éducation : découvrez comment Darkei Elyahou agit concrètement pour la communauté francophone en Israël depuis plus de 20 ans.',
+    images: ['/images/og-actions.jpg'],
+  },
+};
 
 export default function Actions() {
   return (

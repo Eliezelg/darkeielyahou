@@ -50,6 +50,13 @@ const Galas = () => {
                 alt: "Gala de Paris",
                 city: "Paris",
                 date: "Mardi 09 Septembre 2025"
+              },
+              {
+                src: "/images/gala/jerusalem.webp",
+                alt: "Gala de Jérusalem",
+                city: "Jérusalem",
+                date: "ANNULÉ",
+                isCancelled: true
               }
             ]}
           />

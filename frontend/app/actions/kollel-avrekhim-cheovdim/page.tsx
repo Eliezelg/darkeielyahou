@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Clock, Target, Book, Users, Calendar, Building, CheckCircle, Briefcase, Heart } from "lucide-react";
-import KollelMembershipForm from "@/components/forms/kollel-membership-form";
 import { PageHeader } from "@/components/page-header";
 
 export default function KollelAvrekhimCheovdim() {
@@ -262,15 +261,23 @@ export default function KollelAvrekhimCheovdim() {
           <section className="mt-16">
             <h2 className="text-2xl font-serif mb-8 text-center">Demande d'adhésion au Kollel</h2>
             <div className="bg-muted p-6 rounded-lg mb-8">
-              <p className="mb-2 font-medium">Avant de soumettre votre demande :</p>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Veuillez préciser dans le formulaire que vous êtes intéressé par le Kollel Avrekhim Cheovdim</li>
+              <p className="mb-4">
+                Pour postuler au Kollel Avrekhim Cheovdim, veuillez nous contacter directement via notre formulaire de contact.
+              </p>
+              <p className="mb-4 font-medium">Informations à préparer pour votre demande :</p>
+              <ul className="list-disc pl-5 space-y-1 mb-6">
+                <li>Précisez que vous êtes intéressé par le Kollel Avrekhim Cheovdim</li>
                 <li>Indiquez vos disponibilités pour les horaires du matin</li>
                 <li>Mentionnez votre situation professionnelle actuelle</li>
               </ul>
+              <div className="text-center">
+                <Link href="/contact">
+                  <Button size="lg" className="bg-primary text-primary-foreground">
+                    Nous contacter pour postuler
+                  </Button>
+                </Link>
+              </div>
             </div>
-            
-            <KollelMembershipForm />
           </section>
 
           {/* Call to Action */}

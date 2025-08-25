@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { defaultMetadata } from './metadata';
+import { StructuredData, organizationSchema } from '@/components/structured-data';
+import { Toaster } from '@/components/ui/toaster';
 
 // Configuration des polices
 const inter = localFont({
@@ -46,12 +48,16 @@ export default function RootLayout({
           defaultTheme="light"
           enableSystem
         >
+          {/* Données structurées pour l'organisation */}
+          <StructuredData data={organizationSchema} />
+          
           {/* Hide header and footer on admin pages */}
           {!isAdminPage && <Header />}
           <main className={`min-h-screen ${isAdminPage ? 'pt-0' : 'pt-24'}`}>
             {children}
           </main>
           {!isAdminPage && <Footer />}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

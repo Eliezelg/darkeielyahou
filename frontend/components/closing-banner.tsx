@@ -6,12 +6,15 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email("Veuillez entrer un email valide"),
 });
 
 export default function ClosingBanner() {
+  const router = useRouter();
+  
   return (
     <section className="bg-gradient-to-r from-primary to-primary-foreground text-white py-16">
       <div className="container mx-auto px-6">
@@ -31,10 +34,13 @@ export default function ClosingBanner() {
             >
               Faire un don – via Allodons
             </Button>
-            <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-medium border-2 border-white">
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-white/90 font-medium border-2 border-white"
+              onClick={() => router.push('/contact')}
+            >
               Nous contacter
             </Button>
-            <NewsletterForm />
           </div>
         </div>
       </div>
@@ -56,15 +62,5 @@ function NewsletterForm() {
     // Show success message
     alert("Merci pour votre inscription !");
     form.reset();
-  }
-
-  return (
-    <Button
-      size="lg"
-      className="bg-white text-primary hover:bg-white/90 font-medium border-2 border-white"
-      onClick={() => (document.getElementById('newsletter-modal') as HTMLDialogElement)?.showModal()}
-    >
-      Recevoir les actus
-    </Button>
-  );
+  };
 }

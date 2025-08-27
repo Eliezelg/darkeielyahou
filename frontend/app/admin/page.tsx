@@ -107,8 +107,7 @@ export default function AdminLogin() {
     if (!email || !password) {
       toast({
         title: 'Erreur',
-        description: 'Veuillez entrer votre email et mot de passe',
-        variant: 'destructive'
+        description: 'Veuillez entrer votre email et mot de passe'
       });
       return;
     }
@@ -118,8 +117,7 @@ export default function AdminLogin() {
     if (!emailRegex.test(email)) {
       toast({
         title: 'Erreur',
-        description: 'Email invalide',
-        variant: 'destructive'
+        description: 'Email invalide'
       });
       return;
     }
@@ -177,8 +175,7 @@ export default function AdminLogin() {
       
       toast({
         title: 'Erreur de connexion',
-        description: errorMessage,
-        variant: 'destructive'
+        description: errorMessage
       });
       
       // Si trop de tentatives, désactiver le formulaire temporairement

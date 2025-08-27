@@ -485,7 +485,7 @@ export function GenericFormsTable({ formType, title, columns }: GenericFormsTabl
                   <Label htmlFor={key}>{key}</Label>
                   <Input
                     id={key}
-                    value={value || ''}
+                    value={String(value || '')}
                     onChange={(e) => handleInputChange(key, e.target.value)}
                   />
                 </div>

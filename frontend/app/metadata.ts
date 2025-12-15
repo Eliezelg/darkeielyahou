@@ -90,7 +90,9 @@ export const defaultMetadata: Metadata = {
   },
   manifest: '/site.webmanifest',
   verification: {
-    google: 'YOUR_GOOGLE_VERIFICATION_CODE',
+    // TODO: Remplacez par votre code de vérification Google Search Console
+    // Obtenez-le sur: https://search.google.com/search-console
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || '',
   },
   alternates: {
     canonical: 'https://darkei-elyahou.org',

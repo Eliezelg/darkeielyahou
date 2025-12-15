@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
 const { createClient } = require('redis');
@@ -8,7 +9,34 @@ const RedisStore = connectRedis(session);
 const { Resend } = require('resend');
 const { PrismaClient, $Enums } = require('./generated/prisma');
 const { ADMIN_CONFIG } = require('./lib/config');
-const path = require('path'); // Ajout de l'import du module path
+const path = require('path');
+const fs = require('fs');
+const fsPromises = require('fs').promises;
+
+// Cache pour les fichiers statiques (logo, affiches)
+const fileCache = new Map();
+
+// Fonction utilitaire pour lire un fichier en base64 avec cache
+async function readFileAsBase64Cached(filePath) {
+  // Vérifier le cache
+  if (fileCache.has(filePath)) {
+    return fileCache.get(filePath);
+  }
+
+  try {
+    // Vérifier si le fichier existe
+    await fsPromises.access(filePath);
+    // Lire le fichier de manière asynchrone
+    const content = await fsPromises.readFile(filePath);
+    const base64Content = content.toString('base64');
+    // Mettre en cache
+    fileCache.set(filePath, base64Content);
+    return base64Content;
+  } catch (error) {
+    console.error(`Fichier non trouvé ou erreur de lecture: ${filePath}`, error.message);
+    return null;
+  }
+}
 
 // Initialisation de Prisma
 const prisma = new PrismaClient();
@@ -18,6 +46,29 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Middleware de sécurité Helmet - ajoute des headers HTTP de sécurité
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
+  crossOriginEmbedderPolicy: false, // Désactivé pour permettre les images externes
+  hsts: {
+    maxAge: 31536000, // 1 an
+    includeSubDomains: true,
+    preload: true
+  }
+}));
 
 // Middleware de sécurité et CORS
 // Configuration CORS améliorée pour la production
@@ -147,23 +198,15 @@ if (process.env.NODE_ENV === 'production') {
   sessionConfig.cookie.sameSite = 'lax';
 }
 
-// Log de la configuration des cookies
-console.log('Configuration des cookies de session:', {
-  sameSite: sessionConfig.cookie.sameSite,
-  secure: sessionConfig.cookie.secure,
-  httpOnly: sessionConfig.cookie.httpOnly,
-});
-
 app.use(session(sessionConfig));
 
-// Middleware de logging pour déboguer les requêtes
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  if (req.url.startsWith('/api/admin')) {
-    console.log('Requête admin détectée - Headers:', JSON.stringify(req.headers, null, 2));
-  }
-  next();
-});
+// Middleware de logging (désactivé en production pour éviter les logs sensibles)
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+  });
+}
 
 // Route de test
 app.get('/api/health', (req, res) => {
@@ -196,64 +239,58 @@ app.post('/api/send-email', async (req, res) => {
       html: html || text
     };
     
-    // Gestion des pièces jointes (logo et affiche du gala) via le module fs
+    // Gestion des pièces jointes (logo et affiche du gala) - lecture asynchrone avec cache
     try {
-      const fs = require('fs');
-      const logoPath = path.join(__dirname, '../frontend/public/logo/logo.jpg'); // Utilisation du logo en .jpg comme demandé
+      const logoPath = path.join(__dirname, '../frontend/public/logo/logo.jpg');
       const attachments = [];
-      
-      // Ajouter le logo s'il existe
-      if (fs.existsSync(logoPath)) {
-        const logoContent = fs.readFileSync(logoPath).toString('base64');
-        
+
+      // Ajouter le logo s'il existe (lecture asynchrone avec cache)
+      const logoContent = await readFileAsBase64Cached(logoPath);
+      if (logoContent) {
         attachments.push({
           content: logoContent,
           filename: 'logo.jpg',
-          type: 'image/jpeg', 
+          type: 'image/jpeg',
           disposition: 'inline',
-          content_id: 'logo' // Cet identifiant doit correspondre à celui utilisé dans le HTML: <img src="cid:logo">
+          content_id: 'logo'
         });
         console.log('Logo trouvé et ajouté en pièce jointe');
-      } else {
-        console.error('Fichier logo non trouvé:', logoPath);
       }
-      
+
       // Ajouter l'affiche du gala selon la ville sélectionnée
       if (formData && formData.city) {
         let posterPath;
         const cityLowerCase = formData.city.toLowerCase();
-        
-        // Définir le chemin de l'affiche selon la ville
+
         switch(cityLowerCase) {
           case 'paris':
             posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.jpg');
             break;
           case 'jerusalem':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp'); // Conserve le nom de fichier avec majuscule
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/jerusalem.webp');
             break;
           case 'strasbourg':
-            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.jpg'); // Corrigé l'extension en .png
+            posterPath = path.join(__dirname, '../frontend/public/images/gala/strasbourg.jpg');
             break;
           default:
             console.log('Ville non reconnue pour l\'affiche:', formData.city);
         }
-        
-        // Si un chemin d'affiche a été défini et que le fichier existe
-        if (posterPath && fs.existsSync(posterPath)) {
-          const posterContent = fs.readFileSync(posterPath).toString('base64');
-          
-          attachments.push({
-            content: posterContent,
-            filename: `gala-${cityLowerCase}.png`,
-            type: 'image/png',
-            disposition: 'attachment' // En pièce jointe et non inline
-          });
-          console.log(`Affiche du gala de ${formData.city} ajoutée en pièce jointe`);
-        } else if (posterPath) {
-          console.error('Fichier d\'affiche non trouvé:', posterPath);
+
+        // Lecture asynchrone avec cache
+        if (posterPath) {
+          const posterContent = await readFileAsBase64Cached(posterPath);
+          if (posterContent) {
+            attachments.push({
+              content: posterContent,
+              filename: `gala-${cityLowerCase}.png`,
+              type: 'image/png',
+              disposition: 'attachment'
+            });
+            console.log(`Affiche du gala de ${formData.city} ajoutée en pièce jointe`);
+          }
         }
       }
-      
+
       // Ajouter les pièces jointes à l'email
       if (attachments.length > 0) {
         userMsg.attachments = attachments;
@@ -453,31 +490,27 @@ app.post('/api/forms/:type', async (req, res) => {
     // Pour les inscriptions au gala, envoyer un email de confirmation
     if (type === 'GALA_REGISTRATION' && formData.email) {
       try {
-        const fs = require('fs');
         const logoPath = path.join(__dirname, '../frontend/public/logo/logo.jpg');
         const attachments = [];
-        
-        // Ajouter le logo s'il existe
-        if (fs.existsSync(logoPath)) {
-          const logoContent = fs.readFileSync(logoPath).toString('base64');
+
+        // Ajouter le logo s'il existe (lecture asynchrone avec cache)
+        const logoContent = await readFileAsBase64Cached(logoPath);
+        if (logoContent) {
           attachments.push({
             filename: 'logo.png',
             content: logoContent,
             type: 'image/png',
             disposition: 'inline',
-            content_id: 'logo' // ID pour référence dans le HTML de l'email
+            content_id: 'logo'
           });
           console.log('Logo trouvé et ajouté en pièce jointe');
-        } else {
-          console.error('Fichier logo non trouvé:', logoPath);
         }
 
         // Ajouter l'affiche du gala selon la ville sélectionnée
         if (formData.city) {
           let posterPath;
           const cityLowerCase = formData.city.toLowerCase();
-          
-          // Définir le chemin de l'affiche selon la ville
+
           switch(cityLowerCase) {
             case 'paris':
               posterPath = path.join(__dirname, '../frontend/public/images/gala/paris.jpg');
@@ -491,19 +524,20 @@ app.post('/api/forms/:type', async (req, res) => {
             default:
               posterPath = null;
           }
-          
-          if (posterPath && fs.existsSync(posterPath)) {
-            const posterContent = fs.readFileSync(posterPath).toString('base64');
-            attachments.push({
-              filename: `gala-${cityLowerCase}.jpg`,
-              content: posterContent,
-              type: 'image/jpeg',
-              disposition: 'inline',
-              content_id: 'poster' // ID pour référence dans le HTML de l'email
-            });
-            console.log(`Affiche pour ${formData.city} trouvée et ajoutée en pièce jointe`);
-          } else if (posterPath) {
-            console.error('Fichier d\'affiche non trouvé:', posterPath);
+
+          // Lecture asynchrone avec cache
+          if (posterPath) {
+            const posterContent = await readFileAsBase64Cached(posterPath);
+            if (posterContent) {
+              attachments.push({
+                filename: `gala-${cityLowerCase}.jpg`,
+                content: posterContent,
+                type: 'image/jpeg',
+                disposition: 'inline',
+                content_id: 'poster'
+              });
+              console.log(`Affiche pour ${formData.city} trouvée et ajoutée en pièce jointe`);
+            }
           }
         }
 

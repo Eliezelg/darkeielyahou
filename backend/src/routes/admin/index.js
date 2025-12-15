@@ -9,17 +9,10 @@ const { requireAuth } = require('../../middleware/auth');
 const prisma = new PrismaClient();
 
 // Sous-routes
-console.log('Tentative d\'importation du module forms avec chemin absolu...');
 const path = require('path');
 try {
   const formsRouter = require(path.join(__dirname, 'forms'));
-  console.log('Module forms importé avec succès');
-  // Debug: afficher ce qui est exporté par forms.js
-  console.log('Contenu exporté par forms.js:', Object.keys(formsRouter));
-  console.log('formsRouter est un routeur Express:', formsRouter && typeof formsRouter.use === 'function');
-  
   router.use('/forms', formsRouter);
-  console.log('Route /forms montée sur le routeur admin à ' + new Date().toISOString());
 } catch (error) {
   console.error('ERREUR lors de l\'importation du module forms:', error);
 }
@@ -117,8 +110,6 @@ router.post('/login', rateLimitLogin, async (req, res) => {
       data: { lastLoginAt: new Date() }
     });
     
-    console.log('Authentification réussie pour:', email);
-    
     // Création du token JWT avec les informations de l'admin
     const token = jwt.sign(
       { 
@@ -127,7 +118,7 @@ router.post('/login', rateLimitLogin, async (req, res) => {
         fullName: admin.fullName,
         isAdmin: true 
       },
-      ADMIN_CONFIG.SESSION_SECRET || process.env.JWT_SECRET,
+      ADMIN_CONFIG.SESSION_SECRET,
       { expiresIn: '24h' }
     );
     
@@ -151,14 +142,12 @@ router.post('/login', rateLimitLogin, async (req, res) => {
       });
     });
     
-    console.log('Envoi de la réponse avec le token JWT');
     res.status(200).json({
       success: true,
       message: 'Connexion réussie',
-      authToken: token,                // Renommé token en authToken pour correspondre à ce qu'attend le frontend
-      expiresIn: '24h'                 // Valeur fixe pour correspondre à la durée configurée plus haut
+      authToken: token,
+      expiresIn: '24h'
     });
-    console.log('Réponse envoyée avec succès');
   } catch (error) {
     console.error('Erreur lors de la connexion admin:', error);
     res.status(500).json({

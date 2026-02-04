@@ -9,6 +9,20 @@ type RequestOptions = {
   cache?: RequestCache;
 };
 
+// Fonction pour récupérer le token CSRF depuis le cookie
+function getCsrfToken(): string | null {
+  if (typeof document === 'undefined') return null;
+
+  const cookies = document.cookie.split(';');
+  for (const cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'XSRF-TOKEN') {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
+}
+
 // Fonction utilitaire pour effectuer des requêtes API
 async function api<T = any>(
   endpoint: string,
@@ -22,11 +36,19 @@ async function api<T = any>(
     cache = 'default',
   } = options;
 
+  // Récupérer le token CSRF pour les requêtes mutantes
+  const csrfToken = getCsrfToken();
+  const csrfHeader: Record<string, string> = {};
+  if (csrfToken && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+    csrfHeader['X-XSRF-TOKEN'] = csrfToken;
+  }
+
   // Configuration de la requête
   const config: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
+      ...csrfHeader,
       ...headers,
     },
     credentials,

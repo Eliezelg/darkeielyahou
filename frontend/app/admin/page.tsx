@@ -20,20 +20,36 @@ export default function AdminLogin() {
   const router = useRouter();
   const { toast } = useToast();
   
+  // Fonction pour récupérer le token CSRF depuis le cookie
+  const getCsrfToken = (): string | null => {
+    if (typeof document === 'undefined') return null;
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'XSRF-TOKEN') {
+        return decodeURIComponent(value);
+      }
+    }
+    return null;
+  };
+
   // Fonction utilitaire pour les appels API au backend avec authentification
   const callBackendApi = async (endpoint: string, options: RequestInit = {}) => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-    
+
     // Récupérer le token d'authentification du localStorage s'il existe
     const authToken = typeof window !== 'undefined' ? localStorage.getItem('darkei_admin_auth_token') : null;
-    
+
+    // Récupérer le token CSRF
+    const csrfToken = getCsrfToken();
+
     const defaultOptions: RequestInit = {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       }
     };
-    
+
     // Ajouter le token d'authentification dans les headers si disponible
     if (authToken) {
       defaultOptions.headers = {
@@ -41,7 +57,16 @@ export default function AdminLogin() {
         'Authorization': `Bearer ${authToken}`
       };
     }
-    
+
+    // Ajouter le token CSRF pour les requêtes mutantes
+    const method = (options.method || 'GET').toUpperCase();
+    if (csrfToken && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+      defaultOptions.headers = {
+        ...defaultOptions.headers,
+        'X-XSRF-TOKEN': csrfToken
+      };
+    }
+
     try {
       const response = await fetch(`${API_URL}${endpoint}`, {
         ...defaultOptions,
@@ -51,10 +76,9 @@ export default function AdminLogin() {
           ...(options.headers || {})
         }
       });
-      
+
       return response;
     } catch (error) {
-      console.error(`Erreur lors de l'appel à ${endpoint}:`, error);
       throw error;
     }
   };

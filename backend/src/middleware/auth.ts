@@ -1,49 +1,87 @@
-const { ADMIN_CONFIG } = require('../../lib/config');
-const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('../../generated/prisma');
+/**
+ * Middleware d'authentification pour l'administration
+ */
+
+import jwt from 'jsonwebtoken';
+import type { Request, Response, NextFunction } from 'express';
+import { ADMIN_CONFIG } from '../../lib/config';
+import { PrismaClient } from '../../generated/prisma';
 
 const prisma = new PrismaClient();
 
-// Vérifier le token JWT
-// SÉCURITÉ: Utilise uniquement SESSION_SECRET défini via variable d'environnement
-const verifyToken = (token) => {
+// Étendre les types Express
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserPayload;
+    }
+  }
+}
+
+// Étendre les types de session
+declare module 'express-session' {
+  interface SessionData {
+    user?: UserPayload;
+  }
+}
+
+interface UserPayload {
+  userId?: string;
+  email?: string;
+  fullName?: string;
+  isAdmin?: boolean;
+  loginTime?: Date;
+}
+
+interface DecodedToken extends UserPayload {
+  iat?: number;
+  exp?: number;
+}
+
+/**
+ * Vérifie le token JWT
+ */
+function verifyToken(token: string | undefined): DecodedToken | null {
   try {
     if (!token) return null;
 
     // SÉCURITÉ: Pas de fallback - SESSION_SECRET est obligatoire (vérifié dans config.js)
     const secret = ADMIN_CONFIG.SESSION_SECRET;
 
-    return jwt.verify(token, secret);
+    return jwt.verify(token, secret) as DecodedToken;
   } catch (error) {
-    console.error('Erreur de vérification du token:', error.message);
+    const err = error as Error;
+    console.error('Erreur de vérification du token:', err.message);
     return null;
   }
-};
+}
 
-// Middleware to require authentication
-const requireAuth = async (req, res, next) => {
+/**
+ * Middleware pour exiger l'authentification
+ */
+export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
   // Vérifier le token dans le header Authorization
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
-    
+
     try {
       const decodedToken = verifyToken(token);
-      
+
       if (decodedToken) {
         // Vérifier que l'utilisateur existe toujours et est actif
         if (decodedToken.userId) {
           const admin = await prisma.adminUser.findUnique({
             where: { id: decodedToken.userId }
           });
-          
+
           if (!admin || !admin.isActive) {
             return res.status(401).json({
               success: false,
               error: 'Compte administrateur inactif ou supprimé'
             });
           }
-          
+
           req.user = {
             userId: admin.id,
             email: admin.email,
@@ -54,66 +92,67 @@ const requireAuth = async (req, res, next) => {
           // Support ancien format de token
           req.user = decodedToken;
         }
-        
+
         return next();
       }
     } catch (error) {
-      console.error('Erreur lors de la vérification JWT:', error.message);
+      const err = error as Error;
+      console.error('Erreur lors de la vérification JWT:', err.message);
     }
   }
-  
+
   // Vérifier la session (fallback)
   if (req.session?.user) {
-    
     if (req.session.user.userId) {
       const admin = await prisma.adminUser.findUnique({
         where: { id: req.session.user.userId }
       });
-      
+
       if (!admin || !admin.isActive) {
-        req.session.destroy();
+        req.session.destroy(() => {});
         return res.status(401).json({
           success: false,
           error: 'Compte administrateur inactif ou supprimé'
         });
       }
     }
-    
+
     req.user = req.session.user;
     return next();
   }
 
   // Si aucune authentification n'est fournie ou valide, retourner une erreur
-  res.status(401).json({
+  return res.status(401).json({
     success: false,
     error: 'Authentification requise',
   });
-};
+}
 
-// NOTE: La fonction login legacy a été supprimée pour des raisons de sécurité.
-// L'authentification se fait désormais via /api/admin/login avec email/mot de passe
-// et vérification bcrypt (voir backend/src/routes/admin/index.js)
-
-// Middleware for logout
-const logout = (req, res) => {
+/**
+ * Middleware pour la déconnexion
+ */
+export function logout(req: Request, res: Response): void {
   req.session.destroy((err) => {
     if (err) {
       console.error('Erreur lors de la déconnexion:', err);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         error: 'Erreur lors de la déconnexion',
       });
+      return;
     }
-    
-    res.clearCookie('connect.sid'); // Session cookie name
+
+    res.clearCookie('darkei.sid'); // Session cookie name
     res.status(200).json({
       success: true,
       message: 'Déconnexion réussie',
     });
   });
-};
+}
 
-module.exports = {
-  requireAuth,
-  logout
-};
+/**
+ * Ferme la connexion Prisma
+ */
+export async function closePrismaConnection(): Promise<void> {
+  await prisma.$disconnect();
+}

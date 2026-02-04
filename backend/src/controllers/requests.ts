@@ -1,19 +1,38 @@
-const { PrismaClient } = require('../../generated/prisma');
-const ExcelJS = require('exceljs');
+/**
+ * Controller pour la gestion des demandes (requests)
+ */
+
+import { Request, Response } from 'express';
+import { PrismaClient, $Enums } from '../../generated/prisma';
+import ExcelJS from 'exceljs';
 
 const prisma = new PrismaClient();
 
-// Récupérer toutes les demandes
-const getRequests = async (req, res) => {
+interface RequestQuery {
+  type?: string;
+  status?: string;
+  page?: string;
+  limit?: string;
+}
+
+interface UpdateRequestBody {
+  status?: $Enums.RequestStatus;
+  notes?: string;
+}
+
+/**
+ * Récupérer toutes les demandes
+ */
+export async function getRequests(req: Request, res: Response): Promise<void> {
   try {
-    const { type, status, page = '1', limit = '10' } = req.query;
-    
+    const { type, status, page = '1', limit = '10' } = req.query as RequestQuery;
+
     const pageNumber = parseInt(page, 10) || 1;
     const pageSize = parseInt(limit, 10) || 10;
     const skip = (pageNumber - 1) * pageSize;
 
     // Construction du filtre
-    const where = {};
+    const where: Record<string, string> = {};
     if (type) where.formType = type;
     if (status) where.status = status;
 
@@ -45,15 +64,17 @@ const getRequests = async (req, res) => {
       error: 'Une erreur est survenue lors de la récupération des demandes',
     });
   }
-};
+}
 
-// Exporter les demandes en Excel
-const exportToExcel = async (req, res) => {
+/**
+ * Exporter les demandes en Excel
+ */
+export async function exportToExcel(req: Request, res: Response): Promise<void> {
   try {
-    const { type, status } = req.query;
+    const { type, status } = req.query as RequestQuery;
 
     // Construction du filtre
-    const where = {};
+    const where: Record<string, string> = {};
     if (type) where.formType = type;
     if (status) where.status = status;
 
@@ -81,9 +102,9 @@ const exportToExcel = async (req, res) => {
     ];
 
     // Style des en-têtes
-    worksheet.getRow(1).font = { bold: true };
-    worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4A6670' } };
-    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    const headerRow = worksheet.getRow(1);
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4A6670' } };
+    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
 
     // Ajouter les données
     requests.forEach((request) => {
@@ -116,13 +137,15 @@ const exportToExcel = async (req, res) => {
       error: 'Une erreur est survenue lors de l\'export des demandes',
     });
   }
-};
+}
 
-// Mettre à jour le statut d'une demande
-const updateRequestStatus = async (req, res) => {
+/**
+ * Mettre à jour le statut d'une demande
+ */
+export async function updateRequestStatus(req: Request, res: Response): Promise<void | Response> {
   try {
     const { id } = req.params;
-    const { status, notes } = req.body;
+    const { status, notes } = req.body as UpdateRequestBody;
 
     // Vérifier si la demande existe
     const existingRequest = await prisma.formRequest.findUnique({
@@ -156,10 +179,12 @@ const updateRequestStatus = async (req, res) => {
       error: 'Une erreur est survenue lors de la mise à jour de la demande',
     });
   }
-};
+}
 
-// Récupérer une demande spécifique par ID
-const getRequestById = async (req, res) => {
+/**
+ * Récupérer une demande spécifique par ID
+ */
+export async function getRequestById(req: Request, res: Response): Promise<void | Response> {
   try {
     const { id } = req.params;
 
@@ -186,13 +211,15 @@ const getRequestById = async (req, res) => {
       error: 'Une erreur est survenue lors de la récupération de la demande',
     });
   }
-};
+}
 
-// Mettre à jour une demande complète
-const updateRequest = async (req, res) => {
+/**
+ * Mettre à jour une demande complète
+ */
+export async function updateRequest(req: Request, res: Response): Promise<void | Response> {
   try {
     const { id } = req.params;
-    const { status, notes } = req.body;
+    const { status, notes } = req.body as UpdateRequestBody;
 
     // Vérifier si la demande existe
     const existingRequest = await prisma.formRequest.findUnique({
@@ -226,12 +253,4 @@ const updateRequest = async (req, res) => {
       error: 'Une erreur est survenue lors de la mise à jour de la demande',
     });
   }
-};
-
-module.exports = {
-  getRequests,
-  getRequestById,
-  updateRequest,
-  exportToExcel,
-  updateRequestStatus
-};
+}

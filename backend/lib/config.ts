@@ -1,4 +1,7 @@
-// Configuration globale de l'application
+/**
+ * Configuration globale de l'application
+ */
+
 // SÉCURITÉ: Validation des variables d'environnement critiques
 if (!process.env.SESSION_SECRET) {
   throw new Error('ERREUR CRITIQUE: SESSION_SECRET non défini. Définissez cette variable d\'environnement avec une valeur sécurisée (minimum 32 caractères).');
@@ -8,7 +11,29 @@ if (process.env.SESSION_SECRET.length < 32) {
   throw new Error('ERREUR CRITIQUE: SESSION_SECRET doit contenir au moins 32 caractères.');
 }
 
-const APP_CONFIG = {
+export interface AdminConfigType {
+  SESSION_SECRET: string;
+  SESSION_MAX_AGE: number;
+  SESSION_KEY: string;
+}
+
+export interface FormsConfigType {
+  TYPES: string[];
+  STATUS: {
+    PENDING: string;
+    IN_REVIEW: string;
+    COMPLETED: string;
+    REJECTED: string;
+  };
+}
+
+export interface AppConfigType {
+  FRONTEND_URL: string | undefined;
+  ADMIN: AdminConfigType;
+  FORMS: FormsConfigType;
+}
+
+export const APP_CONFIG: AppConfigType = {
   // URL du frontend
   FRONTEND_URL: process.env.FRONTEND_URL,
 
@@ -44,10 +69,8 @@ const APP_CONFIG = {
   },
 };
 
-// Pour la rétrocompatibilité (NOTE: PASSWORD supprimé pour sécurité - utiliser bcrypt + DB)
-const ADMIN_CONFIG = {
+// Pour la rétrocompatibilité
+export const ADMIN_CONFIG = {
   SESSION_SECRET: APP_CONFIG.ADMIN.SESSION_SECRET,
   SESSION_MAX_AGE: APP_CONFIG.ADMIN.SESSION_MAX_AGE,
 };
-
-module.exports = { APP_CONFIG, ADMIN_CONFIG };

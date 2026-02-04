@@ -56,8 +56,6 @@ export default function GalaForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    
     // Indiquer que la soumission est en cours
     setIsSubmitting(true);
     
@@ -86,111 +84,10 @@ export default function GalaForm() {
           title: "Inscription envoyée",
           description: data.message || "Votre inscription au gala a été enregistrée avec succès. Nous vous contacterons prochainement avec plus de détails."
         });
-        
+
         // Marquer le formulaire comme soumis pour afficher le message de confirmation
         setIsSubmitted(true);
-        
-        // Définir la couleur bleue du site
-        const primaryBlue = "#006989"; // Le bleu principal utilisé sur le site Darkei Elyahou
-        
-        // Créer un email HTML pour le participant avec un joli design et le logo
-        const userHtmlContent = `
-          <!DOCTYPE html>
-          <html lang="fr">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Confirmation d'inscription au gala</title>
-            <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
-              .header { background-color: ${primaryBlue}; padding: 25px 20px; text-align: center; border-radius: 6px 6px 0 0; }
-              .logo { max-width: 180px; margin: 0 auto 15px; display: block; background-color: white; border-radius: 5px; padding: 10px; }
-              .header h1 { color: white; margin: 0; font-weight: 600; }
-              .content { padding: 25px; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; }
-              .footer { background-color: ${primaryBlue}; color: white; padding: 15px; text-align: center; font-size: 12px; border-radius: 0 0 6px 6px; }
-              .details { background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-left: 4px solid ${primaryBlue}; border-radius: 4px; }
-              h1 { color: white; }
-              h2 { color: ${primaryBlue}; margin-top: 0; }
-              p { margin-bottom: 15px; }
-              .gala-info { background-color: #fafafa; border: 1px solid #eaeaea; padding: 15px; margin-top: 20px; text-align: center; }
-              .gala-info h3 { color: ${primaryBlue}; margin-top: 0; }
-              .button { display: inline-block; background-color: ${primaryBlue}; color: white; text-decoration: none; padding: 10px 20px; border-radius: 4px; margin-top: 10px; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <img src="https://darkei-elyahou.org/logo/logo.png" alt="Darkei Elyahou" class="logo">
-              <h1>Confirmation d'inscription au gala</h1>
-            </div>
-            <div class="content">
-              <p>Bonjour ${values.firstName},</p>
-              <p>Nous avons bien reçu votre inscription au <strong>gala de ${values.city}</strong> de Darkei Elyahou. Nous vous remercions pour votre confiance.</p>
-              
-              <div class="details">
-                <h2>Détails de votre inscription</h2>
-                <p><strong>Prénom:</strong> ${values.firstName}</p>
-                <p><strong>Nom:</strong> ${values.lastName}</p>
-                <p><strong>Email:</strong> ${values.email}</p>
-                <p><strong>Téléphone:</strong> ${values.phoneCountryCode}${values.phoneNumber}</p>
-                <p><strong>Ville du gala:</strong> ${values.city}</p>
-                <p><strong>Participants:</strong> ${Number(values.maleAttendees) + Number(values.femaleAttendees)} personnes (${values.maleAttendees} hommes, ${values.femaleAttendees} femmes)</p>
-              </div>
-              
-              <div class="gala-info">
-                <h3>Informations sur le gala de ${values.city}</h3>
-                <p>Vous trouverez en pièce jointe l'affiche officielle de l'événement.</p>
-              </div>
-              
-              <p>Cordialement,<br>L'équipe Darkei Elyahou</p>
-            </div>
-            <div class="footer">
-              <p>&copy; ${new Date().getFullYear()} Darkei Elyahou. Tous droits réservés.</p>
-            </div>
-          </body>
-          </html>
-        `;
-        
-        // Créer un texte simple pour les clients de messagerie qui ne supportent pas HTML
-        const textContent = `
-Bonjour ${values.firstName},
 
-Nous avons bien reçu votre inscription au gala de Darkei Elyahou.
-
-Détails de votre inscription:
-- Prénom: ${values.firstName}
-- Nom: ${values.lastName}
-- Email: ${values.email}
-- Téléphone: ${values.phoneCountryCode}${values.phoneNumber}
-- Ville: ${values.city}
-- Participants: ${Number(values.maleAttendees) + Number(values.femaleAttendees)} personnes (${values.maleAttendees} hommes, ${values.femaleAttendees} femmes)
-
-Nous vous remercions pour votre confiance et vous contacterons prochainement avec plus de détails concernant l'événement.
-
-Cordialement,
-L'équipe Darkei Elyahou
-`;
-        
-        // Importer le service d'email
-        const { sendEmail } = await import('@/lib/email-service');
-        
-        // Envoyer l'email au participant
-        await sendEmail({
-          to: values.email,
-          from: 'contact@darkei-elyahou.org',
-          subject: `Confirmation d'inscription au gala - ${values.firstName} ${values.lastName}`,
-          text: textContent,
-          html: userHtmlContent,
-        });
-        
-        // Envoyer une copie à l'administrateur
-        await sendEmail({
-          to: 'contact@darkei-elyahou.org',
-          from: 'contact@darkei-elyahou.org', 
-          subject: `[ADMIN] Nouvelle inscription au gala - ${values.firstName} ${values.lastName}`,
-          text: `Nouvelle inscription au gala reçue:\n\n${JSON.stringify(formData, null, 2)}`,
-          html: `<h1>Nouvelle inscription au gala</h1><pre>${JSON.stringify(formData, null, 2)}</pre>`,
-        });
-        
         // Reset form
         form.reset();
       } else {
@@ -201,7 +98,6 @@ L'équipe Darkei Elyahou
         });
       }
     } catch (error) {
-      console.error('Erreur lors de l\'envoi du formulaire ou de l\'email:', error);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de l'envoi de votre inscription. Veuillez réessayer plus tard."

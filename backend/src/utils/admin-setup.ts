@@ -1,9 +1,13 @@
-const { PrismaClient } = require('../../generated/prisma');
-const bcrypt = require('bcrypt');
+/**
+ * Script de configuration de l'utilisateur admin initial
+ */
+
+import { PrismaClient } from '../../generated/prisma';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-async function setupAdminUser() {
+export async function setupAdminUser(): Promise<void> {
   try {
     // Vérifier si un admin existe déjà
     const existingAdmin = await prisma.adminUser.findFirst({
@@ -40,5 +44,3 @@ async function setupAdminUser() {
 if (require.main === module) {
   setupAdminUser();
 }
-
-module.exports = { setupAdminUser };

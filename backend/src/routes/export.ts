@@ -1,23 +1,44 @@
-const express = require('express');
-const router = express.Router();
-const { PrismaClient, $Enums } = require('../../generated/prisma');
-const ExcelJS = require('exceljs');
-const path = require('path');
-const fs = require('fs');
-const { requireAuth } = require('../middleware/auth');
+/**
+ * Routes d'exportation des données
+ */
+
+import { Router, Request, Response } from 'express';
+import { PrismaClient, $Enums } from '../../generated/prisma';
+import ExcelJS from 'exceljs';
+import * as path from 'path';
+import * as fs from 'fs';
+import { requireAuth } from '../middleware/auth';
+
+const router = Router();
 const prisma = new PrismaClient();
 
+interface GalaFormData {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  phoneCountryCode?: string;
+  phoneNumber?: string;
+  city?: string;
+  maleAttendees?: string | number;
+  femaleAttendees?: string | number;
+  attendees?: {
+    male?: number;
+    female?: number;
+    total?: number;
+  };
+}
+
 // Route pour exporter les inscriptions au gala en Excel
-router.get('/gala-registrations', requireAuth, async (req, res) => {
+router.get('/gala-registrations', requireAuth, async (req: Request, res: Response): Promise<void | Response> => {
   try {
     // L'authentification est déjà vérifiée par le middleware requireAuth
-    // req.user contient les informations de l'utilisateur authentifié
     console.log('Export demandé par:', req.user);
 
     // Récupérer toutes les inscriptions au gala
     const registrations = await prisma.formRequest.findMany({
       where: {
-        formType: $Enums.FormType.GALA_REGISTRATION
+        formType: $Enums.FormType.GALA
       },
       orderBy: {
         createdAt: 'desc'
@@ -50,14 +71,15 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
     ];
 
     // Style des en-têtes
-    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-    worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4A6670' } };
-    worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4A6670' } };
+    headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
 
     // Ajouter les données
     registrations.forEach(registration => {
-      const data = registration.formData;
-      
+      const data = registration.formData as GalaFormData;
+
       worksheet.addRow({
         firstName: data.firstName || '',
         lastName: data.lastName || '',
@@ -66,8 +88,8 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
         city: data.city || '',
         maleAttendees: data.maleAttendees || data.attendees?.male || '0',
         femaleAttendees: data.femaleAttendees || data.attendees?.female || '0',
-        totalAttendees: data.attendees?.total || 
-          (Number(data.maleAttendees || data.attendees?.male || 0) + 
+        totalAttendees: data.attendees?.total ||
+          (Number(data.maleAttendees || data.attendees?.male || 0) +
            Number(data.femaleAttendees || data.attendees?.female || 0)).toString(),
         createdAt: registration.createdAt.toLocaleString('fr-FR'),
         status: registration.status
@@ -77,7 +99,7 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
     // Alternance des couleurs de lignes pour une meilleure lisibilité
     worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
       if (rowNumber > 1) { // Ignorer la ligne d'en-tête
-        const fill = rowNumber % 2 === 0 
+        const fill: ExcelJS.Fill = rowNumber % 2 === 0
           ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF9F9F9' } }
           : { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } };
         row.eachCell({ includeEmpty: true }, function(cell) {
@@ -104,25 +126,21 @@ router.get('/gala-registrations', requireAuth, async (req, res) => {
     res.download(filePath, fileName, (err) => {
       if (err) {
         console.error('Erreur lors de l\'envoi du fichier:', err);
-        // Supprimer le fichier après l'avoir envoyé ou en cas d'erreur
-        fs.unlink(filePath, (unlinkErr) => {
-          if (unlinkErr) console.error('Erreur lors de la suppression du fichier temporaire:', unlinkErr);
-        });
-      } else {
-        // Supprimer le fichier après l'avoir envoyé
-        fs.unlink(filePath, (unlinkErr) => {
-          if (unlinkErr) console.error('Erreur lors de la suppression du fichier temporaire:', unlinkErr);
-        });
       }
+      // Supprimer le fichier après l'avoir envoyé
+      fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) console.error('Erreur lors de la suppression du fichier temporaire:', unlinkErr);
+      });
     });
   } catch (error) {
-    console.error('Erreur lors de l\'exportation des inscriptions au gala:', error);
+    const err = error as Error;
+    console.error('Erreur lors de l\'exportation des inscriptions au gala:', err);
     res.status(500).json({
       success: false,
       error: 'Une erreur est survenue lors de l\'exportation',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   }
 });
 
-module.exports = router;
+export = router;

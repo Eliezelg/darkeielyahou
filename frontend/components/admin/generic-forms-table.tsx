@@ -12,6 +12,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+// Fonction pour récupérer le token CSRF depuis le cookie
+const getCsrfToken = (): string | null => {
+  if (typeof document === 'undefined') return null;
+  const cookies = document.cookie.split(';');
+  for (const cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'XSRF-TOKEN') {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
+};
+
 type FormRequest = {
   id: string;
   formType: string;
@@ -66,6 +79,7 @@ export function GenericFormsTable({ formType, title, columns }: GenericFormsTabl
         
         const response = await fetch(`${API_URL}/api/admin/forms?type=${formType}`, {
           method: 'GET',
+          credentials: 'include',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -114,6 +128,7 @@ export function GenericFormsTable({ formType, title, columns }: GenericFormsTabl
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const response = await fetch(`${API_URL}/api/export/requests?type=${formType}`, {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -235,11 +250,14 @@ export function GenericFormsTable({ formType, title, columns }: GenericFormsTabl
       }
 
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const csrfToken = getCsrfToken();
       const response = await fetch(`${API_URL}/api/admin/forms/${requestToEdit.id}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(csrfToken && { 'X-XSRF-TOKEN': csrfToken })
         },
         body: JSON.stringify({
           formData: editFormData,
@@ -303,11 +321,14 @@ export function GenericFormsTable({ formType, title, columns }: GenericFormsTabl
       }
       
       const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const csrfToken = getCsrfToken();
       const response = await fetch(`${API_URL}/api/admin/forms/${id}`, {
         method: 'DELETE',
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(csrfToken && { 'X-XSRF-TOKEN': csrfToken })
         }
       });
       

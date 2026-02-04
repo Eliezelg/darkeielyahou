@@ -19,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { formatFormDataForEmail, sendEmail } from "@/lib/email-service";
 
 const formSchema = z.object({
   lastName: z.string().min(2, {
@@ -60,24 +59,29 @@ export default function Contact() {
 
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true);
-    
+
     try {
-      // Formater les données pour SendGrid
-      const emailData = formatFormDataForEmail(values, 'Contact');
-      
-      // Envoyer l'email via notre service
-      const success = await sendEmail(emailData);
-      
-      if (success) {
+      // Envoyer les données au backend
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forms/CONTACT`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
         toast({
           title: "Merci pour votre message !",
-          description: "Nous vous répondrons dans les meilleurs délais.",
+          description: data.message || "Nous vous répondrons dans les meilleurs délais.",
         });
         form.reset();
       } else {
         toast({
           title: "Erreur",
-          description: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer."
+          description: data.error || "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer."
         });
       }
     } catch (error) {

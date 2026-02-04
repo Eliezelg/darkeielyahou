@@ -64,36 +64,9 @@ export default function SocialAidForm() {
           title: "Demande envoyée",
           description: data.message || "Votre demande d'aide sociale a été envoyée avec succès. Nous vous contacterons prochainement."
         });
-        
-        // Envoyer un email de confirmation
-        await fetch(`${apiBaseUrl}/api/send-email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            subject: `Demande d'aide sociale - ${values.name}`,
-            text: `
-Bonjour,
 
-Nous avons bien reçu votre demande d'aide sociale.
+        // L'email de notification est envoyé automatiquement par le backend
 
-Détails de votre demande:
-- Nom: ${values.name}
-- Téléphone: ${values.phone}
-- Ville: ${values.city}
-- Situation: ${values.situation}
-- Enfants: ${values.children}
-- Type d'aide: ${values.aidType}
-
-Nous traiterons votre demande dans les plus brefs délais et vous contacterons prochainement.
-
-Cordialement,
-L'équipe Darkei Elyahou
-            `
-          }),
-        });
-        
         // Reset form
         form.reset();
       } else {

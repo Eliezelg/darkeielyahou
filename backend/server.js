@@ -544,7 +544,11 @@ app.post('/api/forms/:type', async (req, res) => {
       },
     });
 
-    // Pour les inscriptions au gala, envoyer un email de confirmation
+    // ============================================
+    // ENVOI D'EMAILS DE CONFIRMATION PAR TYPE
+    // ============================================
+
+    // Pour les inscriptions au gala
     if (type === 'GALA_REGISTRATION' && formData.email) {
       try {
         const logoPath = path.join(__dirname, '../frontend/public/logo/logo.jpg');
@@ -867,6 +871,186 @@ L'équipe Darkei Elyahou
       } catch (emailError) {
         console.error("Erreur lors de l'envoi des emails:", emailError);
         // On continue l'exécution même en cas d'erreur d'envoi d'email
+      }
+    }
+
+    // Pour les demandes d'aide sociale
+    if (type === 'SOCIAL_AID') {
+      try {
+        const adminEmail = process.env.ADMIN_EMAIL || 'contact@darkei-elyahou.org';
+        const primaryBlue = 'hsl(240, 85%, 25%)';
+
+        const adminHtmlContent = `
+          <!DOCTYPE html>
+          <html lang="fr">
+          <head>
+            <meta charset="UTF-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              h1 { color: ${primaryBlue}; border-bottom: 2px solid ${primaryBlue}; padding-bottom: 10px; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+              th { background-color: #f2f2f2; }
+              .urgent { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Nouvelle demande d'aide sociale</h1>
+              <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR')}</p>
+
+              <div class="urgent">
+                <strong>Action requise:</strong> Veuillez contacter cette personne dans les plus brefs délais.
+              </div>
+
+              <table>
+                <tr><td><strong>Nom</strong></td><td>${formData.name || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Téléphone</strong></td><td>${formData.phone || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Ville</strong></td><td>${formData.city || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Enfants</strong></td><td>${formData.children || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Type d'aide</strong></td><td>${formData.aidType || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Situation</strong></td><td>${formData.situation || 'Non spécifié'}</td></tr>
+              </table>
+            </div>
+          </body>
+          </html>
+        `;
+
+        const { error: emailError } = await resend.emails.send({
+          from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+          to: adminEmail,
+          subject: `[AIDE SOCIALE] Nouvelle demande - ${formData.name || 'Anonyme'}`,
+          html: adminHtmlContent,
+          text: `Nouvelle demande d'aide sociale de ${formData.name}. Téléphone: ${formData.phone}. Ville: ${formData.city}. Type d'aide: ${formData.aidType}. Situation: ${formData.situation}`
+        });
+
+        if (emailError) {
+          console.error('Erreur envoi email aide sociale:', emailError.message);
+        } else {
+          console.log('Email aide sociale envoyé à:', adminEmail);
+        }
+      } catch (emailError) {
+        console.error("Erreur lors de l'envoi de l'email aide sociale:", emailError);
+      }
+    }
+
+    // Pour les demandes de prêt
+    if (type === 'LOAN_REQUEST') {
+      try {
+        const adminEmail = process.env.ADMIN_EMAIL || 'contact@darkei-elyahou.org';
+        const primaryBlue = 'hsl(240, 85%, 25%)';
+
+        const adminHtmlContent = `
+          <!DOCTYPE html>
+          <html lang="fr">
+          <head>
+            <meta charset="UTF-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              h1 { color: ${primaryBlue}; border-bottom: 2px solid ${primaryBlue}; padding-bottom: 10px; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+              th { background-color: #f2f2f2; }
+              .info { background-color: #e7f3ff; border-left: 4px solid #2196F3; padding: 15px; margin: 20px 0; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Nouvelle demande de prêt</h1>
+              <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR')}</p>
+
+              <div class="info">
+                <strong>Rappel:</strong> Contacter le demandeur pour convenir d'un rendez-vous.
+              </div>
+
+              <table>
+                <tr><td><strong>Nom</strong></td><td>${formData.name || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Téléphone</strong></td><td>${formData.phone || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Montant souhaité</strong></td><td>${formData.amount || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Objet du prêt</strong></td><td>${formData.loanPurpose || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Disponibilité RDV</strong></td><td>${formData.availability || 'Non spécifié'}</td></tr>
+              </table>
+            </div>
+          </body>
+          </html>
+        `;
+
+        const { error: emailError } = await resend.emails.send({
+          from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+          to: adminEmail,
+          subject: `[PRÊT] Nouvelle demande - ${formData.name || 'Anonyme'} - ${formData.amount || 'Montant non spécifié'}`,
+          html: adminHtmlContent,
+          text: `Nouvelle demande de prêt de ${formData.name}. Téléphone: ${formData.phone}. Montant: ${formData.amount}. Objet: ${formData.loanPurpose}. Disponibilité: ${formData.availability}`
+        });
+
+        if (emailError) {
+          console.error('Erreur envoi email prêt:', emailError.message);
+        } else {
+          console.log('Email demande de prêt envoyé à:', adminEmail);
+        }
+      } catch (emailError) {
+        console.error("Erreur lors de l'envoi de l'email demande de prêt:", emailError);
+      }
+    }
+
+    // Pour les messages de contact
+    if (type === 'CONTACT') {
+      try {
+        const adminEmail = process.env.ADMIN_EMAIL || 'contact@darkei-elyahou.org';
+        const primaryBlue = 'hsl(240, 85%, 25%)';
+
+        const adminHtmlContent = `
+          <!DOCTYPE html>
+          <html lang="fr">
+          <head>
+            <meta charset="UTF-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              h1 { color: ${primaryBlue}; border-bottom: 2px solid ${primaryBlue}; padding-bottom: 10px; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              td { padding: 12px; border: 1px solid #ddd; }
+              .message-box { background-color: #f9f9f9; border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Nouveau message de contact</h1>
+              <p><strong>Date:</strong> ${new Date().toLocaleString('fr-FR')}</p>
+
+              <table>
+                <tr><td><strong>Nom</strong></td><td>${formData.lastName || ''} ${formData.firstName || ''}</td></tr>
+                <tr><td><strong>Email</strong></td><td><a href="mailto:${formData.email}">${formData.email || 'Non spécifié'}</a></td></tr>
+                <tr><td><strong>Téléphone</strong></td><td>${formData.phone || 'Non spécifié'}</td></tr>
+                <tr><td><strong>Sujet</strong></td><td>${formData.subject || 'Non spécifié'}</td></tr>
+              </table>
+
+              <h2>Message</h2>
+              <div class="message-box">
+                ${(formData.message || 'Aucun message').replace(/\n/g, '<br>')}
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+
+        const { error: emailError } = await resend.emails.send({
+          from: `Darkei Elyahou <${process.env.DEFAULT_FROM_EMAIL || 'contact@darkei-elyahou.org'}>`,
+          to: adminEmail,
+          subject: `[CONTACT] ${formData.subject || 'Message'} - ${formData.firstName || ''} ${formData.lastName || ''}`,
+          html: adminHtmlContent,
+          text: `Nouveau message de ${formData.firstName} ${formData.lastName}. Email: ${formData.email}. Sujet: ${formData.subject}. Message: ${formData.message}`
+        });
+
+        if (emailError) {
+          console.error('Erreur envoi email contact:', emailError.message);
+        } else {
+          console.log('Email contact envoyé à:', adminEmail);
+        }
+      } catch (emailError) {
+        console.error("Erreur lors de l'envoi de l'email contact:", emailError);
       }
     }
 

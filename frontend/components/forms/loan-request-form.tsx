@@ -57,35 +57,9 @@ export default function LoanRequestForm() {
           title: "Demande envoyée",
           description: data.message || "Votre demande de prêt a été envoyée avec succès. Nous vous contacterons prochainement pour convenir d'un rendez-vous."
         });
-        
-        // Envoyer un email de confirmation
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/send-email`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            subject: `Demande de prêt - ${values.name}`,
-            text: `
-Bonjour,
 
-Nous avons bien reçu votre demande de prêt.
+        // L'email de notification est envoyé automatiquement par le backend
 
-Détails de votre demande:
-- Nom: ${values.name}
-- Téléphone: ${values.phone}
-- Montant souhaité: ${values.amount}
-- Objet du prêt: ${values.loanPurpose || 'Non spécifié'}
-- Disponibilité pour rendez-vous: ${values.availability}
-
-Nous vous contacterons prochainement pour convenir d'un rendez-vous et discuter des modalités du prêt.
-
-Cordialement,
-L'équipe Darkei Elyahou
-            `
-          }),
-        });
-        
         // Reset form
         form.reset();
       } else {

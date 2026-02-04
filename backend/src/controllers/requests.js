@@ -1,5 +1,5 @@
 const { PrismaClient } = require('../../generated/prisma');
-const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 
 const prisma = new PrismaClient();
 
@@ -63,33 +63,50 @@ const exportToExcel = async (req, res) => {
       orderBy: { createdAt: 'desc' },
     });
 
-    // Préparation des données pour l'export
-    const data = requests.map((request) => ({
-      ID: request.id,
-      'Type de formulaire': request.formType,
-      Statut: request.status,
-      'Créé le': request.createdAt.toISOString(),
-      'Mis à jour le': request.updatedAt.toISOString(),
-      'Créé par': request.createdBy || 'Anonyme',
-      'Assigné à': request.assignedTo || 'Non assigné',
-      'Données': JSON.stringify(request.formData, null, 2),
-      'Notes': request.notes || '',
-    }));
+    // Création du classeur Excel avec ExcelJS
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Demandes');
 
-    // Création du classeur Excel
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    
-    // Ajout de la feuille au classeur
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Demandes');
-    
+    // Définir les colonnes
+    worksheet.columns = [
+      { header: 'ID', key: 'id', width: 40 },
+      { header: 'Type de formulaire', key: 'formType', width: 20 },
+      { header: 'Statut', key: 'status', width: 15 },
+      { header: 'Créé le', key: 'createdAt', width: 25 },
+      { header: 'Mis à jour le', key: 'updatedAt', width: 25 },
+      { header: 'Créé par', key: 'createdBy', width: 20 },
+      { header: 'Assigné à', key: 'assignedTo', width: 20 },
+      { header: 'Données', key: 'formData', width: 50 },
+      { header: 'Notes', key: 'notes', width: 30 },
+    ];
+
+    // Style des en-têtes
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '4A6670' } };
+    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+
+    // Ajouter les données
+    requests.forEach((request) => {
+      worksheet.addRow({
+        id: request.id,
+        formType: request.formType,
+        status: request.status,
+        createdAt: request.createdAt.toISOString(),
+        updatedAt: request.updatedAt.toISOString(),
+        createdBy: request.createdBy || 'Anonyme',
+        assignedTo: request.assignedTo || 'Non assigné',
+        formData: JSON.stringify(request.formData, null, 2),
+        notes: request.notes || '',
+      });
+    });
+
     // Génération du fichier Excel en mémoire
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-    
+    const excelBuffer = await workbook.xlsx.writeBuffer();
+
     // Configuration de la réponse pour le téléchargement
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename=demandes-${new Date().toISOString().split('T')[0]}.xlsx`);
-    
+
     // Envoi du fichier
     res.send(excelBuffer);
   } catch (error) {

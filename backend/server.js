@@ -13,6 +13,56 @@ const path = require('path');
 const fs = require('fs');
 const fsPromises = require('fs').promises;
 
+// ===========================================
+// RATE LIMITING pour protection anti-spam
+// ===========================================
+const emailRateLimits = new Map();
+const EMAIL_RATE_LIMIT = {
+  maxRequests: 5,        // Max 5 emails
+  windowMs: 60 * 1000,   // Par minute
+  blockDurationMs: 15 * 60 * 1000  // Blocage 15 min si dépassé
+};
+
+const rateLimitEmail = (req, res, next) => {
+  const ip = req.ip || req.connection.remoteAddress || 'unknown';
+  const now = Date.now();
+
+  if (!emailRateLimits.has(ip)) {
+    emailRateLimits.set(ip, { count: 1, windowStart: now, blockedUntil: 0 });
+    return next();
+  }
+
+  const record = emailRateLimits.get(ip);
+
+  // Vérifier si l'IP est bloquée
+  if (record.blockedUntil > now) {
+    const remainingMinutes = Math.ceil((record.blockedUntil - now) / 60000);
+    return res.status(429).json({
+      success: false,
+      error: `Trop de requêtes. Réessayez dans ${remainingMinutes} minute(s).`
+    });
+  }
+
+  // Réinitialiser la fenêtre si expirée
+  if (now - record.windowStart > EMAIL_RATE_LIMIT.windowMs) {
+    record.count = 1;
+    record.windowStart = now;
+    return next();
+  }
+
+  // Vérifier la limite
+  record.count++;
+  if (record.count > EMAIL_RATE_LIMIT.maxRequests) {
+    record.blockedUntil = now + EMAIL_RATE_LIMIT.blockDurationMs;
+    return res.status(429).json({
+      success: false,
+      error: 'Limite de requêtes atteinte. Veuillez patienter 15 minutes.'
+    });
+  }
+
+  next();
+};
+
 // Cache pour les fichiers statiques (logo, affiches)
 const fileCache = new Map();
 
@@ -213,14 +263,20 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Le serveur fonctionne correctement' });
 });
 
-// Route pour l'envoi d'emails
-app.post('/api/send-email', async (req, res) => {
+// Route pour l'envoi d'emails (avec rate limiting)
+app.post('/api/send-email', rateLimitEmail, async (req, res) => {
   try {
     // Extraction des données avec valeurs par défaut pour compatibilité
     const { to, from, subject = 'Message du site Darkei Elyahou', text = '', html = '', sendCopy = false, formData = null } = req.body;
-    
-    // Log des données reçues pour débogage
-    console.log('Données reçues:', { to, from, subject, textLength: text?.length || 0, sendCopy });
+
+    // Validation de l'email destinataire
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!to || !emailRegex.test(to)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Adresse email destinataire invalide'
+      });
+    }
     
     // Vérification basique qu'il y a du contenu à envoyer
     if ((!text || text.trim() === '') && (!html || html.trim() === '')) {
@@ -440,9 +496,10 @@ app.post('/api/forms/:type', async (req, res) => {
     const formData = req.body;
     const userEmail = req.session?.user?.email || null;
 
-    // Log détaillé pour débogage
-    console.log(`Réception d'un formulaire de type: ${type}`);
-    console.log('Données du formulaire:', JSON.stringify(formData, null, 2));
+    // Log minimal (pas de données sensibles)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`Réception d'un formulaire de type: ${type}`);
+    }
 
     // Définir manuellement les types de formulaires valides
     const validTypes = [

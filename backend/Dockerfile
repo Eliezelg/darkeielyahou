@@ -19,6 +19,9 @@ RUN npx prisma generate
 # Compiler le TypeScript
 RUN npm run build
 
+# Copier le client Prisma généré dans dist/ (les imports relatifs le cherchent là)
+RUN cp -r generated dist/generated
+
 # Supprimer les devDependencies pour l'image finale
 RUN npm prune --production
 
